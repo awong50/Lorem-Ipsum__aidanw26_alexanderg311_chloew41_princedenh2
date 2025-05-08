@@ -12,9 +12,11 @@ Sascha Gordon-Zolov
 
 ## Site Description
 
-Typing is an extremely useful skill, one that is used daily in all of our lives. However, often the limiting factor with typing has to do with speed. Our website, ProtoType, is set on trying to fix that in a fun way. ProtoType is a typing game centered around improving one’s typing speed. One will be able to race against their friends, trying to get higher and higher scores on the leaderboard with the same sets of words. (Or with random sets of words.) Additionally, one will be able to track their progress and improvement over time, all of which will be neatly displayed in one’s user profile.
+Typing is an extremely useful skill, one that is used daily in all of our lives. However, often the limiting factor with typing has to do with speed. Our website, ProtoType, is set on trying to fix that in a fun way. ProtoType is a typing game centered around improving one’s typing speed. Users will be able to race against their friends, trying to get higher and higher scores on the leaderboard with the same sets of words. (Or with random sets of words.) Users will be able to see the progress of other players in-game in real time. Even though these games are limited to a small number of players, user’s scores will contribute to a leaderboard consisting of all players who have ever played with the given word set. Additionally, one will be able to track their progress and improvement over time, all of which will be neatly displayed in one’s user profile.
 
 ProtoType also has a second life, one that lives in LaTeX. While some of us can type quickly (even fast enough to almost keep up with one’s thoughts!), there is no doubt that typing in LaTeX is slow and hard. Typing math can be really painful, despite how beautiful the result is. In ProtoType, one will be able to switch to a “LaTeX” mode. Here, an equation will be rendered and displayed. Users will be asked to type the equation in LaTeX, under the same settings as can found in the standard game. Multiple different ways to write identical terms will be accepted, and any other tips/question answers will be displayed in the home LaTeX page. 
+
+
 
 # Install Guide
 
