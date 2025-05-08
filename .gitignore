@@ -1,0 +1,13 @@
+# Pycache
+__pycache__/
+
+# .DS_Store
+.DS_Store
+
+# Virtual environment variables
+.env
+
+# NGINX config files
+wsgi.py
+*.sock
+*.ini
