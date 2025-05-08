@@ -9,3 +9,6 @@ saschaGZ, chloeW -- 2025-05-08 01:19
     * Added mention of a dataset with fun equations that can be depicted in LaTeX
     * Introduced the PyLaTeX API as a means of dynamically displaying equations written in LaTeX
     * Clarified intended features in project description
+
+princedenH, aidanW -- 2025-05-08 11:00
+* Setup basic vite and react framework 
