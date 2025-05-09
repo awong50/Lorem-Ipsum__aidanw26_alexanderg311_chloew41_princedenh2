@@ -12,3 +12,6 @@ saschaGZ, chloeW -- 2025-05-08 01:19
 
 princedenH, aidanW -- 2025-05-08 11:00
 * Setup basic vite and react framework 
+
+aidanW -- 2025-05-08 18:52
+* Updated README with proper launch codes for node project
