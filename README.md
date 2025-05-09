@@ -91,23 +91,28 @@ $ pip install -r requirements.txt
 $ cd PATH/TO/LoremIpsum__aidanw26_alexanderg311_chloew41_princedenh2
 ```
  
-2. Navigate to 'app' directory
+2. Download required node modules:
 
 ```
- $ cd app/
+$ npm install
 ```
 
-3. Run App
+3. Run app:
 
 ```
- $ python3 __init__.py
+$ npm run dev
 ```
+
 4. Open the link that appears in the terminal to be brought to the website
     - You can visit the link via several methods:
         - Control + Clicking on the link
-        - Typing/Pasting http://127.0.0.1:5000 in any browser
+        - Typing/Pasting http://localhost:5173/ in any browser
     - To close the app, press control + C when in the terminal
 
 ```    
-* Running on http://127.0.0.1:5000
+  VITE v6.3.5  ready in 206 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
 ``` 
