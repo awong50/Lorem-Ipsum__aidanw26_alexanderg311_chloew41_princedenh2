@@ -24,33 +24,23 @@ ProtoType also has a second life, one that lives in LaTeX. While some of us can 
 
 Ensure that **Git** and **Python** are installed on your machine. It is recommended that you use a virtual machine when running this project to avoid any possible conflicts. For help, refer to the following documentation:
    1. Installing Git: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git 
-   2. Installing Python: https://www.python.org/downloads/ 
+   2. Installing Node: https://nodejs.org/en/download
+
+        a. If Node is already installed (but the version is old), follow these steps to update it:
+
+        b. Install Node Version Manager (NVM): ```curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash```
+
+        c. Restart terminal (Close and open)
+
+        d. Install new Node Version: ```nvm install --lts```
+
+        e. Use newer Node Version: ```nvm use --lts```
 
    3. (Optional) Setting up Git with SSH (Ms. Novillo's APCSA Guide): https://novillo-cs.github.io/apcsa/tools/ 
          
 
 **Cloning the Project**
-1. Create Python virtual environment:
-
-```
-$ python3 -m PATH/TO/venv_name
-```
-
-2. Activate virtual environment 
-
-   - Linux: `$ . PATH/TO/venv_name/bin/activate`
-   - Windows (PowerShell): `> . .\PATH\TO\venv_name\Scripts\activate`
-   - Windows (Command Prompt): `>PATH\TO\venv_name\Scripts\activate`
-   - macOS: `$ source PATH/TO/venv_name/bin/activate`
-
-   *Notes*
-
-   - If successful, command line will display name of virtual environment: `(venv_name) $ `
-
-   - To close a virtual environment, simply type `$ deactivate` in the terminal
-
-
-3. In terminal, clone the repository to your local machine: 
+1. In terminal, clone the repository to your local machine: 
 
 HTTPS METHOD (Recommended)
 
@@ -64,16 +54,16 @@ SSH METHOD (Requires SSH Key to be set up):
 $ git clone git@github.com:awong50/Lorem-Ipsum__aidanw26_alexanderg311_chloew41_princedenh2.git
 ```
 
-4. Navigate to project directory
+2. Navigate to project directory
 
 ```
 $ cd PATH/TO/LoremIpsum__aidanw26_alexanderg311_chloew41_princedenh2
 ```
 
-5. Install dependencies
+3. Install dependencies
 
 ```
-$ pip install -r requirements.txt
+$ npm install
 ```
         
 # Launch Codes
@@ -90,20 +80,14 @@ $ pip install -r requirements.txt
 ```
 $ cd PATH/TO/LoremIpsum__aidanw26_alexanderg311_chloew41_princedenh2
 ```
- 
-2. Download required node modules:
 
-```
-$ npm install
-```
-
-3. Run app:
+2. Run app:
 
 ```
 $ npm run dev
 ```
 
-4. Open the link that appears in the terminal to be brought to the website
+3. Open the link that appears in the terminal to be brought to the website
     - You can visit the link via several methods:
         - Control + Clicking on the link
         - Typing/Pasting http://localhost:5173/ in any browser
