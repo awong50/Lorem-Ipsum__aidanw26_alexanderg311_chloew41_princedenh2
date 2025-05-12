@@ -15,3 +15,6 @@ princedenH, aidanW -- 2025-05-08 11:00
 
 aidanW -- 2025-05-08 18:52
 * Updated README with proper launch codes for node project
+
+chloeW, saschaGZ -- 2025-05-12 11:01
+* Experimented with LaTeX.js and added a rudimentary HTML file to test
