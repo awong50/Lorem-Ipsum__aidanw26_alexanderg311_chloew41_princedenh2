@@ -8,7 +8,7 @@ function App() {
 
   return (
     <>
-      <h1> MORTY I CAME IN MY JORTS </h1>
+      <h1> Hi </h1>
     </>
   )
 }
