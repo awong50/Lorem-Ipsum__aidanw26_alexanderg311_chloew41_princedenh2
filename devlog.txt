@@ -18,3 +18,6 @@ aidanW -- 2025-05-08 18:52
 
 chloeW, saschaGZ -- 2025-05-12 11:01
 * Experimented with LaTeX.js and added a rudimentary HTML file to test
+
+princedenH -- 2025-05-12 11:01
+* Began implementing website routes with react
