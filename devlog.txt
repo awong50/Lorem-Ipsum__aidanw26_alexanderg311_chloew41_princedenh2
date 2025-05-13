@@ -21,3 +21,7 @@ chloeW, saschaGZ -- 2025-05-12 11:01
 
 princedenH -- 2025-05-12 11:01
 * Began implementing website routes with react
+
+aidanW -- 2024-05-12 20:11
+* Completed website routes and integrated LaTeX into site
+* Made files build ready
