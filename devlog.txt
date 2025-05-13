@@ -32,3 +32,6 @@ aidanW --2025-05-12 20:57
 
 aidanW --2025-05-13 11:01
 * Cleaned up code and made it more dev-like
+
+aidanW --2025-05-13 19:50
+* Updated README to have correct install and launch procedures
