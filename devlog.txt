@@ -29,3 +29,6 @@ aidanW -- 2025-05-12 20:11
 aidanW --2025-05-12 20:57
 * Created live site
 * Created development version
+
+aidanW --2025-05-13 11:01
+* Cleaned up code and made it more dev-like
