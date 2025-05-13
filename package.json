@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "latex.js": "^0.12.6",
+    "mongoose": "^8.14.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.0"
