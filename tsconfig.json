@@ -3,5 +3,19 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
+  ],
+  "compilerOptions": {
+    "incremental": true,  // Reuse previous compilation info to speed up builds
+    "skipLibCheck": true,  // Skip type checking for declaration files (speeds up compilation)
+    "noEmitOnError": true, // Don't emit output if there are type errors
+    "esModuleInterop": true,  // Allows easier import compatibility
+    "allowJs": true,  // Allows JavaScript files to be compiled
+    "strict": true,  // Enables strict type-checking options
+    "jsx": "react-jsx"  // Optimized JSX transform (React 17+)
+  },
+  "exclude": [
+    "node_modules",
+    "dist",  // Exclude build outputs
+    "build"
   ]
 }
