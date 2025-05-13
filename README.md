@@ -22,7 +22,7 @@ ProtoType also has a second life, one that lives in LaTeX. While some of us can 
 
 **Prerequisites**
 
-Ensure that **Git** and **Python** are installed on your machine. It is recommended that you use a virtual machine when running this project to avoid any possible conflicts. For help, refer to the following documentation:
+Ensure that **Git** and **Node** are installed on your machine. For help, refer to the following documentation:
    1. Installing Git: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git 
    2. Installing Node: https://nodejs.org/en/download
 
@@ -70,7 +70,7 @@ $ npm install
 
 ## Best Way
 
-1. Visit (insert droplet here) on any modern browser
+1. Visit https://prototype.awong50.tech/ on any modern browser
 2. Enjoy!
 
 ## The DEVO Way
@@ -81,13 +81,19 @@ $ npm install
 $ cd PATH/TO/LoremIpsum__aidanw26_alexanderg311_chloew41_princedenh2
 ```
 
-2. Run app:
+2. Double Check and ensure that packages are installed:
+
+```
+$ npm install
+```
+
+3. Run app:
 
 ```
 $ npm run dev
 ```
 
-3. Open the link that appears in the terminal to be brought to the website
+4. Open the link that appears in the terminal to be brought to the website
     - You can visit the link via several methods:
         - Control + Clicking on the link
         - Typing/Pasting http://localhost:5173/ in any browser
