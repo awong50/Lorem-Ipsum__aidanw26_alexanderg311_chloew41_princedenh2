@@ -7,6 +7,7 @@ const LatexPage = () => {
     \\documentclass{article}
     \\begin{document}
     \\[\\zeta(s) = \\sum_{n \\geq 1} \\frac{1}{n^s} \\quad \\quad \\forall{s > 1}\\]
+    \\[\\left(\\frac{\\int_0^\\infty e^{-x^2} \\, \\mathrm{d}x}{\\frac{\\sqrt\\pi}{2}}\\right) = 1 \\]
     \\end{document}
   `;
 
