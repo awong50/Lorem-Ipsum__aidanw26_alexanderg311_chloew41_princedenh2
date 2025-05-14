@@ -48,3 +48,4 @@ chloeW, saschagZ -- 2025-05-14 11:01
 
 aidanW -- 2025-05-14 13:31
 * Completed transition to KaTeX
+* Got something working for Mongo Atlas and Mongoose
