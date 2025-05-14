@@ -45,3 +45,6 @@ aidanW --2025-05-13 19:50
 chloeW, saschagZ -- 2025-05-14 11:01
 * Got the LaTeX to stop displaying the same equations twice! File now works more or less as intended.
 * Was sadly introduced to KaTeX, the better version of LaTeX. Began transferring over to KaTeX.
+
+aidanW -- 2025-05-14 13:31
+* Completed transition to KaTeX
