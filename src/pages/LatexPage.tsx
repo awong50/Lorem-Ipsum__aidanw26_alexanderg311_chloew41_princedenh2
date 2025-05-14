@@ -8,14 +8,16 @@ const LatexPage = () => {
     \\begin{document}
     \\[\\zeta(s) = \\sum_{n \\geq 1} \\frac{1}{n^s} \\quad \\quad \\forall{s > 1}\\]
     \\[\\left(\\frac{\\int_0^\\infty e^{-x^2} \\, \\mathrm{d}x}{\\frac{\\sqrt\\pi}{2}}\\right) = 1 \\]
+    \\[\\zeta(3) = \\frac{5}{2} \\sum_{n=1}^\\infty \\frac{(-1)^{n-1}}{n^3 \\binom{2n}{n}}\\]
     \\end{document}
   `;
 
   useEffect(() => {
-    const generator = new HtmlGenerator({ hyphenate: false });
+    var generator = new HtmlGenerator({ hyphenate: false });
     parse(latexSource, { generator });
     if (containerRef.current) {
       containerRef.current.innerHTML = '';
+      containerRef.current.appendChild(generator.stylesAndScripts("https://cdn.jsdelivr.net/gh/fgborges/latex2e-js@develop/dist/"));
       containerRef.current.appendChild(generator.domFragment());
     }
   }, []);
