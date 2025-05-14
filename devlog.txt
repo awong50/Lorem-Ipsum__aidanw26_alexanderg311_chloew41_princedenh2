@@ -33,5 +33,15 @@ aidanW --2025-05-12 20:57
 aidanW --2025-05-13 11:01
 * Cleaned up code and made it more dev-like
 
+saschaGZ, chloeW -- 2025-05-12 11:01
+* Got the LaTeX to work! Can now display basic equations, some problems with equations being displayed twice in different formats
+
+saschaGZ, chloeW -- 2025-05-13 11:01
+* Working on trying to fix the repeated equations being displayed, managed to use more LaTeX features with confusing results from the repeated display.
+
 aidanW --2025-05-13 19:50
 * Updated README to have correct install and launch procedures
+
+chloeW, saschagZ -- 2025-05-14 11:01
+* Got the LaTeX to stop displaying the same equations twice! File now works more or less as intended.
+* Was sadly introduced to KaTeX, the better version of LaTeX. Began transferring over to KaTeX.
