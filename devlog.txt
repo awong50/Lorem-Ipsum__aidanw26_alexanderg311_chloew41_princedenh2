@@ -26,11 +26,11 @@ aidanW -- 2025-05-12 20:11
 * Completed website routes and integrated LaTeX into site
 * Made files build ready
 
-aidanW --2025-05-12 20:57
+aidanW -- 2025-05-12 20:57
 * Created live site
 * Created development version
 
-aidanW --2025-05-13 11:01
+aidanW -- 2025-05-13 11:01
 * Cleaned up code and made it more dev-like
 
 saschaGZ, chloeW -- 2025-05-12 11:01
@@ -39,7 +39,7 @@ saschaGZ, chloeW -- 2025-05-12 11:01
 saschaGZ, chloeW -- 2025-05-13 11:01
 * Working on trying to fix the repeated equations being displayed, managed to use more LaTeX features with confusing results from the repeated display.
 
-aidanW --2025-05-13 19:50
+aidanW -- 2025-05-13 19:50
 * Updated README to have correct install and launch procedures
 
 chloeW, saschagZ -- 2025-05-14 11:01
@@ -53,9 +53,9 @@ aidanW -- 2025-05-14 13:31
 aidanW -- 2025-05-14 19:27
 * Added visual interface to add accounts to Mongo
 
-aidanW --2025-05-15 10:56
+aidanW -- 2025-05-15 10:56
 * Adding Styling for Registration Page
 * Created easier routes for importing CSS
 
-chloeW --2025-05-15 12:21
+chloeW -- 2025-05-15 12:21
 * Set up KaTeX page so that site users can input equations to be rendered in TeX
