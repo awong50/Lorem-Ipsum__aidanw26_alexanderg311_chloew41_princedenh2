@@ -53,7 +53,8 @@ const LatexPage = () => {
       <h1>Compiling LaTeX with KaTeX</h1>
       <div>
         <input type="text" value={equation}
-          onChange={handleInputChange} 
+          onChange={handleInputChange}
+          style={{ width: '100%', height: '30px' }} 
           placeholder="Enter equation" />
         {/* <p>Input: {equation}</p> */}
       </div>
