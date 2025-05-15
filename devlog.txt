@@ -57,3 +57,5 @@ aidanW --2025-05-15 10:56
 * Adding Styling for Registration Page
 * Created easier routes for importing CSS
 
+chloeW --2025-05-15 12:21
+* Set up KaTeX page so that site users can input equations to be rendered in TeX
