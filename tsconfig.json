@@ -11,7 +11,14 @@
     "esModuleInterop": true,  // Allows easier import compatibility
     "allowJs": true,  // Allows JavaScript files to be compiled
     "strict": true,  // Enables strict type-checking options
-    "jsx": "react-jsx"  // Optimized JSX transform (React 17+)
+    "jsx": "react-jsx",  // Optimized JSX transform (React 17+)
+    "baseUrl": "src",
+    "paths": {
+      "@css/*": ["css/*"], 
+      "@pages/*": ["pages/*"], 
+      "@components/*": ["components/*"], 
+      "@utils/*": ["utils/*"]
+    }
   },
   "exclude": [
     "node_modules",
