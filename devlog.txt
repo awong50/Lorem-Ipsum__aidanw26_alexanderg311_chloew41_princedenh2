@@ -63,3 +63,6 @@ chloeW -- 2025-05-15 12:21
 aidanW -- 2025-05-15 20:12
 * Moved registration data to corrrect database
 * Removed email requirement for registration
+
+chloeW, saschaGZ -- 2025-05-16 11:01
+* Upon deleting a full line in the LaTeX tab, the displayed equation is now empty.
