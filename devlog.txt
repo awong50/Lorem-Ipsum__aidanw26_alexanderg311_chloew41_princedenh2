@@ -59,3 +59,7 @@ aidanW -- 2025-05-15 10:56
 
 chloeW -- 2025-05-15 12:21
 * Set up KaTeX page so that site users can input equations to be rendered in TeX
+
+aidanW -- 2025-05-15 20:12
+* Moved registration data to corrrect database
+* Removed email requirement for registration
