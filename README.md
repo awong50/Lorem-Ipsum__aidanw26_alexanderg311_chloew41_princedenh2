@@ -57,7 +57,7 @@ $ git clone git@github.com:awong50/Lorem-Ipsum__aidanw26_alexanderg311_chloew41_
 2. Navigate to project directory
 
 ```
-$ cd PATH/TO/LoremIpsum__aidanw26_alexanderg311_chloew41_princedenh2
+$ cd PATH/TO/Lorem-Ipsum__aidanw26_alexanderg311_chloew41_princedenh2
 ```
 
 3. Install dependencies
@@ -78,7 +78,7 @@ $ npm install
 1. Navigate to project directory:
 
 ```
-$ cd PATH/TO/LoremIpsum__aidanw26_alexanderg311_chloew41_princedenh2
+$ cd PATH/TO/Lorem-Ipsum__aidanw26_alexanderg311_chloew41_princedenh2
 ```
 
 2. Double Check and ensure that packages are installed:
