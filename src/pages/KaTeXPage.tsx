@@ -21,17 +21,6 @@ const LatexPage = () => {
   useEffect(() => {
     if (containerRef.current && equation) {
       containerRef.current.innerHTML = ''; // Clear previous content
-      
-      /*
-      latexSource.split('\n').forEach((line) => {
-        if (line.trim()) {
-          const equationElement = document.createElement('div');
-          katex.render(line.trim(), equationElement, {
-            throwOnError: false,
-            displayMode: true, // Render in display mode
-          });
-          containerRef.current?.appendChild(equationElement);
-      */
 
       const equationElement = document.createElement('div');
       katex.render(equation, equationElement, {
@@ -39,6 +28,9 @@ const LatexPage = () => {
         displayMode: true, // Render in display mode
       });
       containerRef.current?.appendChild(equationElement);
+    }
+    else {
+      containerRef.current.innerHTML = '';
     }
   }, [equation]);
 

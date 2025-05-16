@@ -42,7 +42,7 @@ saschaGZ, chloeW -- 2025-05-13 11:01
 aidanW -- 2025-05-13 19:50
 * Updated README to have correct install and launch procedures
 
-chloeW, saschagZ -- 2025-05-14 11:01
+chloeW, saschaGZ -- 2025-05-14 11:01
 * Got the LaTeX to stop displaying the same equations twice! File now works more or less as intended.
 * Was sadly introduced to KaTeX, the better version of LaTeX. Began transferring over to KaTeX.
 
@@ -63,3 +63,6 @@ chloeW -- 2025-05-15 12:21
 aidanW -- 2025-05-15 20:12
 * Moved registration data to corrrect database
 * Removed email requirement for registration
+
+chloeW, saschaGZ -- 2025-05-16 11:01
+* Upon deleting a full line in the LaTeX tab, the displayed equation is now empty.
