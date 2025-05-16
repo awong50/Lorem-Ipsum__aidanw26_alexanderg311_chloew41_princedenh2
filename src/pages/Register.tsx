@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styles from '@css/Register.module.css';
 
 const Register = () => {
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [form, setForm] = useState({ name: '', password: '' });
   const [message, setMessage] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,7 +20,7 @@ const Register = () => {
       });
       if (res.ok) {
         setMessage('User added!');
-        setForm({ name: '', email: '', password: '' });
+        setForm({ name: '', password: '' });
       } else {
         const data = await res.json();
         setMessage(data.error || 'Error adding user');
