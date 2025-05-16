@@ -1,13 +1,14 @@
 import { Router } from 'express';
 import User from '../models/User';
+import userQuery from '../db/userQuery';
 
 const router = Router();
 
 // Create a new user
 router.post('/users', async (req, res) => {
   try {
-    const { name, email, password } = req.body;
-    const user = new User({ name, email, password });
+    const { name,  password } = req.body;
+    const user = new User({ name,  password });
     await user.save();
     res.status(201).json(user);
   } catch (error) {
@@ -31,6 +32,11 @@ router.get('/users', async (_req, res) => {
       res.status(500).json({ error: 'An unknown error occurred' });
     }
   }
+});
+
+// Validate one user
+router.get('/validateUser', async (_req, res) => {
+  const userInfo = userQuery
 });
 
 export default router;
