@@ -1,0 +1,19 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.sample {
+  padding: 1em;
+  border-radius: 5px;
+  margin-bottom: 1em;
+}
+
+.textarea {
+  font-size: 1.1em;
+  width: 100%;
+}
+
+.result {
+  margin-top: 1em;
+}

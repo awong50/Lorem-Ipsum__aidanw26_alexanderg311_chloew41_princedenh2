@@ -3,6 +3,7 @@ import Home from './pages/Home';
 import Register from './pages/Register';
 import About from './pages/About';
 import LatexPage from './pages/KaTeXPage';
+import TypingPage from './pages/Typing';
 
 function App() {
   return (
@@ -11,7 +12,8 @@ function App() {
         <Link to="/">Home</Link> |{' '}
         <Link to="/register">Registration Page</Link> |{' '}
         <Link to="/about">About</Link> |{' '}
-        <Link to="/latex">View LaTeX Page</Link>
+        <Link to="/latex">View LaTeX Page</Link> |{' '}
+        <Link to="/typing">View Typing Page</Link>
       </nav>
 
       <Routes>
@@ -19,6 +21,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/about" element={<About />} />
         <Route path="/latex" element={<LatexPage />} />
+        <Route path="/typing" element={<TypingPage />} />
       </Routes>
     </div>
   );
