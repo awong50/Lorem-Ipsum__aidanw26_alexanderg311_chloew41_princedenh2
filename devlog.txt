@@ -66,3 +66,6 @@ aidanW -- 2025-05-15 20:12
 
 chloeW, saschaGZ -- 2025-05-16 11:01
 * Upon deleting a full line in the LaTeX tab, the displayed equation is now empty.
+
+aidanW -- 2025-05-18 11:39
+* Added basic typing test functionality (WPM, accuracy, and completion of sample text)
