@@ -76,3 +76,6 @@ aidanW -- 2025-05-19 10:58
 
 saschaGZ, chloeW -- 2025-05-19 11:01
 * Working on fixing accuracy in typing
+
+chloeW -- 2025-05-19 14:46
+* Accounted for deleted characters (but not backspaces) in typing accuracy calculations
