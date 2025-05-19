@@ -4,6 +4,7 @@ import Register from './pages/Register';
 import About from './pages/About';
 import LatexPage from './pages/KaTeXPage';
 import TypingPage from './pages/Typing';
+import Protected from './pages/Protected';
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
         <Link to="/register">Registration Page</Link> |{' '}
         <Link to="/about">About</Link> |{' '}
         <Link to="/latex">View LaTeX Page</Link> |{' '}
-        <Link to="/typing">View Typing Page</Link>
+        <Link to="/typing">View Typing Page</Link> |{' '}
+        <Link to="/protected">Protected</Link>
       </nav>
 
       <Routes>
@@ -22,6 +24,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/latex" element={<LatexPage />} />
         <Route path="/typing" element={<TypingPage />} />
+        <Route path="/protected" element={<Protected />} />
       </Routes>
     </div>
   );
