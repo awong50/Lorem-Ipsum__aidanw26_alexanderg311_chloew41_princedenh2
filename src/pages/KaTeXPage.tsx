@@ -43,7 +43,7 @@ const LatexPage = () => {
         <input type="text" value={equation}
           onChange={handleInputChange}
           style={{ width: '100%', height: '30px' }} 
-          placeholder="Enter equation" />
+          placeholder="Start LaTeXing here..." />
         {/* <p>Input: {equation}</p> */}
       </div>
       <div ref={containerRef}></div>
