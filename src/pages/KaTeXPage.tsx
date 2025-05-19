@@ -30,7 +30,9 @@ const LatexPage = () => {
       containerRef.current?.appendChild(equationElement);
     }
     else {
-      containerRef.current.innerHTML = '';
+      if (containerRef.current) {
+        containerRef.current.innerHTML = '';
+      }
     }
   }, [equation]);
 
