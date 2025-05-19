@@ -69,3 +69,7 @@ chloeW, saschaGZ -- 2025-05-16 11:01
 
 aidanW -- 2025-05-18 11:39
 * Added basic typing test functionality (WPM, accuracy, and completion of sample text)
+
+aidanW -- 2025-05-19 10:58
+* Fixed Droplet hosting
+* Started implementing login functionality
