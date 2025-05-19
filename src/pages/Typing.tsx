@@ -3,6 +3,7 @@ import styles from '@css/Typing.module.css';
 
 const sampleText = "The quick brown fox jumps over the lazy dog.";
 let total = 0;
+let correct = 0;
 
 const Typing = () => {
   const [input, setInput] = useState("");
@@ -40,24 +41,23 @@ const Typing = () => {
     };
   }, [startTime, finished, input]);
   
-  console.log(total);
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
-    if (e.keyCode === 8) {
+    const newCharacter = value.length > input.length;
+    console.log(newCharacter);
+    if (newCharacter) {
         total++;
     }
-    console.log(total);
     if (!startTime && value.length === 1) {
         setStartTime(Date.now());
     }
     setInput(value);
 
     // Calculate accuracy
-    let correct = 0;
-    for (let i = 0; i < value.length; i++) {
-        if (value[i] === sampleText[i]) correct++;
+    if (newCharacter) {
+        if (value[value.length-1] === sampleText[value.length-1]) correct++;
     }
-    const acc = total > 0 ? Math.round((correct / total) * 100) : 100;
+    const acc = value.length > 0 ? Math.round((correct / total) * 100) : 100;
     setAccuracy(acc);
 
     // Live update WPM on every keystroke
@@ -78,6 +78,9 @@ const Typing = () => {
   };
 
   const handleRestart = () => {
+    correct = 0;
+    total = 0;
+    setAccuracy(100);
     setInput("");
     setStartTime(null);
     setWpm(0);
