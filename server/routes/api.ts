@@ -9,8 +9,18 @@ router.post('/users', async (req, res) => {
   try {
     const { name,  password } = req.body;
     const user = new User({ name,  password });
-    await user.save();
-    res.status(201).json(user);
+    const currentUser = userQuery(name)
+    
+    if (currentUser == null) {
+      await user.save();
+      res.status(201).json(user);
+      console.log('Current User')
+      console.log(currentUser)
+    }
+    else {
+      res.status(400).json({error: 'Username Already Exists'});
+    }
+
   } catch (error) {
     if (error instanceof Error) {
       res.status(400).json({ error: error.message });
@@ -37,6 +47,7 @@ router.get('/users', async (_req, res) => {
 // Validate one user
 router.get('/validateUser', async (_req, res) => {
   const userInfo = userQuery
+  res.json(userQuery)
 });
 
 export default router;
