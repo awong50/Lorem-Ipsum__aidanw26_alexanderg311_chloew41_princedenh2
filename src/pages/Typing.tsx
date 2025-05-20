@@ -44,7 +44,6 @@ const Typing = () => {
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     const newCharacter = value.length > input.length;
-    console.log(newCharacter);
     if (newCharacter) {
         total++;
     }
@@ -53,12 +52,12 @@ const Typing = () => {
     }
     setInput(value);
 
-    // Calculate accuracy
+    // Calculate accuracy if new character is typed
     if (newCharacter) {
         if (value[value.length-1] === sampleText[value.length-1]) correct++;
+        const acc = value.length > 0 ? Math.round((correct / total) * 100) : 100;
+        setAccuracy(acc);
     }
-    const acc = value.length > 0 ? Math.round((correct / total) * 100) : 100;
-    setAccuracy(acc);
 
     // Live update WPM on every keystroke
     if (startTime && !finished) {
