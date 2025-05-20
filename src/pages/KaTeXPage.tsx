@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
+import styles from '@css/KaTeX.module.css';
 
 const TAB = '    '; 
 
@@ -59,12 +60,12 @@ const LatexPage = () => {
           value={equation}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          style={{ width: '100%', height: '80px', fontSize: '16px' }}
+          style={{ width: '756px', height: '80px', fontSize: '15px' }}
           placeholder="Start LaTeXing here..."
         />
         {/* <p>Input: {equation}</p> */}
       </div>
-      <div ref={containerRef}></div>
+      <div className={styles.container} ref={containerRef}></div>
       <p><b>Sample Equation 1:</b> {sampleEquation1}</p>
       <p><b>Sample Equation 2:</b> {sampleEquation2}</p>
       <p><b>Sample Equation 3:</b> {sampleEquation3}</p>
