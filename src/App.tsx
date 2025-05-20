@@ -6,18 +6,22 @@ import LatexPage from './pages/KaTeXPage';
 import TypingPage from './pages/Typing';
 import Login from './pages/Login';
 import Protected from './pages/Protected';
+import LogoutButton from './components/LogoutButton';
 
 function App() {
+  const isLoggedIn = !!localStorage.getItem('user'); // Check if user is logged in
+
   return (
     <div>
       <nav>
         <Link to="/">Home</Link> |{' '}
-        <Link to="/register">Registration Page</Link> |{' '}
+        <Link to="/register">Register</Link> |{' '}
         <Link to="/login">Login</Link> |{' '}
         <Link to="/about">About</Link> |{' '}
         <Link to="/latex">View LaTeX Page</Link> |{' '}
         <Link to="/typing">View Typing Page</Link> |{' '}
         <Link to="/protected">Protected</Link>
+        {isLoggedIn && <LogoutButton />} {/* Show logout button if logged in */}
       </nav>
       <Routes>
         <Route path="/" element={<Home />} />
