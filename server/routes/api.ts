@@ -15,7 +15,7 @@ router.post('/users', async (req, res) => {
     console.log(currentUser);
     
     if (currentUser == null) {
-      user.save();
+      await user.save();
       res.status(201).json(user);
       console.log('Current User')
       console.log(currentUser)

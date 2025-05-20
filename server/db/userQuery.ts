@@ -6,7 +6,6 @@ const userQuery = async (username: string) => {
   await connectDB();
   const user = await User.findOne({ name: username });
   console.log('Query Result:', user);
-  mongoose.connection.close();
   return user;
 };
 
