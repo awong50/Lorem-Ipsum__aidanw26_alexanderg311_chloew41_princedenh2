@@ -79,3 +79,6 @@ saschaGZ, chloeW -- 2025-05-19 11:01
 
 chloeW -- 2025-05-19 14:46
 * Accounted for deleted characters (but not backspaces) in typing accuracy calculations
+
+aidanW -- 2025-05-19 21:00
+* Started working on login functionality
