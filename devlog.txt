@@ -82,3 +82,6 @@ chloeW -- 2025-05-19 14:46
 
 aidanW -- 2025-05-19 21:00
 * Started working on login functionality
+
+aidanW -- 2025-05-20 10:58
+* Started working on logout functionality + Completed login functionality
