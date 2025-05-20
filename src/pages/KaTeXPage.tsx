@@ -1,16 +1,31 @@
-import { useEffect, useRef } from 'react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
 
-const LatexPage = () => {
+const TAB = '    '; 
 
+const LatexPage = () => {
   const [equation, setEquation] = useState<string>('');
 
   const handleInputChange = 
-      (e: React.ChangeEvent<HTMLInputElement>) => {
+      (e: React.ChangeEvent<HTMLTextAreaElement>) => {
           setEquation(e.target.value);
       };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const target = e.target as HTMLTextAreaElement;
+      const start = target.selectionStart;
+      const end = target.selectionEnd;
+      const newValue = equation.substring(0, start) + TAB + equation.substring(end);
+      setEquation(newValue);
+
+      setTimeout(() => {
+        target.selectionStart = target.selectionEnd = start + TAB.length;
+      }, 0);
+    }
+  };
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -20,12 +35,12 @@ const LatexPage = () => {
 
   useEffect(() => {
     if (containerRef.current && equation) {
-      containerRef.current.innerHTML = ''; // Clear previous content
+      containerRef.current.innerHTML = '';
 
       const equationElement = document.createElement('div');
       katex.render(equation, equationElement, {
         throwOnError: false,
-        displayMode: true, // Render in display mode
+        displayMode: true,
       });
       containerRef.current?.appendChild(equationElement);
     }
@@ -40,10 +55,13 @@ const LatexPage = () => {
     <div>
       <h1>Compiling LaTeX with KaTeX</h1>
       <div>
-        <input type="text" value={equation}
+        <textarea
+          value={equation}
           onChange={handleInputChange}
-          style={{ width: '100%', height: '30px' }} 
-          placeholder="Start LaTeXing here..." />
+          onKeyDown={handleKeyDown}
+          style={{ width: '100%', height: '80px', fontSize: '16px' }}
+          placeholder="Start LaTeXing here..."
+        />
         {/* <p>Input: {equation}</p> */}
       </div>
       <div ref={containerRef}></div>
