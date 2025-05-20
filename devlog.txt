@@ -85,3 +85,7 @@ aidanW -- 2025-05-19 21:00
 
 aidanW -- 2025-05-20 10:58
 * Started working on logout functionality + Completed login functionality
+
+chloeW, saschaGZ -- 2025-05-20 11:01
+*Multiline funcionality in the LaTeX page!
+*Users can now tab in the LaTeX page
