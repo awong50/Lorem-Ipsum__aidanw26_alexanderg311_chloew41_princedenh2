@@ -101,3 +101,7 @@ saschaGZ -- 2025-05-21 10:14
 
 chloeW, saschaGZ -- 2025-05-21 10:36
 * Broke everything, then fixed it! Moved the containers over, definitely looks better. Starting to work on displaying the formula that users are meant to replicate. 
+
+chloeW -- 2025-05-21 18:08
+* Added completion detection, restart button, show solution button, and time elapsed to LaTeX page
+* Rendered target formula in LaTeX
