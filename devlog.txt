@@ -95,3 +95,6 @@ chloeW -- 2025-05-20 17:43
 
 aidanW -- 2025-05-20 18:25
 * Updated design document
+
+saschaGZ -- 2025-05-21 10:14 
+* Added some comments to the KaTeX page for clarity
