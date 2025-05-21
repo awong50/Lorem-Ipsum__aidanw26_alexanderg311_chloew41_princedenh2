@@ -3,17 +3,19 @@ import katex from 'katex';
 import 'katex/dist/katex.min.css';
 import styles from '@css/KaTeX.module.css';
 
+//custom tab instead of \t because we think it looks nicer (four spaces)
 const TAB = '    '; 
 
 const LatexPage = () => {
   const [equation, setEquation] = useState<string>('');
 
   const handleInputChange = 
+      //AreaElement allows the inputted string to be in the form of a text box
       (e: React.ChangeEvent<HTMLTextAreaElement>) => {
           setEquation(e.target.value);
       };
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    //makes pressing tab add a tab
     if (e.key === 'Tab') {
       e.preventDefault();
       const target = e.target as HTMLTextAreaElement;
