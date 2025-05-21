@@ -3,17 +3,20 @@ import katex from 'katex';
 import 'katex/dist/katex.min.css';
 import styles from '@css/KaTeX.module.css';
 
+//custom tab instead of \t because we think it looks nicer (four spaces)
 const TAB = '    '; 
 
 const LatexPage = () => {
   const [equation, setEquation] = useState<string>('');
 
   const handleInputChange = 
+      //AreaElement allows the inputted string to be in the form of a text box
       (e: React.ChangeEvent<HTMLTextAreaElement>) => {
           setEquation(e.target.value);
       };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    //makes pressing tab add a tab
     if (e.key === 'Tab') {
       e.preventDefault();
       const target = e.target as HTMLTextAreaElement;
@@ -54,18 +57,29 @@ const LatexPage = () => {
 
   return (
     <div>
-      <h1>Compiling LaTeX with KaTeX</h1>
+      <h1>LaTeX Test</h1>
+      <p>
+        <strong>Create the following formula in LaTeX:</strong>
+      </p>
+      <p>
+        {sampleEquation1}
+      </p>
+      <p>
+        <strong>Your output:</strong>
+      </p>
+      <div className={styles.container} ref={containerRef}></div>
+      <p>
+        <strong>Type here:</strong>
+      </p>
       <div>
         <textarea
           value={equation}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          style={{ width: '756px', height: '80px', fontSize: '15px' }}
+          style={{ width: '755px', height: '80px', fontSize: '15px', marginLeft: '30px' }}
           placeholder="Start LaTeXing here..."
         />
-        {/* <p>Input: {equation}</p> */}
       </div>
-      <div className={styles.container} ref={containerRef}></div>
       <p><b>Sample Equation 1:</b> {sampleEquation1}</p>
       <p><b>Sample Equation 2:</b> {sampleEquation2}</p>
       <p><b>Sample Equation 3:</b> {sampleEquation3}</p>
