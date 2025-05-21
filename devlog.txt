@@ -98,3 +98,6 @@ aidanW -- 2025-05-20 18:25
 
 saschaGZ -- 2025-05-21 10:14 
 * Added some comments to the KaTeX page for clarity
+
+chloeW, saschaGZ -- 2025-05-21 10:36
+* Broke everything, then fixed it! Moved the containers over, definitely looks better. Starting to work on displaying the formula that users are meant to replicate. 
