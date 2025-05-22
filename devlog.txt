@@ -109,3 +109,6 @@ chloeW -- 2025-05-21 18:08
 chloeW, saschaGZ -- 2025-05-22 11:01
 *Extra spaces/extra brackets are now accepted unilaterally. Not enough spaces/not enough brackets are also accepted unilaterally.
 *There must always be an equal number of left and right brackets for a solution to be accepted. 
+
+princedenH -- 2025-05-22 11:01
+* added logout
