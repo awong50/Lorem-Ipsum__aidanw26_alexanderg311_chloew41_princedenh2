@@ -33,20 +33,23 @@ const LatexPage = () => {
   const sampleEquation2 = '\\left(\\frac{\\int_0^\\infty e^{-x^2} \\, \\mathrm{d}x}{\\frac{\\sqrt\\pi}{2}}\\right) = 1'
   const sampleEquation3 = '\\zeta(3) = \\frac{5}{2} \\sum_{n=1}^\\infty \\frac{(-1)^{n-1}}{n^3 \\binom{2n}{n}}'
 
+  function removeSpaces(str) {
+    return str.replaceAll(" ", "");
+  }
+
   const handleInputChange = 
-      // AreaElement allows the inputted string to be in the form of a text box
-      (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    // AreaElement allows the inputted string to be in the form of a text box
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 
-      if (!startTime) {
-          setStartTime(Date.now());
-      }
+    if (!startTime) {
+        setStartTime(Date.now());
+    }
 
-      setEquation(e.target.value);
+    setEquation(e.target.value);
 
-      if (e.target.value === sampleEquation1) {
-          setFinished(true);
-          console.log("done!");
-      }
+    if (removeSpaces(e.target.value) === removeSpaces(sampleEquation1)) {
+        setFinished(true);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
