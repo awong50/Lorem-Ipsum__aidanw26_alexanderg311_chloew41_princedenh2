@@ -33,27 +33,20 @@ const LatexPage = () => {
   const sampleEquation2 = '\\left(\\frac{\\int_0^\\infty e^{-x^2} \\, \\mathrm{d}x}{\\frac{\\sqrt\\pi}{2}}\\right) = 1'
   const sampleEquation3 = '\\zeta(3) = \\frac{5}{2} \\sum_{n=1}^\\infty \\frac{(-1)^{n-1}}{n^3 \\binom{2n}{n}}'
 
-  let LB = 0;
-  let RB = 0;
-
   function cleanUp(str) {
-    LB = 0;
-    RB = 0;
-    for (let i = 0; i < str.length; i++) {
-        if (str[i] === "{") {
-            LB ++;
-        }
-        else if (str[i] === "}") {
-            RB ++;
-        }
-    }
-    if (LB === RB) {
+    try {
+        var html = katex.renderToString(str);
         const noLB = str.replace(/[{]/g, "");
         const noRB = noLB.replace(/[}]/g, "");
         return noRB.replace(/ /g, "");
     }
-    else {
-        return str.replace(/ /g, "");
+    catch (e) {
+        if (e instanceof katex.ParseError) {
+            // KaTeX can't parse the expression
+            html = ("Error in LaTeX '" + str + "': " + e.message)
+                .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return("")
+        }
     }
   }
 
@@ -68,6 +61,7 @@ const LatexPage = () => {
     setEquation(e.target.value);
 
     if (cleanUp(e.target.value) === cleanUp(sampleEquation1)) {
+        console.log(cleanUp(sampleEquation1))
         setFinished(true);
     }
   };
@@ -136,7 +130,7 @@ const LatexPage = () => {
         <b>Create the following formula in LaTeX:</b>
       </p>
       <div 
-        className={styles.container}
+        className={styles.target}
         ref={targetRef} >
       </div>
       <p>
