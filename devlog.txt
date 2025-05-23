@@ -112,3 +112,31 @@ chloeW, saschaGZ -- 2025-05-22 11:01
 
 princedenH -- 2025-05-22 11:01
 * added logout
+
+aidanW -- 2025-05-22 20:27
+* Edited styling to comply with conventions
+* Removed unecessary/unused code from KaTeXPage and fixed variable any error
+
+aidanW -- 2025-05-22 20:27
+
+------------------------------------------------------------------------
+DEVLOG ENTRY OUTLINING APPLICATION OF JAVASCRIPT STYLE
+------------------------------------------------------------------------
+
+* Suprisingly (maybe not), a lot of our code already followed the style guidelines found from the guide. I believe this was likely due to our experience using Java from AP Computer Science, so the conventions carried over to JS (things like using camelCase for functions, putting content inside braces, etc). One styling convention that was applicable to our codebase, however, was the use of const over let (unless extreme mutability is necessary). 
+
+* The code examples for each styling practice were the best part of the guide for my Devos. It made it extremely clear what was desired and what was not through the green and red color coding. It also helped with understanding because it was readble code instead of a block of text.
+
+* Fortunately, we haven't used many for loops and small if statements (such as for assigning variables), so going forward it will be easy to implement the guide's following practices:
+    * Using .forEach in altering arrays (rather than going through using a for loop)
+    * Using ternary operators (?) for assigning variables rather than if if else block (const x = condition ? 1:2)
+
+Altercations:
+
+Typing.tsx
+
+* Lines 4, 5 and 6: 
+    * Moved variable declarations within function and altered them to use const (better practice) with useRef for mutable counters (better than let)
+    * Altered related code to use the new useRef (lines include 50, 82, 83) -> *.current to change
+
+* Not mentioned in docs, but altered line spacing for better readability
