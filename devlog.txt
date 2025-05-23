@@ -122,6 +122,11 @@ aidanW -- 2025-05-22 20:27
 chloeW, saschaGZ -- 2025-05-23 11:01
 * Errors can no longer be successes! Spaces and brackets can still be removed/added to no detriment. 
 * Working on turning the output box green when the user succeeds.
+
+chloeW -- 2025-05-23 18:35
+* Finished turning output box green when user succeeds on KaTeX page
+* Added back hide solution button
+
 ------------------------------------------------------------------------
 DEVLOG ENTRY OUTLINING APPLICATION OF JAVASCRIPT STYLE
 ------------------------------------------------------------------------
