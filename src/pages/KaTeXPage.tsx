@@ -30,9 +30,31 @@ const LatexPage = () => {
   }, [startTime, finished]);
 
   const sampleEquation1 = '\\zeta(s) = \\sum_{n \\geq 1} \\frac{1}{n^s} \\quad \\quad \\forall{s > 1}'
+  const sampleEquation2 = '\\left(\\frac{\\int_0^\\infty e^{-x^2} \\, \\mathrm{d}x}{\\frac{\\sqrt\\pi}{2}}\\right) = 1'
+  const sampleEquation3 = '\\zeta(3) = \\frac{5}{2} \\sum_{n=1}^\\infty \\frac{(-1)^{n-1}}{n^3 \\binom{2n}{n}}'
 
-  function removeSpaces(str: string) {
-    return str.replace(/ /g, "");
+  let LB = 0;
+  let RB = 0;
+
+  function cleanUp(str) {
+    LB = 0;
+    RB = 0;
+    for (let i = 0; i < str.length; i++) {
+        if (str[i] === "{") {
+            LB ++;
+        }
+        else if (str[i] === "}") {
+            RB ++;
+        }
+    }
+    if (LB === RB) {
+        const noLB = str.replace(/[{]/g, "");
+        const noRB = noLB.replace(/[}]/g, "");
+        return noRB.replace(/ /g, "");
+    }
+    else {
+        return str.replace(/ /g, "");
+    }
   }
 
   const handleInputChange = 
@@ -45,7 +67,7 @@ const LatexPage = () => {
 
     setEquation(e.target.value);
 
-    if (removeSpaces(e.target.value) === removeSpaces(sampleEquation1)) {
+    if (cleanUp(e.target.value) === cleanUp(sampleEquation1)) {
         setFinished(true);
     }
   };
