@@ -9,7 +9,7 @@ const TAB = '    ';
 const LatexPage = () => {
 
   const [finished, setFinished] = useState(false);
-  const [givenUp, setGivenUp] = useState(false);
+  const [shownSol, setShownSol] = useState(false);
 
   const [equation, setEquation] = useState<string>('');
 
@@ -120,7 +120,7 @@ const LatexPage = () => {
     setStartTime(null);
     setElapsedTime(0);
     setFinished(false);
-    setGivenUp(false);
+    setShownSol(false);
   };
 
   return (
@@ -130,14 +130,14 @@ const LatexPage = () => {
         <b>Create the following formula in LaTeX:</b>
       </p>
       <div 
-        className={styles.target}
+        className={styles.container}
         ref={targetRef} >
       </div>
       <p>
         <b>Your output:</b>
       </p>
       <div 
-        className={styles.container}
+        className={styles.container + (finished ? ' ' + styles.finished : '')}
         ref={containerRef}>
       </div>
       <p>
@@ -158,10 +158,13 @@ const LatexPage = () => {
         {finished && <button onClick={handleRestart}>Restart</button>}
       </div>
       <div>
-        {!finished && <button onClick={() => setGivenUp(true)}>Show Solution</button>}
+        {!finished && !shownSol && <button onClick={() => setShownSol(true)}>Show Solution</button>}
       </div>
       <div>
-        {givenUp && (<p><b>Solution:</b> {sampleEquation1}</p>)}
+        {!finished && shownSol && <button onClick={() => setShownSol(false)}>Hide Solution</button>}
+      </div>
+      <div>
+        {shownSol && (<p><b>Solution:</b> {sampleEquation1}</p>)}
       </div>
       {/* <p><b>Sample Equation 1:</b> {sampleEquation1}</p> */}
       {/* <p><b>Sample Equation 2:</b> {sampleEquation2}</p> */}

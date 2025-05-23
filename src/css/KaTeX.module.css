@@ -1,4 +1,4 @@
-.target {
+.container {
   min-height: 110px;
   width: 750px;
   display: flex;
@@ -10,17 +10,9 @@
   margin-left: 30px;
 }
 
-.container {
-  min-height: 110px;
-  width: 750px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid;
-  padding: 5px;
-  margin-top: 10px;
-  margin-left: 30px;
-  background-color: #90EE90;
+.finished {
+  color: green;
+  background-color: #e4fadc;
 }
 
 .result {
