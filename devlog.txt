@@ -119,6 +119,9 @@ aidanW -- 2025-05-22 20:27
 
 aidanW -- 2025-05-22 20:27
 
+chloeW, saschaGZ -- 2025-05-23 11:01
+* Errors can no longer be successes! Spaces and brackets can still be removed/added to no detriment. 
+* Working on turning the output box green when the user succeeds.
 ------------------------------------------------------------------------
 DEVLOG ENTRY OUTLINING APPLICATION OF JAVASCRIPT STYLE
 ------------------------------------------------------------------------
