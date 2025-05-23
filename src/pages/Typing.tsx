@@ -1,17 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from '@css/Typing.module.css';
 
-const sampleText = "The quick brown fox jumps over the lazy dog.";
-let total = 0;
-let correct = 0;
-
 const Typing = () => {
+
   const [input, setInput] = useState("");
   const [startTime, setStartTime] = useState<number | null>(null);
   const [wpm, setWpm] = useState<number>(0);
   const [accuracy, setAccuracy] = useState<number>(100); // Reat Hooks: accuracy is state variable, setAccuracy is function to update it, useState<number>(100) initializes it to 0
   const [finished, setFinished] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  // Use refs for mutable counters
+  const total = useRef(0);
+  const correct = useRef(0);
+
+  const sampleText = "The quick brown fox jumps over the lazy dog.";
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -22,6 +25,7 @@ const Typing = () => {
         setWpm(elapsed > 0 ? Math.round(words / elapsed) : 0);
       }, 500);
     }
+
     return () => {
       if (interval) clearInterval(interval);
     };
@@ -42,11 +46,14 @@ const Typing = () => {
   }, [startTime, finished, input]);
   
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+
     const value = e.target.value;
     const newCharacter = value.length > input.length;
+
     if (newCharacter) {
-        total++;
+        total.current++;
     }
+
     if (!startTime && value.length === 1) {
         setStartTime(Date.now());
     }
@@ -54,8 +61,8 @@ const Typing = () => {
 
     // Calculate accuracy if new character is typed
     if (newCharacter) {
-        if (value[value.length-1] === sampleText[value.length-1]) correct++;
-        const acc = value.length > 0 ? Math.round((correct / total) * 100) : 100;
+        if (value[value.length-1] === sampleText[value.length-1]) correct.current++;
+        const acc = value.length > 0 ? Math.round((correct.current / total.current) * 100) : 100;
         setAccuracy(acc);
     }
 
@@ -77,8 +84,8 @@ const Typing = () => {
   };
 
   const handleRestart = () => {
-    correct = 0;
-    total = 0;
+    correct.current = 0;
+    total.current = 0;
     setAccuracy(100);
     setInput("");
     setStartTime(null);
@@ -121,6 +128,7 @@ const Typing = () => {
         )}
         </div>
     </div>
+
   );
 };
 
