@@ -6,6 +6,12 @@ import styles from '@css/KaTeX.module.css';
 // Custom tab instead of \t because we think it looks nicer (four spaces)
 const TAB = '    '; 
 
+const formulas: string[] = [
+  '\\zeta(s) = \\sum_{n \\geq 1} \\frac{1}{n^s} \\quad \\quad \\forall{s > 1}',
+  '\\left(\\frac{\\int_0^\\infty e^{-x^2} \\mathrm{d}x}{\\frac{\\sqrt\\pi}{2}}\\right) = 1',
+  '\\zeta(3) = \\frac{5}{2} \\sum_{n=1}^\\infty \\frac{(-1)^{n-1}}{n^3 \\binom{2n}{n}}'
+];
+
 const LatexPage = () => {
 
   const [finished, setFinished] = useState(false);
@@ -15,6 +21,13 @@ const LatexPage = () => {
 
   const [startTime, setStartTime] = useState<number | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
+
+  const [targetEquation, setTargetEquation] = useState<string>('');
+
+  useEffect(() => {
+    const index = Math.floor(Math.random() * formulas.length);
+    setTargetEquation(formulas[index]);
+  }, []);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -29,13 +42,8 @@ const LatexPage = () => {
     };
   }, [startTime, finished]);
 
-  const sampleEquation1 = '\\zeta(s) = \\sum_{n \\geq 1} \\frac{1}{n^s} \\quad \\quad \\forall{s > 1}'
-  const sampleEquation2 = '\\left(\\frac{\\int_0^\\infty e^{-x^2} \\, \\mathrm{d}x}{\\frac{\\sqrt\\pi}{2}}\\right) = 1'
-  const sampleEquation3 = '\\zeta(3) = \\frac{5}{2} \\sum_{n=1}^\\infty \\frac{(-1)^{n-1}}{n^3 \\binom{2n}{n}}'
-
-  function cleanUp(str) {
+  function cleanUp(str: string) {
     try {
-        var html = katex.renderToString(str);
         const noLB = str.replace(/[{]/g, "");
         const noRB = noLB.replace(/[}]/g, "");
         return noRB.replace(/ /g, "");
@@ -60,8 +68,7 @@ const LatexPage = () => {
 
     setEquation(e.target.value);
 
-    if (cleanUp(e.target.value) === cleanUp(sampleEquation1)) {
-        console.log(cleanUp(sampleEquation1))
+    if (cleanUp(e.target.value) === cleanUp(targetEquation)) {
         setFinished(true);
     }
   };
@@ -107,15 +114,17 @@ const LatexPage = () => {
     if (targetRef.current) {
       targetRef.current.innerHTML = '';
       const equationElement = document.createElement('div');
-      katex.render(sampleEquation1, equationElement, {
+      katex.render(targetEquation, equationElement, {
         throwOnError: false,
         displayMode: true,
       });
       targetRef.current.appendChild(equationElement);
     }
-  }, []);
+  }, [targetEquation]);
 
   const handleRestart = () => {
+    const index = Math.floor(Math.random() * formulas.length);
+    setTargetEquation(formulas[index]);
     setEquation("");
     setStartTime(null);
     setElapsedTime(0);
@@ -155,7 +164,7 @@ const LatexPage = () => {
       </div>
       <p><b>Time Elapsed:</b> {Math.round(elapsedTime)}s</p>
       <div>
-        {finished && <button onClick={handleRestart}>Restart</button>}
+        {finished && <button onClick={handleRestart}>Next</button>}
       </div>
       <div>
         {!finished && !shownSol && <button onClick={() => setShownSol(true)}>Show Solution</button>}
@@ -164,11 +173,8 @@ const LatexPage = () => {
         {!finished && shownSol && <button onClick={() => setShownSol(false)}>Hide Solution</button>}
       </div>
       <div>
-        {shownSol && (<p><b>Solution:</b> {sampleEquation1}</p>)}
+        {shownSol && (<p><b>Solution:</b> {targetEquation}</p>)}
       </div>
-      {/* <p><b>Sample Equation 1:</b> {sampleEquation1}</p> */}
-      {/* <p><b>Sample Equation 2:</b> {sampleEquation2}</p> */}
-      {/* <p><b>Sample Equation 3:</b> {sampleEquation3}</p> */}
     </div>
   );
 };
