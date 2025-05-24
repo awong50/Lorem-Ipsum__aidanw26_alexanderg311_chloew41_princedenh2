@@ -44,6 +44,7 @@ const LatexPage = () => {
 
   function cleanUp(str: string) {
     try {
+        var html = katex.renderToString(str);
         const noLB = str.replace(/[{]/g, "");
         const noRB = noLB.replace(/[}]/g, "");
         return noRB.replace(/ /g, "");
