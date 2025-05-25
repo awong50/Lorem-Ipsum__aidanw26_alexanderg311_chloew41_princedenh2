@@ -50,6 +50,7 @@ router.get('/users', async (_req, res) => {
 router.get('/words', async (_req, res) => {
   try {
      res.json(RandomWords());
+    
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json({ error: error.message });
