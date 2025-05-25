@@ -1,4 +1,5 @@
 import express from 'express';
+import session from 'express-session';
 import cors from 'cors';
 import path from 'path';
 import connectDB from './db/mongoose';
@@ -12,6 +13,15 @@ connectDB();
 
 app.use(cors());
 app.use(express.json());
+
+app.use(
+  session({
+    secret: 'supasecretkeyhehe', 
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: true } 
+  })
+);
 
 // API Routes
 app.use('/api', apiRouter);

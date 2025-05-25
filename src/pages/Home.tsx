@@ -1,6 +1,13 @@
+import LogoutButton from '../components/LogoutButton';
+
 const Home = () => {
+  const isLoggedIn = !!localStorage.getItem('user');
+
   return (
-    <h1>Home Page</h1>
+    <div>
+      <h1>Home Page</h1>
+      {isLoggedIn && <LogoutButton />}
+    </div>
   );
 };
 
