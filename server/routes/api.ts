@@ -99,42 +99,4 @@ router.post('/logout', (req, res) => {
   });
 });
 
-// Save typing test result for logged-in user
-router.post('/typing-result', async (req, res) => {
-  try {
-    const { wpm, accuracy } = req.body;
-    const username = req.body.username; // Or get from session if using sessions
-
-    if (!username) {
-      res.status(401).json({ error: 'Not logged in' });
-    }
-
-    const user = await User.findOne({ name: username });
-    if (!user) {
-      res.status(404).json({ error: 'User not found' });
-      return;
-    }
-
-    user.typingTests.push({ wpm, accuracy });
-    await user.save();
-    res.json({ message: 'Result saved' });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to save result' });
-  }
-});
-
-// Get typing test history for a user
-router.get('/typing-history/:username', async (req, res) => {
-  try {
-    const user = await User.findOne({ name: req.params.username });
-    if (!user) {
-      res.status(404).json({ error: 'User not found' });
-      return;
-    }
-    res.json(user.typingTests || []);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch history' });
-  }
-});
-
 export default router;
