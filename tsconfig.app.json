@@ -23,5 +23,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "src/pages/Register.tsx"]
+  "include": ["src", "src/pages/Register.tsx", "server/data/RandomWords.tsx"]
 }

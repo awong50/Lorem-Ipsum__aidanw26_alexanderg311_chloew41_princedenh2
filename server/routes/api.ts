@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import User from '../models/User';
 import userQuery from '../db/userQuery';
-
+import RandomWords from '../data/RandomWords';
+import { random } from 'lodash';
 const router = Router();
 
 // Create a new user
@@ -46,7 +47,17 @@ router.get('/users', async (_req, res) => {
     }
   }
 });
-
+router.get('/words', async (_req, res) => {
+  try {
+     res.json(RandomWords());
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: 'An unknown error occurred' });
+    }
+  }
+});
 // Validate one user
 router.get('/validateUser', async (_req, res) => {
   const userInfo = userQuery
