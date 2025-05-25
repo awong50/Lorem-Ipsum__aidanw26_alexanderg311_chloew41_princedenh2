@@ -113,10 +113,11 @@ const Typing = () => {
       setFinished(true);
     }
   };
-
+  
   useEffect(() => {
     if (finished && localStorage.getItem('user')) {
       const user = JSON.parse(localStorage.getItem('user')!);
+      console.log('Saving result:', { wpm, accuracy, username: user.name });
       fetch('/api/typing-result', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -127,7 +128,6 @@ const Typing = () => {
         })
       });
     }
-    // eslint-disable-next-line
   }, [finished]);
 
   const handleRestart = () => {

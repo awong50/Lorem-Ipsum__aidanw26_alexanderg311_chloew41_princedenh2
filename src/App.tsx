@@ -7,6 +7,7 @@ import TypingPage from './pages/Typing';
 import Login from './pages/Login';
 import Protected from './pages/Protected';
 import LogoutButton from './components/LogoutButton';
+import UserProfile from './pages/UserProfile';
 
 function App() {
   const isLoggedIn = !!localStorage.getItem('user'); // Check if user is logged in
@@ -21,6 +22,7 @@ function App() {
         <Link to="/latex">View LaTeX Page</Link> |{' '}
         <Link to="/typing">View Typing Page</Link> |{' '}
         <Link to="/protected">Protected</Link>
+        <Link to="/user-profile">User Profile</Link>
         {isLoggedIn && <LogoutButton />} {/* Show logout button if logged in */}
       </nav>
       <Routes>
@@ -31,6 +33,7 @@ function App() {
         <Route path="/latex" element={<LatexPage />} />
         <Route path="/typing" element={<TypingPage />} />
         <Route path="/protected" element={<Protected />} />
+        <Route path="/user-profile" element={<UserProfile />} /> {/* User profile route */}
       </Routes>
     </div>
   );

@@ -99,4 +99,45 @@ router.post('/logout', (req, res) => {
   });
 });
 
+router.post('/typing-result', async (req, res) => {
+  try {
+    const { username, wpm, accuracy } = req.body;
+    const user = await User.findOne({ name: username });
+
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+    
+    user.typingTests = user.typingTests || [];
+    user.typingTests.push({ wpm, accuracy, date: new Date() });
+
+    // Keep only last 10 results
+    if (user.typingTests.length > 10) {
+      user.typingTests = user.typingTests.slice(-10);
+    }
+
+    await user.save();
+    res.status(200).json({ message: 'Typing result saved' });
+  } catch (error) {
+    console.error(error); // Add this for debugging
+    res.status(500).json({ error: 'Failed to save result' });
+  }
+});
+
+router.get('/typing-history/:username', async (req, res) => {
+  try {
+    const user = await User.findOne({ name: req.params.username });
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    res.status(200).json(user.typingTests);
+  } catch (error) {
+    res.status(500).json({ error: 'Error retrieving history' });
+  }
+});
+
+
 export default router;
