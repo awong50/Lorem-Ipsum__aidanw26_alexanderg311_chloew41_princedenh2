@@ -154,6 +154,9 @@ aidanW -- 2025-05-24 20:07
 * Completed logout functionality
 * Made typing test countdown
 
-princedenH -- 20205-05-24 22:0
+princedenH -- 20205-05-24 22:00
 * Created backend api to get list of random words 
 * Incorporated with typing test to select from random words
+
+aidanW -- 2025-05-25 13:46
+* Created user profile save logic for typing tests
