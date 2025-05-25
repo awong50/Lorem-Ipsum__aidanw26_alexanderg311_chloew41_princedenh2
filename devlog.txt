@@ -118,16 +118,6 @@ aidanW -- 2025-05-22 20:27
 * Removed unecessary/unused code from KaTeXPage and fixed variable any error
 
 aidanW -- 2025-05-22 20:27
-
-chloeW, saschaGZ -- 2025-05-23 11:01
-* Errors can no longer be successes! Spaces and brackets can still be removed/added to no detriment. 
-* Working on turning the output box green when the user succeeds.
-
-chloeW -- 2025-05-23 20:22
-* Finished turning output box green when user succeeds on KaTeX page
-* Added back hide solution button
-* Set up target formula to be randomly selected from a premade list
-
 ------------------------------------------------------------------------
 DEVLOG ENTRY OUTLINING APPLICATION OF JAVASCRIPT STYLE
 ------------------------------------------------------------------------
@@ -149,3 +139,16 @@ Typing.tsx
     * Altered related code to use the new useRef (lines include 50, 82, 83) -> *.current to change
 
 * Not mentioned in docs, but altered line spacing for better readability
+
+
+chloeW, saschaGZ -- 2025-05-23 11:01
+* Errors can no longer be successes! Spaces and brackets can still be removed/added to no detriment. 
+* Working on turning the output box green when the user succeeds.
+
+chloeW -- 2025-05-23 20:22
+* Finished turning output box green when user succeeds on KaTeX page
+* Added back hide solution button
+* Set up target formula to be randomly selected from a premade list
+
+aidanW -- 2025-05-24 20:07
+* Completed logout functionality
