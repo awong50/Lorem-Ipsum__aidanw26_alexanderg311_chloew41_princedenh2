@@ -2,84 +2,67 @@ import React, { useState, useRef, useEffect } from "react";
 import styles from '@css/Typing.module.css';
 
 const Typing = () => {
-
   const [input, setInput] = useState("");
   const [startTime, setStartTime] = useState<number | null>(null);
   const [wpm, setWpm] = useState<number>(0);
-  const [accuracy, setAccuracy] = useState<number>(100); // Reat Hooks: accuracy is state variable, setAccuracy is function to update it, useState<number>(100) initializes it to 0
+  const [accuracy, setAccuracy] = useState<number>(100);
   const [finished, setFinished] = useState(false);
+  const timeTotal = 15;
+  const [timeLeft, setTimeLeft] = useState(timeTotal); // Countdown
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Use refs for mutable counters
   const total = useRef(0);
   const correct = useRef(0);
 
   const sampleText = "The quick brown fox jumps over the lazy dog.";
 
+  // Countdown timer effect
   useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-    if (startTime && !finished) {
-      interval = setInterval(() => {
-        const elapsed = (Date.now() - startTime) / 1000 / 60; // minutes
-        const words = input.trim().split(/\s+/).length;
-        setWpm(elapsed > 0 ? Math.round(words / elapsed) : 0);
-      }, 500);
+    if (!startTime || finished) return;
+    if (timeLeft <= 0) {
+      setFinished(true);
+      return;
     }
-
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [startTime, finished, input]);
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [startTime, finished, timeLeft]);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-    if (startTime && !finished) {
-      interval = setInterval(() => {
-        const elapsed = (Date.now() - startTime) / 1000 / 60; // minutes passed since start (used for WPM)
-        const words = input.trim().split(/\s+/).length;
-        setWpm(elapsed > 0 ? Math.round(words / elapsed) : 0);
-      }, 100); // Update the live number here (100 ms currently)
+    if (!startTime) return;
+    let endTime = Date.now();
+    if (finished && input.length > 0) {
+      endTime = startTime + (timeTotal - timeLeft) * 1000;
     }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [startTime, finished, input]);
-  
+    const elapsedMinutes = (endTime - startTime) / 1000 / 60;
+    const words = input.trim().length === 0 ? 0 : input.trim().split(/\s+/).length;
+    setWpm(elapsedMinutes > 0 ? Math.round(words / elapsedMinutes) : 0);
+  }, [input, finished, startTime, timeLeft]);
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (finished) return;
 
     const value = e.target.value;
     const newCharacter = value.length > input.length;
 
     if (newCharacter) {
-        total.current++;
+      total.current++;
     }
 
     if (!startTime && value.length === 1) {
-        setStartTime(Date.now());
+      setStartTime(Date.now());
     }
     setInput(value);
 
-    // Calculate accuracy if new character is typed
     if (newCharacter) {
-        if (value[value.length-1] === sampleText[value.length-1]) correct.current++;
-        const acc = value.length > 0 ? Math.round((correct.current / total.current) * 100) : 100;
-        setAccuracy(acc);
-    }
-
-    // Live update WPM on every keystroke
-    if (startTime && !finished) {
-        const elapsed = (Date.now() - startTime) / 1000 / 60;
-        const words = value.trim().split(/\s+/).length;
-        setWpm(elapsed > 0 ? Math.round(words / elapsed) : 0);
+      if (value[value.length - 1] === sampleText[value.length - 1]) correct.current++;
+      const acc = value.length > 0 ? Math.round((correct.current / total.current) * 100) : 100;
+      setAccuracy(acc);
     }
 
     if (value === sampleText) {
-        setFinished(true);
-        if (startTime) {
-        const timeTaken = (Date.now() - startTime) / 1000 / 60; // minutes
-        const words = sampleText.split(" ").length;
-        setWpm(Math.round(words / timeTaken));
-        }
+      setFinished(true);
     }
   };
 
@@ -91,6 +74,7 @@ const Typing = () => {
     setStartTime(null);
     setWpm(0);
     setFinished(false);
+    setTimeLeft(timeTotal);
     inputRef.current?.focus();
   };
 
@@ -102,6 +86,9 @@ const Typing = () => {
       </p>
       <div className={styles.sample}>
         {sampleText}
+      </div>
+      <div>
+        <strong>Time Left: {timeLeft}s</strong>
       </div>
       <textarea
         ref={inputRef}
@@ -115,20 +102,19 @@ const Typing = () => {
       />
       <div className={styles.result}>
         {finished ? (
-            <>
+          <>
             <h2>Your WPM: {wpm}</h2>
             <h2>Accuracy: {accuracy}%</h2>
             <button onClick={handleRestart}>Restart</button>
-            </>
+          </>
         ) : (
-            <>
+          <>
             <p>WPM: {wpm}</p>
             <p>Accuracy: {accuracy}%</p>
-            </>
+          </>
         )}
-        </div>
+      </div>
     </div>
-
   );
 };
 
