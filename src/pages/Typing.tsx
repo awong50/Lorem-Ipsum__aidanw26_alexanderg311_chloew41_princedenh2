@@ -1,7 +1,6 @@
-import React, { useState, useRef, useEffect, use } from "react";
+import React, { useState, useRef, useEffect} from "react";
 import styles from '@css/Typing.module.css';
-import _, { set } from 'lodash'; // Import lodash for sampling
-import RandomWords from '../../server/data/RandomWords';
+import _ from 'lodash'; // Import lodash for sampling
 
 const Typing = () => {
   const [input, setInput] = useState("");
@@ -17,7 +16,6 @@ const Typing = () => {
   // Use refs for mutable counters
   const total = useRef(0);
   const correct = useRef(0);
-  const incorrect = useRef(0);
 
   useEffect(() => {
     if (!startTime || finished) return;
