@@ -152,3 +152,4 @@ chloeW -- 2025-05-23 20:22
 
 aidanW -- 2025-05-24 20:07
 * Completed logout functionality
+* Made typing test countdown
