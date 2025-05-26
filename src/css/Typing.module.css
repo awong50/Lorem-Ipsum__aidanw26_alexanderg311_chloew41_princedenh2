@@ -1,9 +1,7 @@
 .container {
   max-width: 650px;
-  margin: 2em auto;
-  background: var(--card-bg);
+  margin: 20em auto;
   border-radius: 18px;
-  box-shadow: var(--card-shadow);
   padding: 2.5em 2em 2em 2em;
   display: flex;
   flex-direction: column;
@@ -13,8 +11,7 @@
 .sample {
   padding: 1.2em 1em;
   border-radius: 10px;
-  background: #181a20;
-  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.18);
+  background: #2e2f34;
   margin-bottom: 1.5em;
   font-family: 'Fira Mono', 'Consolas', monospace;
   font-size: 1.3em;

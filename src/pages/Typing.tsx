@@ -73,7 +73,7 @@ const Typing = () => {
               key={idx}
               style={{
                 color,
-                background: input.length === idx ? '#333' : 'transparent', // optional: highlight current letter
+                background: input.length === idx ? 'red' : 'transparent', // highlight current letter
                 transition: 'color 0.1s',
                 fontFamily: 'monospace',
                 fontSize: '1.2em',
@@ -145,10 +145,6 @@ const Typing = () => {
 
   return (
   <div className={styles.container}>
-    <h1>Typing Speed Test</h1>
-    <p>
-      <strong>Type the following text:</strong>
-    </p>
     <div
       className={styles.sample}
       style={{

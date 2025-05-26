@@ -1,12 +1,12 @@
 :root {
   font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-  background: linear-gradient(135deg, #181a20 0%, #23272f 100%);
+  background: linear-gradient(135deg, #2e2f34 0%, #23272f 100%);
   color: #e3e3e3;
   --accent: #ffd600;
   --accent-bg: #23272f;
   --card-bg: #23272f;
   --card-shadow: 0 4px 32px 0 rgba(0,0,0,0.25);
-  --input-bg: #181a20;
+  --input-bg: #2e2f34;
   --input-border: #333;
   --input-focus: var(--accent);
 }
@@ -37,7 +37,7 @@ button {
 }
 button:hover, button:focus {
   background: #fff176;
-  color: #181a20;
+  color: #2e2f34;
   outline: none;
   box-shadow: 0 4px 16px 0 rgba(0,0,0,0.18);
 }
@@ -49,15 +49,4 @@ a {
 }
 a:hover {
   color: #fff176;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    background: linear-gradient(135deg, #f9f9f9 0%, #e3e3e3 100%);
-    color: #23272f;
-    --accent-bg: #fffde7;
-    --card-bg: #fff;
-    --input-bg: #f9f9f9;
-    --input-border: #ccc;
-  }
 }

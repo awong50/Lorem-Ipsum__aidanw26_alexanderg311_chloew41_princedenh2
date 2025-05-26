@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from '@css/Auth.module.css';
 const API_URL = import.meta.env.VITE_API_URL;
-
 const Auth = () => {
+  const navigate = useNavigate();
   const [registerForm, setRegisterForm] = useState({ name: '', password: '' });
   const [loginForm, setLoginForm] = useState({ name: '', password: '' });
   const [registerMsg, setRegisterMsg] = useState('');
@@ -48,6 +49,9 @@ const Auth = () => {
       if (res.ok) {
         localStorage.setItem('user', JSON.stringify(data.user));
         setLoginMsg('Login successful!');
+        setTimeout(() => {
+            navigate('/typing');
+        }, 500)
       } else {
         setLoginMsg(data.error || 'Login failed');
       }

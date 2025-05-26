@@ -4,7 +4,7 @@
   gap: 4rem;
   padding: 4rem 2rem;
   min-height: 81.5vh;
-  background-color: #1c1c1c;
+  background-color: #2e2f34;
   color: #eee;
 }
 
@@ -13,10 +13,8 @@
   flex-direction: column;
   gap: 1rem;
   padding: 2rem;
-  background-color: #2a2a2a;
   border-radius: 12px;
   width: 280px;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
   height: 30vh;
 }
 
