@@ -11,10 +11,22 @@ const PORT = process.env.PORT || 3000;
 // Connect to MongoDB
 connectDB();
 
+const allowedOrigins = [
+  'https://prototype.awong50.tech',
+  'http://localhost:5173',
+];
+
 app.use(cors({
-  origin: 'https://prototype.awong50.tech',
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
+
 
 app.use(express.json());
 
