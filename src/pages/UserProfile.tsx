@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 const API_URL = import.meta.env.VITE_API_URL;
 
 interface TypingTest {
@@ -8,6 +9,15 @@ interface TypingTest {
 }
 
 const UserProfile = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (!user) {
+      navigate('/login'); // Redirect to login if not logged in
+    }
+  }, [navigate]);
+
   const [history, setHistory] = useState<TypingTest[]>([]);
   const [user, setUser] = useState<{ name: string }>({ name: '' });
 

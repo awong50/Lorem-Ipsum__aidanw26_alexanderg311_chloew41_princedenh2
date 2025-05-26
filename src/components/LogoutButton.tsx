@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const LogoutButton = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      const res = await fetch('/api/logout', {
+      const res = await fetch(`${API_URL}/api/logout`, {
         method: 'POST',
         credentials: 'include', // Include cookies for session
       });

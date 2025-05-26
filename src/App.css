@@ -1,32 +1,63 @@
-#root {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
-  text-align: center;
+:root {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #181a20 0%, #23272f 100%);
+  color: #e3e3e3;
+  --accent: #ffd600;
+  --accent-bg: #23272f;
+  --card-bg: #23272f;
+  --card-shadow: 0 4px 32px 0 rgba(0,0,0,0.25);
+  --input-bg: #181a20;
+  --input-border: #333;
+  --input-focus: var(--accent);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: #181a20;
+  background: inherit;
+  color: inherit;
 }
 
-nav {
-  margin-bottom: 2rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1em;
-  justify-content: center;
-  align-items: center;
+h1, h2, h3 {
+  font-weight: 700;
+  letter-spacing: -1px;
 }
 
-nav a {
-  color: #fff;
+button {
+  border-radius: 8px;
+  border: none;
+  padding: 0.7em 1.5em;
+  font-size: 1.1em;
+  font-weight: 600;
+  background: var(--accent);
+  color: #181a20;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.12);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+button:hover, button:focus {
+  background: #fff176;
+  color: #181a20;
+  outline: none;
+  box-shadow: 0 4px 16px 0 rgba(0,0,0,0.18);
+}
+
+a {
+  color: var(--accent);
   text-decoration: none;
-  padding: 0.5em 1em;
-  border-radius: 4px;
-  transition: background 0.2s;
+  font-weight: 500;
+}
+a:hover {
+  color: #fff176;
 }
 
-nav a:hover {
-  background: #23272f;
+@media (prefers-color-scheme: light) {
+  :root {
+    background: linear-gradient(135deg, #f9f9f9 0%, #e3e3e3 100%);
+    color: #23272f;
+    --accent-bg: #fffde7;
+    --card-bg: #fff;
+    --input-bg: #f9f9f9;
+    --input-border: #ccc;
+  }
 }

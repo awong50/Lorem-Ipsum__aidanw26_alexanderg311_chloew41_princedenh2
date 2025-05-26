@@ -1,19 +1,47 @@
 .container {
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: 650px;
+  margin: 2em auto;
+  background: var(--card-bg);
+  border-radius: 18px;
+  box-shadow: var(--card-shadow);
+  padding: 2.5em 2em 2em 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .sample {
-  padding: 1em;
-  border-radius: 5px;
-  margin-bottom: 1em;
+  padding: 1.2em 1em;
+  border-radius: 10px;
+  background: #181a20;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.18);
+  margin-bottom: 1.5em;
+  font-family: 'Fira Mono', 'Consolas', monospace;
+  font-size: 1.3em;
+  letter-spacing: 0.02em;
+  min-height: 2.8em;
+  width: 100%;
+  color: #bdbdbd;
+  transition: background 0.2s;
 }
 
 .textarea {
-  font-size: 1.1em;
+  font-size: 1.2em;
+  font-family: 'Fira Mono', 'Consolas', monospace;
+  background: transparent;
+  color: #fff;
+  border: none;
+  outline: none;
   width: 100%;
+  resize: none;
 }
 
 .result {
-  margin-top: 1em;
+  margin-top: 2em;
+  text-align: center;
+}
+
+strong {
+  color: var(--accent);
+  font-weight: 700;
 }
