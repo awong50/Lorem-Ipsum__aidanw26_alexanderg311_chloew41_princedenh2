@@ -44,16 +44,12 @@ const LatexPage = () => {
 
   function cleanUp(str: string) {
     try {
-        var html = katex.renderToString(str);
         const noLB = str.replace(/[{]/g, "");
         const noRB = noLB.replace(/[}]/g, "");
         return noRB.replace(/ /g, "");
     }
     catch (e) {
         if (e instanceof katex.ParseError) {
-            // KaTeX can't parse the expression
-            html = ("Error in LaTeX '" + str + "': " + e.message)
-                .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
             return("")
         }
     }
