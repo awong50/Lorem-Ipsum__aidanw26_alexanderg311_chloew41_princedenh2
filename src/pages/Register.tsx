@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styles from '@css/Register.module.css';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Register = () => {
   const [form, setForm] = useState({ name: '', password: '' });
@@ -13,7 +14,7 @@ const Register = () => {
     e.preventDefault();
     setMessage('');
     try {
-      const res = await fetch('/api/users', {
+      const res = await fetch(`${API_URL}/api/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),

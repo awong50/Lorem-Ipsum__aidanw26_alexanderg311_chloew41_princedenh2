@@ -16,23 +16,14 @@ app.use(express.json());
 
 app.use(
   session({
-    secret: 'supasecretkeyhehe', 
+    secret: 'supasecretkeyhehe',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: true } 
+    cookie: { secure: false }
   })
 );
-
 // API Routes
 app.use('/api', apiRouter);
-
-// Serve static files
-app.use(express.static(path.join(__dirname, '../dist')));
-
-// Wildcard route (must be last)
-app.use((_req, res) => {
-  res.sendFile(path.join(__dirname, '../dist/index.html'));
-});
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

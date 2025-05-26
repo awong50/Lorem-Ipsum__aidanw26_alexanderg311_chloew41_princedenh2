@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '@css/Login.module.css';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Login = () => {
   const [form, setForm] = useState({ name: '', password: '' });
@@ -15,7 +16,7 @@ const Login = () => {
     e.preventDefault();
     setMessage('');
     try {
-      const res = await fetch('/api/login', {
+      const res = await fetch(`${API_URL}/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),

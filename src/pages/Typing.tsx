@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect} from "react";
 import styles from '@css/Typing.module.css';
 import _ from 'lodash'; // Import lodash for sampling
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Typing = () => {
   const [input, setInput] = useState("");
@@ -44,7 +45,7 @@ const Typing = () => {
     // Fetch sample text from the server
     const fetchSampleText = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/words');
+        const response = await fetch(`${API_URL}/api/words`);
         console.log(response);
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
@@ -118,7 +119,7 @@ const Typing = () => {
     if (finished && localStorage.getItem('user')) {
       const user = JSON.parse(localStorage.getItem('user')!);
       console.log('Saving result:', { wpm, accuracy, username: user.name });
-      fetch('/api/typing-result', {
+      fetch(`${API_URL}/api/typing-result`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

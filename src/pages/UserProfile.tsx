@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+const API_URL = import.meta.env.VITE_API_URL;
 
 interface TypingTest {
   wpm: number;
@@ -16,7 +17,7 @@ const UserProfile = () => {
     const user = JSON.parse(stored);
     setUser(user);
 
-    fetch(`/api/typing-history/${user.name}`)
+    fetch(`${API_URL}/api/typing-history/${user.name}`)
       .then(res => res.json())
       .then((data: TypingTest[]) => setHistory(data))
       .catch(console.error);
