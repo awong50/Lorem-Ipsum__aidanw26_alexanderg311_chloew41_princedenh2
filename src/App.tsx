@@ -1,10 +1,8 @@
 import { Routes, Route, Link } from 'react-router-dom';
 import Home from './pages/Home';
-import Register from './pages/Register';
 import About from './pages/About';
 import LatexPage from './pages/KaTeXPage';
 import TypingPage from './pages/Typing';
-import Login from './pages/Login';
 import LogoutButton from './components/LogoutButton';
 import UserProfile from './pages/UserProfile';
 import Auth from './pages/Auth';
@@ -16,10 +14,6 @@ function App() {
     <div>
       <nav>
         <Link to="/">Home</Link>
-        <span>|</span>
-        <Link to="/register">Register</Link>
-        <span>|</span>
-        <Link to="/login">Login</Link>
         <span>|</span>
         <Link to="/about">About</Link>
         <span>|</span>
@@ -35,8 +29,6 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/about" element={<About />} />
         <Route path="/latex" element={<LatexPage />} />
         <Route path="/typing" element={<TypingPage />} />

@@ -14,7 +14,7 @@ const UserProfile = () => {
   useEffect(() => {
     const user = localStorage.getItem('user');
     if (!user) {
-      navigate('/login'); // Redirect to login if not logged in
+      navigate('/auth'); // Redirect to login if not logged in
     }
   }, [navigate]);
 
