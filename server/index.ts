@@ -23,7 +23,7 @@ app.use(
     secret: 'supasecretkeyhehe',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false }
+    cookie: { secure: true, sameSite: 'none' }
   })
 );
 // API Routes
