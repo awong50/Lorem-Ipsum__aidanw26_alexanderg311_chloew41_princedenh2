@@ -160,3 +160,8 @@ princedenH -- 20205-05-24 22:00
 
 aidanW -- 2025-05-25 13:46
 * Created user profile save logic for typing tests
+
+aidanW -- 2025-05-26 14:55
+* Created server to host backend logic
+* Added some CSS styling
+* Combined login and register pages
