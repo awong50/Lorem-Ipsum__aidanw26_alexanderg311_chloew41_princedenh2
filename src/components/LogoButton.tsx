@@ -6,7 +6,7 @@ const LogoButton = () => {
 
   return (
     <button
-      onClick={() => navigate('/typing')}
+      onClick={() => navigate('/')}
       style={{
         border: 'none',
         background: 'transparent',

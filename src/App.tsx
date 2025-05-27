@@ -2,7 +2,6 @@ import { Routes, Route, Link } from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
 import LatexPage from './pages/KaTeXPage';
-import TypingPage from './pages/Typing';
 import LogoutButton from './components/LogoutButton';
 import UserProfile from './pages/UserProfile';
 import Auth from './pages/Auth';
@@ -18,7 +17,7 @@ function App() {
     <div>
       <nav style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <LogoButton />
-        <Link to="/typing"><FaRegKeyboard size={20} />          </Link>
+        <Link to="/"><FaRegKeyboard size={20} />          </Link>
         <Link to="/about"><FaInfo size={20} />                     </Link>
         <Link to="/latex"><SiLatex size={20} /></Link>
         <Link to="/user-profile"><FaRegUser size={20}/></Link>
@@ -29,7 +28,6 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/latex" element={<LatexPage />} />
-        <Route path="/typing" element={<TypingPage />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/user-profile" element={<UserProfile />} />
       </Routes>

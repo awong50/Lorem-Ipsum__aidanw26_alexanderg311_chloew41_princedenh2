@@ -56,7 +56,7 @@ const LatexPage = () => {
             // KaTeX can't parse the expression
             html = ("Error in LaTeX '" + str + "': " + e.message)
                 .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            return("")
+            return(html)
         }
     }
   }
