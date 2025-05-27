@@ -170,5 +170,5 @@ aidanW -- 2025-05-26 16:57
 * Updated navbar buttons to images
 * Added more styling and background color changes
 
-chloeW, saschaGZ -- 2025-05-28 11:01
+chloeW, saschaGZ -- 2025-05-27 11:01
 * Re-fixed the problems with errors!
