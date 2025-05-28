@@ -15,7 +15,7 @@ const Typing = () => {
   const [timeLeft, setTimeLeft] = useState(timeTotal); // Countdown
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [sampleText, setSampleText] = useState<string>(""); // State to hold the sample text
-  const [caretIndex, setCaretIndex] = useState(0);
+  const [, setCaretIndex] = useState(0);
   const [inputFocused, setInputFocused] = useState(true);
 
   const [history, setHistory] = useState<{ wpm: number; accuracy: number }[]>([]);
