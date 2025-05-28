@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect} from "react";
 import styles from '@css/Typing.module.css';
+import { MdOutlineNavigateNext } from "react-icons/md";
 import _ from 'lodash'; // Import lodash for sampling
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -13,10 +14,19 @@ const Typing = () => {
   const [timeLeft, setTimeLeft] = useState(timeTotal); // Countdown
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [sampleText, setSampleText] = useState<string>(""); // State to hold the sample text
+  const [caretIndex, setCaretIndex] = useState(0);
+  const [inputFocused, setInputFocused] = useState(true);
+
 
   // Use refs for mutable counters
   const total = useRef(0);
   const correct = useRef(0);
+
+  useEffect(() => {
+    if (!finished) {
+      inputRef.current?.focus();
+    }
+  }, [finished]);
 
   useEffect(() => {
     if (!startTime || finished) return;
@@ -62,7 +72,7 @@ const Typing = () => {
 
   const renderSampleText = () => {
     return (
-      <span>
+      <span style={{ position: 'relative', display: 'inline-block' }}>
         {sampleText.split('').map((char, idx) => {
           let color = '#bbb'; // default gray
           if (input.length > idx) {
@@ -73,13 +83,29 @@ const Typing = () => {
               key={idx}
               style={{
                 color,
-                background: input.length === idx ? 'red' : 'transparent', // highlight current letter
-                transition: 'color 0.1s',
+                background: input.length === idx ? 'transparent' : 'transparent',
+                transition: 'color 0.3s',
                 fontFamily: 'monospace',
                 fontSize: '1.2em',
+                position: 'relative',
+                
               }}
             >
               {char}
+              {idx === input.length && !finished && (
+              <span
+                style={{
+                  position: 'absolute',
+                  left: '0%',
+                  transition: 'right 0.3s',
+                  top: 0,
+                  width: '2px',
+                  height: '1.2em',
+                  backgroundColor: '#fff',
+                  animation: 'blink 1s step-end infinite',
+                }}
+              />
+            )}
             </span>
           );
         })}
@@ -113,6 +139,8 @@ const Typing = () => {
     if (value === sampleText) {
       setFinished(true);
     }
+
+    setCaretIndex(value.length);
   };
   
   useEffect(() => {
@@ -141,65 +169,120 @@ const Typing = () => {
     setFinished(false);
     setTimeLeft(timeTotal);
     inputRef.current?.focus();
+
+    // Fetch new sample text
+    const fetchSampleText = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/words`);
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        const sample = _.sampleSize(data, 50).join(" ");
+        setSampleText(sample);
+      } catch (error) {
+        console.error('Error fetching sample text:', error);
+      }
+    };
+    fetchSampleText();
   };
 
-  return (
-  <div className={styles.container}>
-    <div
-      className={styles.sample}
-      style={{
-      userSelect: 'none',
-      marginBottom: 8,
-      position: 'relative',
-      minHeight: '2.5em', // ensures enough height for textarea overlay
-      cursor: 'text', // This ensures the cursor stays as 'text' always
-      }}
-      onClick={() => inputRef.current?.focus()}
-    >
-      {renderSampleText()}
-      <textarea
-      ref={inputRef}
-      value={input}
-      onChange={handleChange}
-      rows={3}
-      cols={60}
-      disabled={finished}
-      className={styles.textarea}
-      placeholder="Start typing here..."
-      style={{
-        opacity: 0,
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        resize: 'none',
-        pointerEvents: finished ? 'none' : 'auto',
-        zIndex: 2,
-        cursor: 'default',
-      }}
-      tabIndex={0}
-      />
-    </div>
-    <div>
-      <strong>Time Left: {timeLeft}s</strong>
-    </div>
-    <div className={styles.result}>
+return (
+    <div className={styles.container}>
       {finished ? (
-        <>
+        <div style={{ textAlign: 'center', marginTop: '3em' }}>
+          <h1>Results</h1>
           <h2>Your WPM: {wpm}</h2>
           <h2>Accuracy: {accuracy}%</h2>
-          <button onClick={handleRestart}>Restart</button>
-        </>
+          <button onClick={handleRestart}><MdOutlineNavigateNext /></button>
+        </div>
       ) : (
         <>
-          <p>WPM: {wpm}</p>
-          <p>Accuracy: {accuracy}%</p>
+          <div
+            className={styles.sample}
+            style={{
+              userSelect: 'none',
+              marginBottom: 8,
+              position: 'relative',
+              minHeight: '2.5em',
+              cursor: 'text',
+            }}
+            onClick={() => {
+              inputRef.current?.focus();
+              setInputFocused(true);
+            }}
+          >
+            {renderSampleText()}
+            <textarea
+              ref={inputRef}
+              value={input}
+              onChange={handleChange}
+              rows={3}
+              cols={60}
+              disabled={finished}
+              className={styles.textarea}
+              placeholder="Start typing here..."
+              style={{
+                opacity: 0,
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                resize: 'none',
+                pointerEvents: finished ? 'none' : 'auto',
+                zIndex: 2,
+                cursor: 'default',
+              }}
+              tabIndex={0}
+              onFocus={() => setInputFocused(true)}
+              onBlur={() => setInputFocused(false)}
+              onKeyDown={(e) => {
+                if (finished && (e.key === "Tab" || e.key === "Enter")) {
+                  e.preventDefault();
+                  handleRestart();
+                }
+              }}
+            />
+            {!inputFocused && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  background: 'rgba(30,30,30,0.7)',
+                  backdropFilter: 'blur(2px)',
+                  zIndex: 10,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#fff',
+                  fontSize: '1.3em',
+                  borderRadius: '12px',
+                  pointerEvents: 'auto',
+                  cursor: 'pointer',
+                  transition: 'background 0.2s',
+                }}
+                onClick={() => {
+                  inputRef.current?.focus();
+                  setInputFocused(true);
+                }}
+              >
+                Click here to start typing
+              </div>
+            )}
+          </div>
+          <div>
+            <strong>Time Left: {timeLeft}s</strong>
+          </div>
+          <div className={styles.result}>
+            <p>WPM: {wpm}</p>
+            <p>Accuracy: {accuracy}%</p>
+          </div>
         </>
       )}
     </div>
-  </div>
-);
-};
+  );
+}
 
 export default Typing;

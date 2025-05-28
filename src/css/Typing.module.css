@@ -1,29 +1,33 @@
 .container {
-  max-width: 650px;
-  margin: 20em auto;
+  max-width: 1450px; 
+  margin: 10em auto; 
   border-radius: 18px;
-  padding: 2.5em 2em 2em 2em;
+  padding: 3em 2em;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .sample {
-  padding: 1.2em 1em;
-  border-radius: 10px;
+  padding: 1.5em;
+  border-radius: 12px;
   background: #2e2f34;
-  margin-bottom: 1.5em;
+  margin-bottom: 2em;
   font-family: 'Fira Mono', 'Consolas', monospace;
-  font-size: 1.3em;
-  letter-spacing: 0.02em;
-  min-height: 2.8em;
+  font-size: 1.8em; 
+  letter-spacing: 0.035em; 
+  line-height: 1.6em;
+  min-height: 4em;
   width: 100%;
-  color: #bdbdbd;
+  color: #dcdcdc;
   transition: background 0.2s;
+  word-wrap: break-word;
+  word-spacing: 0.2em;
+  margin-top: 160px;
 }
 
 .textarea {
-  font-size: 1.2em;
+  font-size: 1.6em; 
   font-family: 'Fira Mono', 'Consolas', monospace;
   background: transparent;
   color: #fff;
@@ -39,6 +43,23 @@
 }
 
 strong {
-  color: var(--accent);
+  color: var(--accent, #00adb5);
   font-weight: 700;
 }
+
+button {
+  background-color: #00adb5;
+  border: none;
+  color: #fff;
+  padding: 0.75em 1.5em;
+  font-size: 1.1em;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 1em;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #00bfc5;
+}
+
