@@ -21,6 +21,7 @@ const LatexPage = () => {
 
   const [startTime, setStartTime] = useState<number | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
+  const totalTime = 180;
 
   const [targetEquation, setTargetEquation] = useState<string>('');
 
@@ -60,14 +61,6 @@ const LatexPage = () => {
         }
     }
   }
-
-  // function copy() {
-  //   console.log(targetEquation);
-  //   var copyText = targetEquation;
-  //   copyText.select();
-  //   navigator.clipboard.writeText(copyText.value);
-  //   alert("Copied the text: " + copyText.value);
-  // } 
 
   const handleInputChange = 
     // AreaElement allows the inputted string to be in the form of a text box
@@ -176,14 +169,13 @@ const LatexPage = () => {
         />
       </div>
       <div className={styles.text}>
-        <p><b>Time Elapsed:</b> {Math.round(elapsedTime)}s</p>
+        <p><b>Time Remaining:</b> {totalTime-Math.round(elapsedTime)}s</p>
       </div>
       <div className={styles.buttons}>
         <div className={styles.button1}>{<button onClick={handleRestart}>Skip</button>}</div>
         {!finished && !shownSol && <button onClick={() => setShownSol(true)}>Show Solution</button>}
         {!finished && shownSol && <button onClick={() => setShownSol(false)}>Hide Solution</button>}
         {shownSol && (<p><b>Solution:</b> {targetEquation}</p>)}
-        {/* {<button onClick={copy}>Copy Solution</button>} */}
       </div>
     </div>
   );
