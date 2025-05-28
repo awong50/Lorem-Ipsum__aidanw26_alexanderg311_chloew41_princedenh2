@@ -178,5 +178,16 @@ aidanW -- 2025-05-27 21:07
 * Made home page the typing page
 * Created results screen with semi working graph (WPM is currently not accurately being counted)
 
+<<<<<<< HEAD
 aidanW, princedenH -- 2025-05-28 11:01
 * Fixed apex charts and WPM calculation for history
+=======
+chloeW -- 2025-05-28 11:01
+* Improved css: page now extends longer so ``show solution" does not increase the page, buttons are now slightly apart from one another while still horizontal.
+
+saschaGZ -- 2025-05-28 11:01
+* Created a google form for LaTeX formulas.
+
+chloeW, saschaGZ -- 2025-05-28 11:01
+* Working on a copy-paste button for solutions.
+>>>>>>> c82d0d52b78cc5a9900d27d7ec05e95254b51d56

@@ -61,6 +61,14 @@ const LatexPage = () => {
     }
   }
 
+  function copy() {
+    console.log(targetEquation);
+    var copyText = targetEquation;
+    copyText.select();
+    navigator.clipboard.writeText(copyText.value);
+    alert("Copied the text: " + copyText.value);
+  } 
+
   const handleInputChange = 
     // AreaElement allows the inputted string to be in the form of a text box
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -137,24 +145,26 @@ const LatexPage = () => {
 
   return (
     <div>
-      <h1>LaTeX Test</h1>
+      <div className={styles.text}>
+        <h1>LaTeX Test</h1>
       <p>
         <b>Create the following formula in LaTeX:</b>
       </p>
+      </div>
       <div 
         className={styles.container}
         ref={targetRef} >
       </div>
-      <p>
-        <b>Your output:</b>
-      </p>
+      <div className={styles.text}>
+        <p><b>Your output:</b></p>
+      </div>
       <div 
         className={styles.container + (finished ? ' ' + styles.finished : '')}
         ref={containerRef}>
       </div>
-      <p>
-        <b>Type here:</b>
-      </p>
+      <div className={styles.text}>
+        <p><b>Type here:</b></p>
+      </div>
       <div>
         <textarea
           value={equation}
@@ -165,18 +175,15 @@ const LatexPage = () => {
           placeholder="Start LaTeXing here..."
         />
       </div>
-      <p><b>Time Elapsed:</b> {Math.round(elapsedTime)}s</p>
-      <div>
-        {finished && <button onClick={handleRestart}>Next</button>}
+      <div className={styles.text}>
+        <p><b>Time Elapsed:</b> {Math.round(elapsedTime)}s</p>
       </div>
-      <div>
+      <div className={styles.buttons}>
+        <div className={styles.button1}>{<button onClick={handleRestart}>Skip</button>}</div>
         {!finished && !shownSol && <button onClick={() => setShownSol(true)}>Show Solution</button>}
-      </div>
-      <div>
         {!finished && shownSol && <button onClick={() => setShownSol(false)}>Hide Solution</button>}
-      </div>
-      <div>
         {shownSol && (<p><b>Solution:</b> {targetEquation}</p>)}
+        {<button onClick={copy}>Copy Solution</button>}
       </div>
     </div>
   );

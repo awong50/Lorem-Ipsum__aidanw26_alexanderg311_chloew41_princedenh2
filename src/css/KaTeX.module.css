@@ -13,6 +13,10 @@
   border: none;
 }
 
+.text {
+  margin-left: 2em;
+}
+
 .finished {
   color: #43ea7f;
   background-color: #1e2b1e;
@@ -20,4 +24,14 @@
 
 .result {
   margin-top: 1.5em;
+}
+
+.buttons {
+  min-height: 100px;
+  margin-left: 2em;
+}
+
+.button1 {
+  margin-right: 0.5em;
+  float: left;
 }
