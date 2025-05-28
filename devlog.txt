@@ -172,3 +172,8 @@ aidanW -- 2025-05-26 16:57
 
 chloeW, saschaGZ -- 2025-05-27 11:01
 * Re-fixed the problems with errors!
+
+aidanW -- 2025-05-27 21:07
+* Updated styling for typing page
+* Made home page the typing page
+* Created results screen with semi working graph (WPM is currently not accurately being counted)
