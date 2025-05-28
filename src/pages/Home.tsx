@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect} from "react";
 import styles from '@css/Typing.module.css';
 import { MdOutlineNavigateNext } from "react-icons/md";
-import _ from 'lodash'; // Import lodash for sampling
+import _ from 'lodash'; 
+import ApexChart from "react-apexcharts";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const Typing = () => {
@@ -16,6 +17,8 @@ const Typing = () => {
   const [sampleText, setSampleText] = useState<string>(""); // State to hold the sample text
   const [caretIndex, setCaretIndex] = useState(0);
   const [inputFocused, setInputFocused] = useState(true);
+
+  const [history, setHistory] = useState<{ wpm: number; accuracy: number }[]>([]);
 
 
   // Use refs for mutable counters
@@ -159,6 +162,27 @@ const Typing = () => {
     }
   }, [finished]);
 
+  useEffect(() => {
+    if (!startTime || finished) return;
+
+    const interval = setInterval(() => {
+      const elapsed = (Date.now() - startTime) / 1000;
+      if (elapsed > timeTotal) return;
+
+      const elapsedMinutes = elapsed / 60;
+      const words = input.trim().length === 0 ? 0 : input.trim().split(/\s+/).length;
+      const currentWpm = elapsedMinutes > 0 ? Math.round(words / elapsedMinutes) : 0;
+      const currentAccuracy = total.current > 0 ? Math.round((correct.current / total.current) * 100) : 100;
+
+      setHistory((prev) => [
+        ...prev,
+        { wpm: currentWpm, accuracy: currentAccuracy }
+      ]);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [startTime, finished]);
+
   const handleRestart = () => {
     correct.current = 0;
     total.current = 0;
@@ -168,6 +192,7 @@ const Typing = () => {
     setWpm(0);
     setFinished(false);
     setTimeLeft(timeTotal);
+    setHistory([]);
     inputRef.current?.focus();
 
     // Fetch new sample text
@@ -185,13 +210,79 @@ const Typing = () => {
     fetchSampleText();
   };
 
-return (
+  console.log('History:', history);
+
+  return (
     <div className={styles.container}>
       {finished ? (
         <div style={{ textAlign: 'center', marginTop: '3em' }}>
           <h1>Results</h1>
           <h2>Your WPM: {wpm}</h2>
           <h2>Accuracy: {accuracy}%</h2>
+          <div style={{ maxWidth: 600, margin: "2em auto" }}>
+            <ApexChart
+              type="line"
+              height={350}
+              series={[
+                {
+                  name: "WPM",
+                  data: history.map((h) => h.wpm),
+                },
+                {
+                  name: "Accuracy",
+                  data: history.map((h) => h.accuracy),
+                },
+              ]}
+              options={{
+                chart: {
+                  id: "typing-performance",
+                  toolbar: { show: false },
+                  background: 'transparent',
+                },
+                colors: ['#00adb5', '#fbbf24'], // WPM: blue, Accuracy: yellow
+                xaxis: {
+                  categories: history.map((_, i) => (i + 1).toString()),
+                  title: { text: "Seconds", style: { color: '#ccc' } },
+                  labels: { style: { colors: "#ccc" } },
+                },
+                yaxis: {
+                  title: { text: "WPM / Accuracy", style: { color: '#ccc' } },
+                  min: 0,
+                  max: 100,
+                  labels: { style: { colors: "#ccc" } },
+                },
+                stroke: {
+                  curve: "smooth",
+                  width: 3,
+                },
+                markers: {
+                  size: 5,
+                  colors: ['#00adb5', '#fbbf24'],
+                  strokeColors: "#fff",
+                  strokeWidth: 2,
+                },
+                tooltip: {
+                  shared: true,
+                  custom: ({ series, seriesIndex, dataPointIndex }) => {
+                    const second = dataPointIndex + 1;
+                    const wpm = series[0][dataPointIndex] ?? 0;
+                    const accuracy = series[1][dataPointIndex] ?? 0;
+                    return `
+                      <div style="padding: 8px; color: #000">
+                        <strong>Second: ${second}</strong><br/>
+                        WPM: <strong>${wpm}</strong><br/>
+                        Accuracy: <strong>${accuracy}%</strong>
+                      </div>
+                    `;
+                  },
+                },
+                grid: { borderColor: "#444" },
+                legend: {
+                  labels: { colors: '#ccc' }
+                },
+              }}
+            />
+          </div>
           <button onClick={handleRestart}><MdOutlineNavigateNext /></button>
         </div>
       ) : (
