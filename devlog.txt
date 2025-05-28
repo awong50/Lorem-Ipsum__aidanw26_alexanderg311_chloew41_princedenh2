@@ -177,3 +177,6 @@ aidanW -- 2025-05-27 21:07
 * Updated styling for typing page
 * Made home page the typing page
 * Created results screen with semi working graph (WPM is currently not accurately being counted)
+
+aidanW, princedenH -- 2025-05-28 11:01
+* Fixed apex charts and WPM calculation for history

@@ -19,6 +19,7 @@ const Typing = () => {
   const [inputFocused, setInputFocused] = useState(true);
 
   const [history, setHistory] = useState<{ wpm: number; accuracy: number }[]>([]);
+  const inputRefLive = useRef<string>("");
 
 
   // Use refs for mutable counters
@@ -59,12 +60,9 @@ const Typing = () => {
     const fetchSampleText = async () => {
       try {
         const response = await fetch(`${API_URL}/api/words`);
-        console.log(response);
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
-        console.log(data);
         const sample = _.sampleSize(data, 50).join(" "); // Sample 50 words
-        console.log(sample);
         setSampleText(sample);
       } catch (error) {
         console.error('Error fetching sample text:', error);
@@ -120,7 +118,6 @@ const Typing = () => {
     if (finished) return;
 
     const value = e.target.value;
-    console.log(value);
 
     const newCharacter = value.length > input.length;
 
@@ -162,6 +159,26 @@ const Typing = () => {
     }
   }, [finished]);
 
+
+  /*
+
+  useEffect(() => {
+    if (!startTime) return;
+    let endTime = Date.now();
+    if (finished && input.length > 0) {
+      endTime = startTime + (timeTotal - timeLeft) * 1000;
+    }
+    const elapsedMinutes = (endTime - startTime) / 1000 / 60;
+    const words = input.trim().length === 0 ? 0 : input.trim().split(/\s+/).length;
+    setWpm(elapsedMinutes > 0 ? Math.round(words / elapsedMinutes) : 0);
+  }, [input, finished, startTime, timeLeft]);
+
+  */
+  useEffect(() => {
+    inputRefLive.current = input;
+  }, [input]);
+  
+  
   useEffect(() => {
     if (!startTime || finished) return;
 
@@ -170,7 +187,8 @@ const Typing = () => {
       if (elapsed > timeTotal) return;
 
       const elapsedMinutes = elapsed / 60;
-      const words = input.trim().length === 0 ? 0 : input.trim().split(/\s+/).length;
+      const liveInput = inputRefLive.current;
+      const words = liveInput.trim().length === 0 ? 0 : liveInput.trim().split(/\s+/).length;
       const currentWpm = elapsedMinutes > 0 ? Math.round(words / elapsedMinutes) : 0;
       const currentAccuracy = total.current > 0 ? Math.round((correct.current / total.current) * 100) : 100;
 
@@ -210,7 +228,6 @@ const Typing = () => {
     fetchSampleText();
   };
 
-  console.log('History:', history);
 
   return (
     <div className={styles.container}>
@@ -223,15 +240,12 @@ const Typing = () => {
             <ApexChart
               type="line"
               height={350}
+              width={500}
               series={[
                 {
                   name: "WPM",
                   data: history.map((h) => h.wpm),
-                },
-                {
-                  name: "Accuracy",
-                  data: history.map((h) => h.accuracy),
-                },
+                }
               ]}
               options={{
                 chart: {
@@ -246,9 +260,9 @@ const Typing = () => {
                   labels: { style: { colors: "#ccc" } },
                 },
                 yaxis: {
-                  title: { text: "WPM / Accuracy", style: { color: '#ccc' } },
+                  title: { text: "WPM", style: { color: '#ccc' } },
                   min: 0,
-                  max: 100,
+                  max: Math.max(...history.map(h => h.wpm)) + 20,
                   labels: { style: { colors: "#ccc" } },
                 },
                 stroke: {
@@ -263,10 +277,10 @@ const Typing = () => {
                 },
                 tooltip: {
                   shared: true,
-                  custom: ({ series, seriesIndex, dataPointIndex }) => {
+                  custom: ({ series, dataPointIndex }) => {
                     const second = dataPointIndex + 1;
                     const wpm = series[0][dataPointIndex] ?? 0;
-                    const accuracy = series[1][dataPointIndex] ?? 0;
+                    const accuracy = history[dataPointIndex]?.accuracy ?? 0;
                     return `
                       <div style="padding: 8px; color: #000">
                         <strong>Second: ${second}</strong><br/>
