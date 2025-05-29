@@ -11,8 +11,8 @@ const Typing = () => {
   const [wpm, setWpm] = useState<number>(0);
   const [accuracy, setAccuracy] = useState<number>(100);
   const [finished, setFinished] = useState(false);
-  const timeTotal = 15;
-  const [timeLeft, setTimeLeft] = useState(timeTotal); // Countdown
+  const [timeTotal, setTimeTotal] = useState(15); 
+  const [timeLeft, setTimeLeft] = useState(15);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [sampleText, setSampleText] = useState<string>(""); // State to hold the sample text
   const [, setCaretIndex] = useState(0);
@@ -21,10 +21,38 @@ const Typing = () => {
   const [history, setHistory] = useState<{ wpm: number; accuracy: number }[]>([]);
   const inputRefLive = useRef<string>("");
 
-
   // Use refs for mutable counters
   const total = useRef(0);
   const correct = useRef(0);
+
+  const MAX_CHARS_PER_LINE = 60;
+  const scrollRef = useRef<HTMLDivElement>(null); 
+
+  function splitToLines(text: string, maxChars: number): string[] {
+    const words = text.split(" ");
+    const lines: string[] = [];
+    let currentLine = "";
+    for (const word of words) {
+      if ((currentLine + word).length + 1 > maxChars) {
+        lines.push(currentLine.trim());
+        currentLine = word + " ";
+      } else {
+        currentLine += word + " ";
+      }
+    }
+    if (currentLine.trim()) lines.push(currentLine.trim());
+    return lines;
+  }
+
+  const fetchMoreWords = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/words`);
+      const data = await response.json();
+      setSampleText(prev => prev + " " + _.sampleSize(data, 50).join(" "));
+    } catch (error) {
+      console.error('Error fetching more words:', error);
+    }
+  };
 
   useEffect(() => {
     if (!finished) {
@@ -71,49 +99,6 @@ const Typing = () => {
     fetchSampleText();
   }, []); 
 
-  const renderSampleText = () => {
-    return (
-      <span style={{ position: 'relative', display: 'inline-block' }}>
-        {sampleText.split('').map((char, idx) => {
-          let color = '#bbb'; // default gray
-          if (input.length > idx) {
-            color = input[idx] === char ? '#fff' : '#f55'; // white if correct, red if wrong
-          }
-          return (
-            <span
-              key={idx}
-              style={{
-                color,
-                background: input.length === idx ? 'transparent' : 'transparent',
-                transition: 'color 0.3s',
-                fontFamily: 'monospace',
-                fontSize: '1.2em',
-                position: 'relative',
-                
-              }}
-            >
-              {char}
-              {idx === input.length && !finished && (
-              <span
-                style={{
-                  position: 'absolute',
-                  left: '0%',
-                  transition: 'right 0.3s',
-                  top: 0,
-                  width: '2px',
-                  height: '1.2em',
-                  backgroundColor: '#fff',
-                  animation: 'blink 1s step-end infinite',
-                }}
-              />
-            )}
-            </span>
-          );
-        })}
-      </span>
-    );
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (finished) return;
 
@@ -139,9 +124,18 @@ const Typing = () => {
     if (value === sampleText) {
       setFinished(true);
     }
+    
+    if (sampleText.length - value.length < 30) fetchMoreWords();
 
     setCaretIndex(value.length);
   };
+
+  useEffect(() => {
+    const charsBefore = sampleText.slice(0, input.length);
+    const currentLine = splitToLines(charsBefore, MAX_CHARS_PER_LINE).length - 1;
+    const scrollOffset = (currentLine - 1) * 24; // adjust based on your line-height
+    if (scrollRef.current) scrollRef.current.scrollTop = scrollOffset;
+  }, [input]);
   
   useEffect(() => {
     if (finished && localStorage.getItem('user')) {
@@ -159,21 +153,6 @@ const Typing = () => {
     }
   }, [finished]);
 
-
-  /*
-
-  useEffect(() => {
-    if (!startTime) return;
-    let endTime = Date.now();
-    if (finished && input.length > 0) {
-      endTime = startTime + (timeTotal - timeLeft) * 1000;
-    }
-    const elapsedMinutes = (endTime - startTime) / 1000 / 60;
-    const words = input.trim().length === 0 ? 0 : input.trim().split(/\s+/).length;
-    setWpm(elapsedMinutes > 0 ? Math.round(words / elapsedMinutes) : 0);
-  }, [input, finished, startTime, timeLeft]);
-
-  */
   useEffect(() => {
     inputRefLive.current = input;
   }, [input]);
@@ -184,7 +163,10 @@ const Typing = () => {
 
     const interval = setInterval(() => {
       const elapsed = (Date.now() - startTime) / 1000;
-      if (elapsed > timeTotal) return;
+      if (elapsed >= timeTotal) {
+        setFinished(true);
+        return;
+      }
 
       const elapsedMinutes = elapsed / 60;
       const liveInput = inputRefLive.current;
@@ -201,7 +183,8 @@ const Typing = () => {
     return () => clearInterval(interval);
   }, [startTime, finished]);
 
-  const handleRestart = () => {
+  const handleRestart = (customTime?: number) => {
+    const newTime = customTime ?? timeTotal;
     correct.current = 0;
     total.current = 0;
     setAccuracy(100);
@@ -209,7 +192,8 @@ const Typing = () => {
     setStartTime(null);
     setWpm(0);
     setFinished(false);
-    setTimeLeft(timeTotal);
+    setTimeLeft(newTime);
+    setTimeTotal(newTime);
     setHistory([]);
     inputRef.current?.focus();
 
@@ -231,6 +215,46 @@ const Typing = () => {
 
   return (
     <div className={styles.container}>
+      <div className={styles.controls} style={{ marginBottom: '1em', textAlign: 'center' }}>
+        <label style={{ color: '#fff', marginRight: '0.5em' }}>Test Duration:</label>
+        {[15, 30, 60, 120].map((sec) => (
+          <button
+            key={sec}
+            onClick={() => handleRestart(sec)}
+            style={{
+              margin: '0 0.5em',
+              padding: '0.3em 0.7em',
+              backgroundColor: timeTotal === sec ? '#00adb5' : '#333',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer'
+            }}
+          >
+            {sec}s
+          </button>
+        ))}
+        <input
+          type="number"
+          min="5"
+          placeholder="Custom"
+          style={{
+            marginLeft: '1em',
+            padding: '0.3em',
+            width: '60px',
+            borderRadius: '6px',
+            border: '1px solid #ccc'
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              const val = parseInt((e.target as HTMLInputElement).value);
+              if (!isNaN(val) && val >= 5) {
+                handleRestart(val);
+              }
+            }
+          }}
+        />
+    </div>
       {finished ? (
         <div style={{ textAlign: 'center', marginTop: '3em' }}>
           <h1>Results</h1>
@@ -297,25 +321,49 @@ const Typing = () => {
               }}
             />
           </div>
-          <button onClick={handleRestart}><MdOutlineNavigateNext /></button>
+          <button onClick={() => handleRestart()}><MdOutlineNavigateNext /></button>
         </div>
       ) : (
         <>
-          <div
-            className={styles.sample}
-            style={{
-              userSelect: 'none',
-              marginBottom: 8,
-              position: 'relative',
-              minHeight: '2.5em',
-              cursor: 'text',
-            }}
-            onClick={() => {
-              inputRef.current?.focus();
-              setInputFocused(true);
-            }}
-          >
-            {renderSampleText()}
+            <div
+              ref={scrollRef}
+              
+              style={{
+                height: `${3 * 24}px`,
+                overflowY: 'auto',
+                lineHeight: '24px',
+                padding: '8px',
+                marginBottom: 8,
+                position: 'relative',
+                minHeight: '2.5em',
+                cursor: 'text',
+                scrollbarWidth: 'none', 
+                msOverflowStyle: 'none', 
+              }}
+            >
+              {splitToLines(sampleText, MAX_CHARS_PER_LINE).map((line, lineIdx) => (
+                <div key={lineIdx}>
+                  {line.split('').map((char, charIdx) => {
+                    const globalIdx = splitToLines(sampleText, MAX_CHARS_PER_LINE)
+                      .slice(0, lineIdx)
+                      .reduce((acc, l) => acc + l.length, 0) + charIdx;
+
+                    const isActive = globalIdx === input.length;
+                    const isCorrect = input[globalIdx] === char;
+                    const hasTyped = globalIdx < input.length;
+
+                    return (
+                      <span key={charIdx} style={{
+                        color: hasTyped ? (isCorrect ? '#fff' : '#f55') : '#555',
+                        fontSize: '2em', // FONT SIZE
+                        background: isActive ? '#fff4' : 'transparent',
+                      }}>
+                        {char}
+                      </span>
+                    );
+                  })}
+                </div>
+              ))}
             <textarea
               ref={inputRef}
               value={input}
@@ -362,7 +410,7 @@ const Typing = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: '#fff',
-                  fontSize: '1.3em',
+                  fontSize: '2.0em',
                   borderRadius: '12px',
                   pointerEvents: 'auto',
                   cursor: 'pointer',
