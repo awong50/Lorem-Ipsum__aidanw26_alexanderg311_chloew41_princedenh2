@@ -193,3 +193,7 @@ chloeW, saschaGZ -- 2025-05-28 11:01
 aidanW -- 2025-05-28 23:36
 * Added new function to have endless words instead of strict amount
 * Implemented scrolling for 3 line view
+
+chloeW, saschaGZ -- 2025-05-29 11:01 
+* Fixed solution revealed after solution entered
+* Working on creating point system
