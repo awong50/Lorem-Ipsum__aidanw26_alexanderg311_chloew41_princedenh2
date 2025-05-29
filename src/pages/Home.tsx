@@ -34,7 +34,7 @@ const Typing = () => {
     let currentLine = "";
     for (const word of words) {
       if ((currentLine + word).length + 1 > maxChars) {
-        lines.push(currentLine.trim());
+        lines.push(currentLine);
         currentLine = word + " ";
       } else {
         currentLine += word + " ";
@@ -90,7 +90,7 @@ const Typing = () => {
         const response = await fetch(`${API_URL}/api/words`);
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
-        const sample = _.sampleSize(data, 50).join(" "); // Sample 50 words
+        const sample = _.sampleSize(data, 50).join(" ");
         setSampleText(sample);
       } catch (error) {
         console.error('Error fetching sample text:', error);
@@ -133,8 +133,13 @@ const Typing = () => {
   useEffect(() => {
     const charsBefore = sampleText.slice(0, input.length);
     const currentLine = splitToLines(charsBefore, MAX_CHARS_PER_LINE).length - 1;
-    const scrollOffset = (currentLine - 1) * 24; // adjust based on your line-height
-    if (scrollRef.current) scrollRef.current.scrollTop = scrollOffset;
+    const LINE_HEIGHT = 40;
+    const scrollOffset = (currentLine - 1) * LINE_HEIGHT;
+  
+    if (scrollRef.current) {
+      const maxScroll = scrollRef.current.scrollHeight - scrollRef.current.clientHeight;
+      scrollRef.current.scrollTop = Math.min(scrollOffset, maxScroll);
+    }
   }, [input]);
   
   useEffect(() => {
@@ -197,7 +202,6 @@ const Typing = () => {
     setHistory([]);
     inputRef.current?.focus();
 
-    // Fetch new sample text
     const fetchSampleText = async () => {
       try {
         const response = await fetch(`${API_URL}/api/words`);
@@ -329,14 +333,13 @@ const Typing = () => {
               ref={scrollRef}
               
               style={{
-                height: `${3 * 24}px`,
+                height: `${3 * 33}px`,
                 overflowY: 'auto',
-                lineHeight: '24px',
-                padding: '8px',
+                lineHeight: '30px',
+                padding: '10px',
                 marginBottom: 8,
                 position: 'relative',
                 minHeight: '2.5em',
-                cursor: 'text',
                 scrollbarWidth: 'none', 
                 msOverflowStyle: 'none', 
               }}
@@ -411,8 +414,7 @@ const Typing = () => {
                   justifyContent: 'center',
                   color: '#fff',
                   fontSize: '2.0em',
-                  borderRadius: '12px',
-                  pointerEvents: 'auto',
+                  borderRadius: '100px',
                   cursor: 'pointer',
                   transition: 'background 0.2s',
                 }}
