@@ -16,6 +16,8 @@ const LatexPage = () => {
 
   const [finished, setFinished] = useState(false);
   const [shownSol, setShownSol] = useState(false);
+  const [usedSol, setUsedSol] = useState(false);
+  const [score, setScore] = useState<number>(0);
 
   const [equation, setEquation] = useState<string>('');
 
@@ -74,6 +76,11 @@ const LatexPage = () => {
 
     if (cleanUp(e.target.value) === cleanUp(targetEquation)) {
         setFinished(true);
+        setShownSol(false);
+        if (!usedSol) {
+            setScore(score+1);
+        }
+        setUsedSol(false);
     }
   };
 
@@ -170,10 +177,11 @@ const LatexPage = () => {
       </div>
       <div className={styles.text}>
         <p><b>Time Remaining:</b> {totalTime-Math.round(elapsedTime)}s</p>
+        <p><b>Score:</b> {score}</p>
       </div>
       <div className={styles.buttons}>
         <div className={styles.button1}>{<button onClick={handleRestart}>Skip</button>}</div>
-        {!finished && !shownSol && <button onClick={() => setShownSol(true)}>Show Solution</button>}
+        {!finished && !shownSol && <button onClick={() => setShownSol(true) && setUsedSol(true)}>Show Solution</button>}
         {!finished && shownSol && <button onClick={() => setShownSol(false)}>Hide Solution</button>}
         {shownSol && (<p><b>Solution:</b> {targetEquation}</p>)}
       </div>
