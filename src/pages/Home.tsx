@@ -21,38 +21,30 @@ const Typing = () => {
   const [history, setHistory] = useState<{ wpm: number; accuracy: number }[]>([]);
   const inputRefLive = useRef<string>("");
 
+
   // Use refs for mutable counters
   const total = useRef(0);
   const correct = useRef(0);
 
-  const MAX_CHARS_PER_LINE = 60;
-  const scrollRef = useRef<HTMLDivElement>(null); 
+  const CHARS_PER_LINE = 70;
 
-  function splitToLines(text: string, maxChars: number): string[] {
-    const words = text.split(" ");
-    const lines: string[] = [];
-    let currentLine = "";
-    for (const word of words) {
-      if ((currentLine + word).length + 1 > maxChars) {
-        lines.push(currentLine);
-        currentLine = word + " ";
-      } else {
-        currentLine += word + " ";
-      }
-    }
-    if (currentLine.trim()) lines.push(currentLine.trim());
-    return lines;
-  }
-
-  const fetchMoreWords = async () => {
-    try {
-      const response = await fetch(`${API_URL}/api/words`);
-      const data = await response.json();
-      setSampleText(prev => prev + " " + _.sampleSize(data, 50).join(" "));
-    } catch (error) {
-      console.error('Error fetching more words:', error);
-    }
-  };
+  const getLines = (text: string): string[] => { 
+    const lines: string[] = []; 
+    let start = 0; 
+    while (start < text.length) { 
+      let end = Math.min(start + CHARS_PER_LINE, text.length); 
+      if (end < text.length && text[end] !== ' ') { 
+        let lastSpace = text.lastIndexOf(' ', end - 1); 
+        if (lastSpace > start) { 
+          end = lastSpace; 
+        } 
+      } 
+      lines.push(text.slice(start, end).trim() + ' '); 
+      start = end; 
+      while (text[start] === ' ') start++; 
+    } 
+    return lines; 
+  }; 
 
   useEffect(() => {
     if (!finished) {
@@ -62,26 +54,47 @@ const Typing = () => {
 
   useEffect(() => {
     if (!startTime || finished) return;
-    if (timeLeft <= 0) {
-      setFinished(true);
-      return;
-    }
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [startTime, finished, timeLeft]);
 
-  useEffect(() => {
-    if (!startTime) return;
-    let endTime = Date.now();
-    if (finished && input.length > 0) {
-      endTime = startTime + (timeTotal - timeLeft) * 1000;
-    }
-    const elapsedMinutes = (endTime - startTime) / 1000 / 60;
-    const words = input.trim().length === 0 ? 0 : input.trim().split(/\s+/).length;
-    setWpm(elapsedMinutes > 0 ? Math.round(words / elapsedMinutes) : 0);
-  }, [input, finished, startTime, timeLeft]);
+    const interval = setInterval(() => {
+      const elapsed = (Date.now() - startTime) / 1000;
+      if (elapsed >= timeTotal) {
+        setFinished(true);
+        return;
+      }
+
+      const elapsedMinutes = elapsed / 60;
+      const liveInput = inputRefLive.current.trim();
+      const sampleWords = sampleText.trim().split(/\s+/);
+      const inputWords = liveInput.split(/\s+/);
+
+      // Count only fully correct words
+      let correctWords = 0;
+      for (let i = 0; i < inputWords.length; i++) {
+        if (inputWords[i] === sampleWords[i]) {
+          correctWords++;
+        } else {
+          break; // Stop at first incorrect word
+        }
+      }
+
+      let currentWpm = 0;
+      if (elapsed >= 1 && correctWords > 0) {
+        currentWpm = Math.round(correctWords / elapsedMinutes);
+      }
+
+      const currentAccuracy = total.current > 0 ? Math.round((correct.current / total.current) * 100) : 100;
+
+      setWpm(currentWpm); 
+      setAccuracy(currentAccuracy);
+
+      setHistory((prev) => [
+        ...prev,
+        { wpm: currentWpm, accuracy: currentAccuracy }
+      ]);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [startTime, finished, sampleText]);
 
   useEffect(() => {
     // Fetch sample text from the server
@@ -90,7 +103,8 @@ const Typing = () => {
         const response = await fetch(`${API_URL}/api/words`);
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
-        const sample = _.sampleSize(data, 50).join(" ");
+        const wordsCount = Math.max(10, Math.round((timeTotal / 3) * 10));
+        const sample = _.sampleSize(data, wordsCount).join(" ");
         setSampleText(sample);
       } catch (error) {
         console.error('Error fetching sample text:', error);
@@ -99,10 +113,198 @@ const Typing = () => {
     fetchSampleText();
   }, []); 
 
+  useEffect(() => {
+    if (!startTime || finished) return;
+
+    const interval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const newTimeLeft = Math.max(timeTotal - elapsed, 0);
+      setTimeLeft(newTimeLeft);
+      if (newTimeLeft <= 0) {
+        setFinished(true);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [startTime, finished, timeTotal]);
+
+  const renderSampleText = () => {
+    const lines = getLines(sampleText);
+
+    let charIndex = 0;
+    let caretRendered = false;
+    return (
+      <span
+        style={{
+          position: 'relative',
+          display: 'inline-block',
+          width: '100%',
+          textAlign: 'left', 
+        }}
+      >
+        {lines.map((line, lineIdx) => {
+          const lineSpans = [];
+          for (let i = 0; i < line.length; i++, charIndex++) {
+            const char = line[i];
+            let color = '#bbb';
+            if (input.length > charIndex) {
+              color = input[charIndex] === char ? '#fff' : '#f55';
+            }
+            const isCaretHere =
+              !caretRendered &&
+              (
+                charIndex === input.length ||
+                (i === line.length - 1 && charIndex + 1 === input.length)
+              ) &&
+              !finished;
+
+            if (isCaretHere) caretRendered = true;
+
+            lineSpans.push(
+              <span
+                key={`${lineIdx}-${i}`}
+                style={{
+                  color,
+                  background: 'transparent',
+                  transition: 'color 0.3s',
+                  fontFamily: 'monospace',
+                  fontSize: '1.4em',
+                  lineHeight: '1.4em',
+                  position: 'relative',
+                }}
+              >
+                {char}
+                {isCaretHere && (
+                  <span
+                    style={{
+                      position: 'absolute',
+                      left: '0%',
+                      top: 0,
+                      width: '2px',
+                      height: '1.2em',
+                      backgroundColor: '#fff',
+                      animation: 'blink 1s step-end infinite',
+                    }}
+                  />
+                )}
+              </span>
+            );
+          }
+          if (
+            !caretRendered &&
+            input.length === charIndex &&
+            !finished
+          ) {
+            caretRendered = true;
+            lineSpans.push(
+              <span
+                key={`${lineIdx}-caret`}
+                style={{
+                  display: 'inline-block',
+                  position: 'relative',
+                  width: '2px',
+                  height: '1.2em',
+                  verticalAlign: 'bottom',
+                }}
+              >
+                <span
+                  style={{
+                    position: 'absolute',
+                    left: 0,
+                    top: 0,
+                    width: '2px',
+                    height: '1.2em',
+                    backgroundColor: '#fff',
+                    animation: 'blink 1s step-end infinite',
+                  }}
+                />
+              </span>
+            );
+          }
+          return (
+            <div key={lineIdx} style={{ display: 'block', minHeight: '1.4em', textAlign: 'left' }}>
+              {lineSpans}
+            </div>
+          );
+        })}
+      </span>
+    );
+  };
+
+  const [wrongAfterSpace, setWrongAfterSpace] = useState<string[]>([]);
+  const [wrongAfterSpaceIndex, setWrongAfterSpaceIndex] = useState<number | null>(null);
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (finished) return;
 
-    const value = e.target.value;
+    let value = e.target.value;
+
+    // Detect if we're at a space in the sample text
+    const caretPos = value.length;
+    const atSpace = sampleText[caretPos - 1] === " ";
+    const prevCharIsSpace = sampleText[caretPos - 2] === " ";
+
+    // If we are in a wrong-after-space state, enforce max 5 wrong chars
+    if (wrongAfterSpaceIndex !== null && caretPos > wrongAfterSpaceIndex) {
+      // Only allow up to 5 wrong chars after the space
+      if (caretPos - wrongAfterSpaceIndex > 5) {
+        // Ignore further input
+        value = value.slice(0, wrongAfterSpaceIndex + 5);
+      }
+    }
+
+    // If the user is at a space in the sample text, only allow a space to be typed
+    if (
+      caretPos > 0 &&
+      sampleText[caretPos - 1] === " " &&
+      value[caretPos - 1] !== " "
+    ) {
+      // Don't allow non-space at space position
+      return;
+    }
+
+    // If the user just typed a wrong character after a space
+    if (
+      caretPos > 0 &&
+      sampleText[caretPos - 1] === " " &&
+      value[caretPos - 1] === " " &&
+      value.length > input.length
+    ) {
+      // Reset wrongAfterSpace state
+      setWrongAfterSpace([]);
+      setWrongAfterSpaceIndex(null);
+    } else if (
+      caretPos > 0 &&
+      sampleText[caretPos - 1] === " " &&
+      value[caretPos - 1] !== " " &&
+      value.length > input.length
+    ) {
+      // User typed wrong char after a space
+      if (wrongAfterSpaceIndex === null) {
+        setWrongAfterSpaceIndex(caretPos - 1);
+        setWrongAfterSpace([value[caretPos - 1]]);
+      } else if (caretPos - 1 === wrongAfterSpaceIndex + wrongAfterSpace.length) {
+        setWrongAfterSpace((prev) => [...prev, value[caretPos - 1]]);
+      }
+      // Don't update input yet, wait for correction or up to 5 wrong chars
+      if (wrongAfterSpace.length >= 5) return;
+    } else if (
+      wrongAfterSpaceIndex !== null &&
+      caretPos <= wrongAfterSpaceIndex
+    ) {
+      // User backspaced to before the wrong-after-space region, reset
+      setWrongAfterSpace([]);
+      setWrongAfterSpaceIndex(null);
+    }
+
+    // Append wrong letters to sampleText for display
+    let displaySampleText = sampleText;
+    if (wrongAfterSpaceIndex !== null && wrongAfterSpace.length > 0) {
+      displaySampleText =
+        sampleText.slice(0, wrongAfterSpaceIndex + 1) +
+        wrongAfterSpace.join("") +
+        sampleText.slice(wrongAfterSpaceIndex + 1);
+    }
 
     const newCharacter = value.length > input.length;
 
@@ -124,23 +326,25 @@ const Typing = () => {
     if (value === sampleText) {
       setFinished(true);
     }
-    
-    if (sampleText.length - value.length < 30) fetchMoreWords();
 
     setCaretIndex(value.length);
-  };
 
-  useEffect(() => {
-    const charsBefore = sampleText.slice(0, input.length);
-    const currentLine = splitToLines(charsBefore, MAX_CHARS_PER_LINE).length - 1;
-    const LINE_HEIGHT = 40;
-    const scrollOffset = (currentLine - 1) * LINE_HEIGHT;
-  
-    if (scrollRef.current) {
-      const maxScroll = scrollRef.current.scrollHeight - scrollRef.current.clientHeight;
-      scrollRef.current.scrollTop = Math.min(scrollOffset, maxScroll);
+    const container = document.getElementById('sampleTextContainer');
+    const scroller = document.getElementById('sampleTextScroller');
+    if (container && scroller) {
+      const charsPerLine = CHARS_PER_LINE;
+      const lineHeight = 47; 
+      const caretPos = value.length;
+      const currentLine = Math.floor(caretPos / charsPerLine);
+
+      if (currentLine > 1) {
+        const scrollY = (currentLine - 1) * lineHeight;
+        scroller.style.transform = `translateY(-${scrollY}px)`;
+      } else {
+        scroller.style.transform = 'translateY(0px)';
+      }
     }
-  }, [input]);
+  };
   
   useEffect(() => {
     if (finished && localStorage.getItem('user')) {
@@ -202,12 +406,14 @@ const Typing = () => {
     setHistory([]);
     inputRef.current?.focus();
 
+    // Fetch new sample text
     const fetchSampleText = async () => {
       try {
         const response = await fetch(`${API_URL}/api/words`);
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
-        const sample = _.sampleSize(data, 50).join(" ");
+        const wordsCount = Math.max(10, Math.round((timeTotal / 3) * 30));
+        const sample = _.sampleSize(data, wordsCount).join(" ");
         setSampleText(sample);
       } catch (error) {
         console.error('Error fetching sample text:', error);
@@ -215,6 +421,11 @@ const Typing = () => {
     };
     fetchSampleText();
   };
+
+  const averageWpm =
+  history.length > 0
+    ? Math.round(history.reduce((sum, h) => sum + h.wpm, 0) / history.length)
+    : 0;
 
 
   return (
@@ -262,7 +473,7 @@ const Typing = () => {
       {finished ? (
         <div style={{ textAlign: 'center', marginTop: '3em' }}>
           <h1>Results</h1>
-          <h2>Your WPM: {wpm}</h2>
+          <h2>Your WPM: {averageWpm}</h2>
           <h2>Accuracy: {accuracy}%</h2>
           <div style={{ maxWidth: 600, margin: "2em auto" }}>
             <ApexChart
@@ -272,7 +483,7 @@ const Typing = () => {
               series={[
                 {
                   name: "WPM",
-                  data: history.map((h) => h.wpm),
+                  data: Array.from({ length: timeTotal }, (_, i) => history[i]?.wpm ?? 0),
                 }
               ]}
               options={{
@@ -283,7 +494,7 @@ const Typing = () => {
                 },
                 colors: ['#00adb5', '#fbbf24'], // WPM: blue, Accuracy: yellow
                 xaxis: {
-                  categories: history.map((_, i) => (i + 1).toString()),
+                  categories: Array.from({ length: timeTotal }, (_, i) => (i + 1).toString()),
                   title: { text: "Seconds", style: { color: '#ccc' } },
                   labels: { style: { colors: "#ccc" } },
                 },
@@ -329,44 +540,42 @@ const Typing = () => {
         </div>
       ) : (
         <>
+          <div
+            className={styles.sample}
+            style={{
+              userSelect: 'none',
+              marginBottom: 8,
+              position: 'relative',
+              minHeight: '2.5em',
+              cursor: 'text',
+            }}
+            onClick={() => {
+              inputRef.current?.focus();
+              setInputFocused(true);
+            }}
+          >
             <div
-              ref={scrollRef}
-              
+              id="sampleTextContainer"
               style={{
-                height: `${3 * 33}px`,
-                overflowY: 'auto',
-                lineHeight: '30px',
-                padding: '10px',
-                marginBottom: 8,
+                maxHeight: '5.1em', // SET HEIGHT HERE
+                overflow: 'hidden',
                 position: 'relative',
-                minHeight: '2.5em',
-                scrollbarWidth: 'none', 
-                msOverflowStyle: 'none', 
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'start',
+                scrollBehavior: 'smooth'
               }}
             >
-              {splitToLines(sampleText, MAX_CHARS_PER_LINE).map((line, lineIdx) => (
-                <div key={lineIdx}>
-                  {line.split('').map((char, charIdx) => {
-                    const globalIdx = splitToLines(sampleText, MAX_CHARS_PER_LINE)
-                      .slice(0, lineIdx)
-                      .reduce((acc, l) => acc + l.length, 0) + charIdx;
-
-                    const isActive = globalIdx === input.length;
-                    const isCorrect = input[globalIdx] === char;
-                    const hasTyped = globalIdx < input.length;
-
-                    return (
-                      <span key={charIdx} style={{
-                        color: hasTyped ? (isCorrect ? '#fff' : '#f55') : '#555',
-                        fontSize: '2em', // FONT SIZE
-                        background: isActive ? '#fff4' : 'transparent',
-                      }}>
-                        {char}
-                      </span>
-                    );
-                  })}
-                </div>
-              ))}
+              <div
+                id="sampleTextScroller"
+                style={{
+                  transition: 'transform 0.4s ease',
+                  willChange: 'transform',
+                }}
+              >
+                {renderSampleText()}
+              </div>
+            </div>
             <textarea
               ref={inputRef}
               value={input}
@@ -392,11 +601,31 @@ const Typing = () => {
               onFocus={() => setInputFocused(true)}
               onBlur={() => setInputFocused(false)}
               onKeyDown={(e) => {
+                // Prevent navigation and editing commands
+                if (
+                  ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'Tab'].includes(e.key)
+                ) {
+                  e.preventDefault();
+                  return;
+                }
+                // Prevent space unless at word boundary (already handled in handleChange)
+                if (
+                  e.key === ' ' &&
+                  !(input.length < sampleText.length && sampleText[input.length] === ' ')
+                ) {
+                  e.preventDefault();
+                  return;
+                }
+                // Prevent restart on Tab/Enter if finished (existing)
                 if (finished && (e.key === "Tab" || e.key === "Enter")) {
                   e.preventDefault();
                   handleRestart();
                 }
               }}
+              onCopy={e => e.preventDefault()}
+              onPaste={e => e.preventDefault()}
+              onCut={e => e.preventDefault()}
+              onContextMenu={e => e.preventDefault()}
             />
             {!inputFocused && (
               <div
@@ -413,8 +642,9 @@ const Typing = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: '#fff',
-                  fontSize: '2.0em',
-                  borderRadius: '100px',
+                  fontSize: '1.3em',
+                  borderRadius: '12px',
+                  pointerEvents: 'auto',
                   cursor: 'pointer',
                   transition: 'background 0.2s',
                 }}
