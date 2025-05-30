@@ -64,6 +64,11 @@ const LatexPage = () => {
     }
   }
 
+  const showSolution = () => {
+    setShownSol(true)
+    setUsedSol(true)
+  }
+
   const handleInputChange = 
     // AreaElement allows the inputted string to be in the form of a text box
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -137,8 +142,8 @@ const LatexPage = () => {
     const index = Math.floor(Math.random() * formulas.length);
     setTargetEquation(formulas[index]);
     setEquation("");
-    setStartTime(null);
-    setElapsedTime(0);
+    //setStartTime(null);
+    //setElapsedTime(0);
     setFinished(false);
     setShownSol(false);
   };
@@ -181,7 +186,7 @@ const LatexPage = () => {
       </div>
       <div className={styles.buttons}>
         <div className={styles.button1}>{<button onClick={handleRestart}>Skip</button>}</div>
-        {!finished && !shownSol && <button onClick={() => setShownSol(true) && setUsedSol(true)}>Show Solution</button>}
+        {!finished && !shownSol && <button onClick={showSolution}>Show Solution</button>}
         {!finished && shownSol && <button onClick={() => setShownSol(false)}>Hide Solution</button>}
         {shownSol && (<p><b>Solution:</b> {targetEquation}</p>)}
       </div>
