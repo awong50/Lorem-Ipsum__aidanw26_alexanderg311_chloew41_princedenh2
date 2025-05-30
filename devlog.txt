@@ -202,3 +202,9 @@ aidanW -- 2025-05-29 23:35
 * Made final accuracy match up with trend line more
 * Implemented smooth scrolling for words
 * Added restrictions to typing (space between each word, no keyboard commands, etc)
+
+aidanW 2025-05-30 13:32
+* Tab Enter goes to next test
+* Made site theme blue to differentiate
+* Made results page cleaner
+* Quality of life changes like everything except the words and timer dissapearing when typing
