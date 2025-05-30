@@ -5,6 +5,9 @@ import _ from 'lodash';
 import ApexChart from "react-apexcharts";
 const API_URL = import.meta.env.VITE_API_URL;
 
+import CustomTimeModal from '../components/CustomTimeModal';
+import { FaTools } from "react-icons/fa";
+
 const Typing = () => {
   const [input, setInput] = useState("");
   const [startTime, setStartTime] = useState<number | null>(null);
@@ -20,6 +23,8 @@ const Typing = () => {
 
   const [history, setHistory] = useState<{ wpm: number; accuracy: number }[]>([]);
   const inputRefLive = useRef<string>("");
+
+  const [showCustomModal, setShowCustomModal] = useState(false);
 
 
   // Use refs for mutable counters
@@ -72,8 +77,6 @@ const Typing = () => {
       for (let i = 0; i < inputWords.length; i++) {
         if (inputWords[i] === sampleWords[i]) {
           correctWords++;
-        } else {
-          break; // Stop at first incorrect word
         }
       }
 
@@ -430,56 +433,114 @@ const Typing = () => {
 
   return (
     <div className={styles.container}>
+      {!finished && input.length === 0 && (
       <div className={styles.controls} style={{ marginBottom: '1em', textAlign: 'center' }}>
         <label style={{ color: '#fff', marginRight: '0.5em' }}>Test Duration:</label>
         {[15, 30, 60, 120].map((sec) => (
-          <button
-            key={sec}
-            onClick={() => handleRestart(sec)}
+        <button
+          key={sec}
+          onClick={() => handleRestart(sec)}
+          style={{
+          margin: '0 0.5em',
+          padding: '0.3em 0.7em',
+          backgroundColor: timeTotal === sec ? '#00adb5' : '#333',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '6px',
+          cursor: 'pointer',
+          boxShadow: timeTotal === sec ? '0 0 8px #00adb5' : undefined,
+          transition: 'box-shadow 0.2s'
+          }}
+        >
+          {sec}s
+        </button>
+        ))}
+        <button
+        onClick={() => setShowCustomModal(true)}
+        style={{
+          marginLeft: '0.5em',
+          padding: '0.3em 0.7em',
+          backgroundColor: ![15, 30, 60, 120].includes(timeTotal) ? '#00adb5' : '#555',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '6px',
+          cursor: 'pointer',
+          boxShadow: ![15, 30, 60, 120].includes(timeTotal) ? '0 0 8px #00adb5' : undefined,
+          transition: 'box-shadow 0.2s'
+        }}
+        >
+        <FaTools />
+        </button>
+      </div>
+      )}
+      {showCustomModal && (
+      <CustomTimeModal
+        onClose={() => setShowCustomModal(false)}
+        onSubmit={(val) => handleRestart(val)}
+      />
+      )}
+      {finished ? (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+            marginTop: '3em',
+            gap: '2em',
+            width: '100%',
+          }}
+        >
+          <div
             style={{
-              margin: '0 0.5em',
-              padding: '0.3em 0.7em',
-              backgroundColor: timeTotal === sec ? '#00adb5' : '#333',
+              minWidth: 200,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start',
               color: '#fff',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer'
+              background: 'rgba(30,30,30,0.8)',
+              borderRadius: 12,
+              padding: '2em 1.5em',
+              boxShadow: '0 2px 12px #0004',
+              fontSize: '1.4em',
             }}
           >
-            {sec}s
-          </button>
-        ))}
-        <input
-          type="number"
-          min="5"
-          placeholder="Custom"
-          style={{
-            marginLeft: '1em',
-            padding: '0.3em',
-            width: '60px',
-            borderRadius: '6px',
-            border: '1px solid #ccc'
-          }}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              const val = parseInt((e.target as HTMLInputElement).value);
-              if (!isNaN(val) && val >= 5) {
-                handleRestart(val);
-              }
-            }
-          }}
-        />
-    </div>
-      {finished ? (
-        <div style={{ textAlign: 'center', marginTop: '3em' }}>
-          <h1>Results</h1>
-          <h2>Your WPM: {averageWpm}</h2>
-          <h2>Accuracy: {accuracy}%</h2>
-          <div style={{ maxWidth: 600, margin: "2em auto" }}>
+            <div style={{ fontWeight: 700, fontSize: '2.2em', marginBottom: '0.5em' }}>
+              {averageWpm}
+              <span style={{ fontWeight: 400, fontSize: '0.5em', marginLeft: 8, color: '#aaa' }}>WPM</span>
+            </div>
+            <div style={{ fontWeight: 500, fontSize: '1.2em', marginTop: '1.5em' }}>
+              Accuracy
+            </div>
+            <div style={{ fontWeight: 700, fontSize: '1.7em', color: '#00adb5' }}>
+              {accuracy}%
+            </div>
+            <button
+              onClick={() => handleRestart()}
+              style={{
+                marginTop: '2em',
+                background: '#00adb5',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 8,
+                padding: '0.7em 1.2em',
+                fontSize: '1em',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+              }}
+            >
+              <MdOutlineNavigateNext size={24} />
+              New Test
+            </button>
+          </div>
+          <div style={{ flex: 1, minWidth: 350, maxWidth: 900 }}>
             <ApexChart
               type="line"
-              height={350}
-              width={500}
+              height={500}
+              width={900}
               series={[
                 {
                   name: "WPM",
@@ -492,7 +553,7 @@ const Typing = () => {
                   toolbar: { show: false },
                   background: 'transparent',
                 },
-                colors: ['#00adb5', '#fbbf24'], // WPM: blue, Accuracy: yellow
+                colors: ['#00adb5', '#fbbf24'],
                 xaxis: {
                   categories: Array.from({ length: timeTotal }, (_, i) => (i + 1).toString()),
                   title: { text: "Seconds", style: { color: '#ccc' } },
@@ -536,10 +597,25 @@ const Typing = () => {
               }}
             />
           </div>
-          <button onClick={() => handleRestart()}><MdOutlineNavigateNext /></button>
         </div>
       ) : (
         <>
+            <div
+            style={{
+              textAlign: 'left',      
+              fontSize: '1.5em',     
+              fontWeight: 600,       
+              color: '#fff',         
+              width: '100%',       
+              maxWidth: 1700,      
+              marginTop: '5em',
+              marginBottom: '-6em',    
+            }}
+            >
+            {startTime && !finished && (
+              <strong>{timeLeft}</strong>
+            )}
+            </div>
           <div
             className={styles.sample}
             style={{
@@ -601,27 +677,46 @@ const Typing = () => {
               onFocus={() => setInputFocused(true)}
               onBlur={() => setInputFocused(false)}
               onKeyDown={(e) => {
-                // Prevent navigation and editing commands
-                if (
-                  ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'Tab'].includes(e.key)
-                ) {
-                  e.preventDefault();
-                  return;
+              // Prevent editing/navigation keys
+              if (
+                ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(e.key)
+              ) {
+                e.preventDefault();
+                return;
+              }
+
+              // Prevent space unless correct
+              if (
+                e.key === ' ' &&
+                !(input.length < sampleText.length && sampleText[input.length] === ' ')
+              ) {
+                e.preventDefault();
+                return;
+              }
+
+              // Prevent Enter and Tab from inserting characters
+              if (['Tab', 'Enter'].includes(e.key)) {
+                e.preventDefault(); // Prevent typing them
+                // Allow focus movement / activation
+                if (e.key === 'Tab') {
+                  const focusable = document.querySelectorAll(
+                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                  );
+                  const focusArray = Array.prototype.slice.call(focusable);
+                  const index = focusArray.indexOf(document.activeElement);
+                  if (index > -1) {
+                    const next = focusArray[index + 1] || focusArray[0];
+                    next.focus();
+                  }
+                } else if (e.key === 'Enter') {
+                  const active = document.activeElement as HTMLElement;
+                  if (active && typeof active.click === 'function') {
+                    active.click(); // Trigger button click
+                  }
                 }
-                // Prevent space unless at word boundary (already handled in handleChange)
-                if (
-                  e.key === ' ' &&
-                  !(input.length < sampleText.length && sampleText[input.length] === ' ')
-                ) {
-                  e.preventDefault();
-                  return;
-                }
-                // Prevent restart on Tab/Enter if finished (existing)
-                if (finished && (e.key === "Tab" || e.key === "Enter")) {
-                  e.preventDefault();
-                  handleRestart();
-                }
-              }}
+                return;
+              }
+            }}
               onCopy={e => e.preventDefault()}
               onPaste={e => e.preventDefault()}
               onCut={e => e.preventDefault()}
@@ -657,12 +752,35 @@ const Typing = () => {
               </div>
             )}
           </div>
-          <div>
-            <strong>Time Left: {timeLeft}s</strong>
-          </div>
-          <div className={styles.result}>
-            <p>WPM: {wpm}</p>
-            <p>Accuracy: {accuracy}%</p>
+          {/* Restart button at the bottom */}
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: '2em' }}>
+            <button
+              onClick={() => handleRestart()}
+              tabIndex={0}
+              style={{
+                background: '#00adb5',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 8,
+                padding: '0.7em 1.5em',
+                fontSize: '1.1em',
+                cursor: 'pointer',
+                boxShadow: '0 2px 8px #0003',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                outline: 'none', // remove default
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 8px #00adb5';
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = '0 2px 8px #0003';
+              }}
+            >
+              <MdOutlineNavigateNext size={22} />
+              Restart
+            </button>
           </div>
         </>
       )}
