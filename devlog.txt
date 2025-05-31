@@ -208,3 +208,6 @@ aidanW 2025-05-30 13:32
 * Made site theme blue to differentiate
 * Made results page cleaner
 * Quality of life changes like everything except the words and timer dissapearing when typing
+
+aidanW 2025-05-31 00:21
+* Created hover dropdown for profile with link to stats and log out button
