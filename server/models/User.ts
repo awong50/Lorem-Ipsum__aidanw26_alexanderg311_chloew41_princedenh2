@@ -3,6 +3,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface ITypingTest {
   wpm: number;
   accuracy: number;
+  time: number;
   date: Date;
 }
 

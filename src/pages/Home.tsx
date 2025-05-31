@@ -343,14 +343,15 @@ const Typing = () => {
   useEffect(() => {
     if (finished && localStorage.getItem('user')) {
       const user = JSON.parse(localStorage.getItem('user')!);
-      console.log('Saving result:', { wpm, accuracy, username: user.name });
+      console.log('Saving result:', { wpm, accuracy, username: user.name, time: timeTotal });
       fetch(`${API_URL}/api/typing-result`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           wpm,
           accuracy,
-          username: user.name
+          username: user.name,
+          time: timeTotal 
         })
       });
     }

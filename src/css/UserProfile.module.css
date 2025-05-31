@@ -1,0 +1,99 @@
+.container {
+  background-color: #2e2f34;
+  color: #ffffff;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.heading {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.tables {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.tableContainer {
+  background-color: #23242a; /* Slightly lighter for contrast */
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  max-width: 600px;
+}
+
+.tableTitle {
+  color: #00e6e6;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.5rem;
+  background-color: transparent;
+}
+
+thead {
+  color: #7fd7ff;
+  font-size: 0.9rem;
+}
+
+tr {
+  background-color: #2e2f34;
+  transition: background-color 0.2s ease;
+  border-radius: 0.5rem;
+}
+
+tr:hover {
+  background-color: #3a3b44;
+}
+
+td,
+th {
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  font-size: 0.95rem;
+  color: #e0e0e0;
+}
+
+.statsCard {
+  background-color: #1f1f23;
+  border-radius: 1rem;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: #ffffff;
+}
+
+.username {
+  font-size: 1.75rem;
+  color: #00e6e6;
+  margin-bottom: 0.5rem;
+}
+
+.stats {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  color: #b0b0b0;
+}
+
+.statValue {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ffffff;
+}

@@ -87,6 +87,9 @@ const KaTeXPage = () => {
     setShownSol(false);
     setUsedSol(false);
     setScore(0);
+    setSkipped(0);
+    setShownSolutions(0);
+    setTotalQuestions(0);
     if (customTime) setTotalTime(customTime);
   };
 

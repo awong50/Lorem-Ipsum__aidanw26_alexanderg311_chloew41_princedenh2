@@ -96,7 +96,7 @@ router.post('/logout', (req, res) => {
 
 router.post('/typing-result', async (req, res) => {
   try {
-    const { username, wpm, accuracy } = req.body;
+    const { username, wpm, accuracy, time } = req.body; 
     const user = await User.findOne({ name: username });
 
     if (!user) {
@@ -105,7 +105,7 @@ router.post('/typing-result', async (req, res) => {
     }
     
     user.typingTests = user.typingTests || [];
-    user.typingTests.push({ wpm, accuracy, date: new Date() });
+    user.typingTests.push({ wpm, accuracy, time, date: new Date() }); 
 
     // Keep only last 10 results
     if (user.typingTests.length > 10) {
@@ -115,7 +115,7 @@ router.post('/typing-result', async (req, res) => {
     await user.save();
     res.status(200).json({ message: 'Typing result saved' });
   } catch (error) {
-    console.error(error); // Add this for debugging
+    console.error(error);
     res.status(500).json({ error: 'Failed to save result' });
   }
 });
@@ -208,6 +208,23 @@ router.get('/latex-results/:username', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to fetch results' });
+  }
+});
+
+router.get('/user/:username', async (req, res) => {
+  try {
+    const user = await User.findOne({ name: req.params.username });
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+    // Only send safe fields
+    res.status(200).json({
+      name: user.name,
+      createdAt: user.createdAt,
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Error retrieving user' });
   }
 });
 
