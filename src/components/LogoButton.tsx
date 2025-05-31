@@ -13,9 +13,11 @@ const LogoButton = () => {
         cursor: 'pointer',
         padding: '0',
         marginRight: '1rem',
+        marginTop: '2rem',
+        marginLeft: '30rem',
       }}
     >
-      <img src={logo} alt="Prototype Logo" style={{ height: '40px' }} />
+      <img src={logo} alt="Prototype Logo" style={{ height: '45px' }} />
     </button>
   );
 };

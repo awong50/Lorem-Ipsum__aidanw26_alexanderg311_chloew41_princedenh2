@@ -50,7 +50,8 @@ const Auth = () => {
         localStorage.setItem('user', JSON.stringify(data.user));
         setLoginMsg('Login successful!');
         setTimeout(() => {
-            navigate('/typing');
+            navigate('/');
+            window.location.reload();
         }, 500)
       } else {
         setLoginMsg(data.error || 'Login failed');

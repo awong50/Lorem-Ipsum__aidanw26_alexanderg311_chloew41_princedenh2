@@ -430,9 +430,26 @@ const Typing = () => {
     ? Math.round(history.reduce((sum, h) => sum + h.wpm, 0) / history.length)
     : 0;
 
+  const showNavbarOverlay = startTime && !finished;
+
 
   return (
     <div className={styles.container}>
+
+      {showNavbarOverlay && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '64px', 
+            background: '#2e2f34', 
+            zIndex: 1000,
+            pointerEvents: 'none',
+          }}
+        />
+      )}
       {!finished && input.length === 0 && (
       <div className={styles.controls} style={{ marginBottom: '1em', textAlign: 'center' }}>
         <label style={{ color: '#fff', marginRight: '0.5em' }}>Test Duration:</label>

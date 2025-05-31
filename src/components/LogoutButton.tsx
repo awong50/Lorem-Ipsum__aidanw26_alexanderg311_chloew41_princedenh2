@@ -13,7 +13,8 @@ const LogoutButton = () => {
 
       if (res.ok) {
         localStorage.removeItem('user'); // Clear user info from localStorage
-        navigate('/login'); // Redirect to login page
+        navigate('/'); 
+        window.location.reload(); 
       } else {
         console.error('Failed to log out');
       }
