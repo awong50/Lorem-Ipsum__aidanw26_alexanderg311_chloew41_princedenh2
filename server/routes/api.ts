@@ -3,7 +3,6 @@ import User from '../models/User';
 import userQuery from '../db/userQuery';
 import RandomWords from '../data/RandomWords';
 import { random } from 'lodash';
-import LatexResult from '../models/LatexResult';
 const router = Router();
 
 // Create a new user
@@ -144,22 +143,39 @@ router.post('/latex-results', async (req, res) => {
       res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const result = new LatexResult({ username, score, time });
-    await result.save();
+    const user = await User.findOne({ name: username });
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
 
-    res.status(201).json({ message: 'Result saved', result });
+    user.latexResults = user.latexResults || [];
+    user.latexResults.push({ score, time, date: new Date() });
+
+    // Keep only latest 10 results if needed
+    if (user.latexResults.length > 10) {
+      user.latexResults = user.latexResults.slice(-10);
+    }
+
+    await user.save();
+    res.status(201).json({ message: 'Result saved', latexResults: user.latexResults });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to save result' });
   }
 });
 
-// Get all results for a user
 router.get('/latex-results/:username', async (req, res) => {
   try {
     const { username } = req.params;
-    const results = await LatexResult.find({ username }).sort({ createdAt: -1 });
-    res.status(200).json(results);
+    const user = await User.findOne({ name: username });
+
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    res.status(200).json(user.latexResults);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to fetch results' });

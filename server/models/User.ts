@@ -6,11 +6,18 @@ export interface ITypingTest {
   date: Date;
 }
 
+export interface ILatexResult {
+  score: number;
+  time: number;
+  date: Date;
+}
+
 export interface IUser extends Document {
   name: string;
   password: string;
   createdAt: Date;
   typingTests: ITypingTest[];
+  latexResults: ILatexResult[];
 }
 
 const TypingTestSchema = new Schema<ITypingTest>({
@@ -19,17 +26,22 @@ const TypingTestSchema = new Schema<ITypingTest>({
   date: { type: Date, default: Date.now },
 });
 
+const LatexResultSchema = new Schema<ILatexResult>({
+  score: { type: Number, required: true },
+  time: { type: Number, required: true },
+  date: { type: Date, default: Date.now },
+});
+
 const UserSchema: Schema = new Schema(
   {
     name: { type: String, required: true },
     password: { type: String, required: true },
     typingTests: { type: [TypingTestSchema], default: [] },
+    latexResults: { type: [LatexResultSchema], default: [] },
   },
   { timestamps: true }
 );
 
 const User = mongoose.model<IUser>('User', UserSchema, 'users');
 
-
 export default User;
-
