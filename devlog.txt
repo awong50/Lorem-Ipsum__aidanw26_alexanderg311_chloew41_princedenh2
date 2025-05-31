@@ -217,5 +217,6 @@ aidanW 2025-05-31 15:24
 * Styled LaTeX test page
 * Implemented personal best screens and better charts for history
 * Added date joined, total time spent, and tests completed calculations
+* Created about page
 
 
