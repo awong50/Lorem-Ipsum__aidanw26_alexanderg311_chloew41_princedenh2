@@ -6,7 +6,7 @@ import LogoutButton from './components/LogoutButton';
 import UserProfile from './pages/UserProfile';
 import Auth from './pages/Auth';
 
-import { FaRegKeyboard, FaRegUser, FaInfo, FaUser, FaSignOutAlt, FaChartLine  } from "react-icons/fa";
+import { FaRegKeyboard, FaRegUser, FaInfo, FaSignOutAlt, FaChartLine  } from "react-icons/fa";
 import { SiLatex } from "react-icons/si";
 import LogoButton from './components/LogoButton'; 
 
