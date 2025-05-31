@@ -244,8 +244,6 @@ const Typing = () => {
 
     // Detect if we're at a space in the sample text
     const caretPos = value.length;
-    const atSpace = sampleText[caretPos - 1] === " ";
-    const prevCharIsSpace = sampleText[caretPos - 2] === " ";
 
     // If we are in a wrong-after-space state, enforce max 5 wrong chars
     if (wrongAfterSpaceIndex !== null && caretPos > wrongAfterSpaceIndex) {

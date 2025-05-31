@@ -19,7 +19,7 @@ const DEFAULT_TIMES = [60, 120, 180, 300];
 const KaTeXPage = () => {
   const [finished, setFinished] = useState(false);
   const [shownSol, setShownSol] = useState(false);
-  const [usedSol, setUsedSol] = useState(false);
+  const [, setUsedSol] = useState(false);
   const [score, setScore] = useState<number>(0);
   const [equation, setEquation] = useState<string>('');
   const [startTime, setStartTime] = useState<number | null>(null);
