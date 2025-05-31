@@ -211,3 +211,11 @@ aidanW 2025-05-30 13:32
 
 aidanW 2025-05-31 00:21
 * Created hover dropdown for profile with link to stats and log out button
+
+aidanW 2025-05-31 15:24
+* Styled profile page
+* Styled LaTeX test page
+* Implemented personal best screens and better charts for history
+* Added date joined, total time spent, and tests completed calculations
+
+
