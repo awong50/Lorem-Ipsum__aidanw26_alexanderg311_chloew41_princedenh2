@@ -93,6 +93,18 @@ const UserProfile = () => {
     return `${mins}m ${secs}s`;
   };
 
+  const highestWPM = typingTests.length
+  ? Math.max(...typingTests.map(t => t.wpm ?? 0))
+  : '-';
+
+  const highestAccuracy = typingTests.length
+    ? Math.max(...typingTests.map(t => t.accuracy ?? 0))
+    : '-';
+
+  const highestLatex = latexTests.length
+    ? Math.max(...latexTests.map(t => t.score ?? t.latexStreak ?? 0))
+    : '-';
+
   return (
     <div className={styles.container}>
       <div className={styles.topCards}>
@@ -122,6 +134,24 @@ const UserProfile = () => {
                 {formatDuration(totalTypingTime + totalLatexTime)}
               </p>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className={styles.highestCard}>
+        <h2 className={styles.highestTitle}>Personal Bests</h2>
+        <div className={styles.highestStats}>
+          <div>
+            <p className={styles.statLabel}>Highest WPM</p>
+            <p className={styles.statValue}>{highestWPM}</p>
+          </div>
+          <div>
+            <p className={styles.statLabel}>Highest Accuracy (%)</p>
+            <p className={styles.statValue}>{highestAccuracy}</p>
+          </div>
+          <div>
+            <p className={styles.statLabel}>Highest LaTeX Score</p>
+            <p className={styles.statValue}>{highestLatex}</p>
           </div>
         </div>
       </div>

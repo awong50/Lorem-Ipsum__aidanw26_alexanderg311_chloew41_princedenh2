@@ -410,14 +410,14 @@ const KaTeXPage = () => {
                 ref={containerRef}
                 style={{
                   width: '90%',
-                  minHeight: '9.7em',
+                  minHeight: '9em',
                   marginBottom: '1em',
                   border: flashGreen ? '2px solid #2ecc40' : '2px solid #00adb5',
                   borderRadius: '8px',
                   background: finished ? '#222831' : '#23272f',
                   boxShadow: finished ? '0 0 12px #00adb5' : flashGreen ? '0 0 6px #2ecc40' : '0 0 6px #222',
                   transition: 'box-shadow 0.2s, border-color 0.2s',
-                  marginTop: '0em',
+                  marginTop: '-5em',
                 }}
               ></div>
               <div className={styles.katexTextareaWrapper}>
@@ -439,16 +439,97 @@ const KaTeXPage = () => {
                   }}
                 />
               </div>
-              <div className={styles.text}>
-                <p><b>Score:</b> {score}</p>
-              </div>
-              <div className={styles.buttons}>
-                <div className={styles.button1}>
-                  <button onClick={handleSkip}>Skip</button>
-                </div>
-                {!finished && !shownSol && <button onClick={showSolution}>Show Solution</button>}
-                {!finished && shownSol && <button onClick={() => setShownSol(false)}>Hide Solution</button>}
-                {shownSol && (<p><b>Solution:</b> {targetEquation}</p>)}
+                <div className={styles.buttons}>
+                  <div style={{ display: 'flex', gap: '2em', minHeight: 40 }}>
+                    {/* Skip Button Container */}
+                    <div className={styles.button1} style={{ width: 100, height: 50 }}>
+                      {startTime && !finished ? (
+                        <button onClick={handleSkip} style={{ width: '100%', height: '100%' }}>Skip</button>
+                      ) : (
+                        <div style={{ width: '100%', height: '100%' }}></div> // Empty placeholder
+                      )}
+                    </div>
+
+                    {/* Show/Hide Solution Button Container */}
+                    <div style={{ minWidth: 130, height: 50 }}>
+                      {startTime && !finished && !shownSol && (
+                        <button onClick={showSolution} style={{ width: '100%', height: '100%' }}>Show Solution</button>
+                      )}
+                      {startTime && !finished && shownSol && (
+                        <button onClick={() => setShownSol(false)} style={{ width: '100%', height: '100%' }}>Hide Solution</button>
+                      )}
+                      {/* When startTime is false or finished is true, render placeholder */}
+                      {(!startTime || finished) && (
+                        <div style={{ width: '100%', height: '100%' }}></div>
+                      )}
+                    </div>
+                  </div>
+                {shownSol && (
+                  <div
+                  style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100vw',
+                    height: '100vh',
+                    background: 'rgba(0,0,0,0.5)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 2000,
+                  }}
+                  onClick={() => setShownSol(false)}
+                  >
+                  <div
+                    style={{
+                    background: '#23272f',
+                    padding: '2em 2.5em',
+                    borderRadius: 12,
+                    boxShadow: '0 4px 24px #000a',
+                    minWidth: 320,
+                    maxWidth: '90vw',
+                    color: '#fff',
+                    position: 'relative',
+                    }}
+                    onClick={e => e.stopPropagation()}
+                  >
+                    <div style={{ marginBottom: '1em', fontWeight: 600, fontSize: '1.2em' }}>
+                    Solution
+                    </div>
+                    <div>
+                    <span
+                      style={{
+                      display: 'block',
+                      background: '#181a20',
+                      borderRadius: 8,
+                      padding: '1em',
+                      fontSize: '1.1em',
+                      wordBreak: 'break-word',
+                      }}
+                    >
+                      {targetEquation}
+                    </span>
+                    </div>
+                    <button
+                    onClick={() => setShownSol(false)}
+                    style={{
+                      marginTop: '1.5em',
+                      background: '#00adb5',
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: 8,
+                      padding: '0.5em 1.2em',
+                      fontSize: '1em',
+                      cursor: 'pointer',
+                      display: 'block',
+                      marginLeft: 'auto',
+                    }}
+                    >
+                    Close
+                    </button>
+                  </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

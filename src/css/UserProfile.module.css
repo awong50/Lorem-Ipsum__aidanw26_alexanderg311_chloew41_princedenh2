@@ -1,3 +1,7 @@
+body {
+  overflow: hidden;
+}
+
 .container {
   background-color: #2e2f34;
   color: #ffffff;
@@ -10,7 +14,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 3rem;
+  gap: 2rem;
   margin-bottom: 2rem;
 }
 
@@ -54,7 +58,7 @@
   min-width: 220px;
   color: #ffffff;
   height: 165px;
-  width: 40%;
+  width: 36%;
 }
 
 .username {
@@ -175,3 +179,26 @@ th {
   color: #ffffff;
 }
 
+.highestCard {
+  background-color: #23242a;
+  border-radius: 1rem;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  margin: 0 auto 2rem auto;
+  max-width: 79rem;
+  text-align: center;
+}
+
+.highestTitle {
+  color: #00e6e6;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.highestStats {
+  display: flex;
+  justify-content: center;
+  gap: 20rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
