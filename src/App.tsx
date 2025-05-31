@@ -17,7 +17,20 @@ function App() {
 
   return (
     <div>
-      <nav style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <nav
+        style={{
+          position: 'fixed',
+          top: 0,         
+          left: 0,          
+          width: '100%',     
+          zIndex: 1000,      
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          background: '#2e2f34', 
+          paddingBottom: '0.5rem', 
+        }}
+      >
         <LogoButton />
         <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginRight: 'auto', marginTop: '2rem' }}>
           <Link to="/"><FaRegKeyboard size={NAVBARSIZE} /></Link>
