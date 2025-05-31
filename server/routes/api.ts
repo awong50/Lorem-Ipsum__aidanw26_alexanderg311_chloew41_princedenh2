@@ -135,35 +135,64 @@ router.get('/typing-history/:username', async (req, res) => {
 });
 
 // Save a new LaTeX result
-router.post('/latex-results', async (req, res) => {
+router.post('/latex-result', async (req, res) => {
   try {
-    const { username, score, time } = req.body;
+    const {
+      username,
+      score,
+      time,
+      skipped,
+      shownSolutions,
+      totalQuestions,
+    } = req.body;
 
-    if (!username || score == null || time == null) {
+    if (
+      !username ||
+      score == null ||
+      time == null ||
+      skipped == null ||
+      shownSolutions == null ||
+      totalQuestions == null
+    ) {
       res.status(400).json({ error: 'Missing required fields' });
     }
 
+    // Find the user document
     const user = await User.findOne({ name: username });
     if (!user) {
       res.status(404).json({ error: 'User not found' });
       return;
     }
 
+    // Ensure latexResults is at least an array
     user.latexResults = user.latexResults || [];
-    user.latexResults.push({ score, time, date: new Date() });
 
-    // Keep only latest 10 results if needed
+    // Push the new result
+    user.latexResults.push({
+      score,
+      time,
+      skipped,
+      shownSolutions,
+      totalQuestions,
+      date: new Date(),
+    });
+
+    // Optional: keep only the 10 most recent entries
     if (user.latexResults.length > 10) {
       user.latexResults = user.latexResults.slice(-10);
     }
 
     await user.save();
-    res.status(201).json({ message: 'Result saved', latexResults: user.latexResults });
+    res.status(201).json({
+      message: 'Result saved',
+      latexResults: user.latexResults,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to save result' });
   }
 });
+
 
 router.get('/latex-results/:username', async (req, res) => {
   try {

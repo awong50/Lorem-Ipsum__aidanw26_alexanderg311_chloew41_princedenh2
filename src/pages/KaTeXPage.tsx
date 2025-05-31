@@ -66,11 +66,11 @@ const KaTeXPage = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           username: user.name,
-          latexStreak: score,
+          score,
+          time: totalTime,
           skipped,
           shownSolutions,
           totalQuestions,
-          duration: totalTime,
         }),
       }).catch((err) => console.error('Failed to save LaTeX result:', err));
     }

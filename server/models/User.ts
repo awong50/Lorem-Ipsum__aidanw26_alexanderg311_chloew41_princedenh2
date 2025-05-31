@@ -9,6 +9,9 @@ export interface ITypingTest {
 export interface ILatexResult {
   score: number;
   time: number;
+  skipped: number;
+  shownSolutions: number;
+  totalQuestions: number;
   date: Date;
 }
 
@@ -27,15 +30,18 @@ const TypingTestSchema = new Schema<ITypingTest>({
 });
 
 const LatexResultSchema = new Schema<ILatexResult>({
-  score: { type: Number, required: true },
-  time: { type: Number, required: true },
-  date: { type: Date, default: Date.now },
+  score:           { type: Number, required: true },
+  time:            { type: Number, required: true },
+  skipped:         { type: Number, required: true },
+  shownSolutions:  { type: Number, required: true },
+  totalQuestions:  { type: Number, required: true },
+  date:            { type: Date, default: Date.now },
 });
 
 const UserSchema: Schema = new Schema(
   {
-    name: { type: String, required: true },
-    password: { type: String, required: true },
+    name:        { type: String, required: true },
+    password:    { type: String, required: true },
     typingTests: { type: [TypingTestSchema], default: [] },
     latexResults: { type: [LatexResultSchema], default: [] },
   },
@@ -43,5 +49,4 @@ const UserSchema: Schema = new Schema(
 );
 
 const User = mongoose.model<IUser>('User', UserSchema, 'users');
-
 export default User;
