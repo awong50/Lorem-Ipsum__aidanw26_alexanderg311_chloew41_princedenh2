@@ -3,23 +3,19 @@ import User from '../models/User';
 import userQuery from '../db/userQuery';
 import RandomWords from '../data/RandomWords';
 import { random } from 'lodash';
+import LatexResult from '../models/LatexResult';
 const router = Router();
 
 // Create a new user
 router.post('/users', async (req, res) => {
   try {
     const { name,  password } = req.body;
-    console.log(name);
     const user = new User({ name,  password });
     const currentUser = await userQuery(name);
-
-    console.log(currentUser);
     
     if (currentUser == null) {
       await user.save();
       res.status(201).json(user);
-      console.log('Current User')
-      console.log(currentUser)
     }
     else {
       res.status(400).json({error: 'Username Already Exists'});
@@ -136,6 +132,37 @@ router.get('/typing-history/:username', async (req, res) => {
     res.status(200).json(user.typingTests);
   } catch (error) {
     res.status(500).json({ error: 'Error retrieving history' });
+  }
+});
+
+// Save a new LaTeX result
+router.post('/latex-results', async (req, res) => {
+  try {
+    const { username, score, time } = req.body;
+
+    if (!username || score == null || time == null) {
+      res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    const result = new LatexResult({ username, score, time });
+    await result.save();
+
+    res.status(201).json({ message: 'Result saved', result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to save result' });
+  }
+});
+
+// Get all results for a user
+router.get('/latex-results/:username', async (req, res) => {
+  try {
+    const { username } = req.params;
+    const results = await LatexResult.find({ username }).sort({ createdAt: -1 });
+    res.status(200).json(results);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch results' });
   }
 });
 

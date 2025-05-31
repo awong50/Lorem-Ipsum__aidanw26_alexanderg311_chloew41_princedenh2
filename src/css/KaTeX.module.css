@@ -1,37 +1,111 @@
-.container {
-  min-height: 110px;
-  width: 750px;
+.katexPageMain {
+  min-height: 60vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-  border-radius: 14px;
-  background: var(--card-bg);
-  box-shadow: var(--card-shadow);
-  padding: 1.5em;
-  margin-top: 1.5em;
-  margin-left: 0;
-  border: none;
+  justify-content: center;
+  gap: 3rem;
+  margin-top: 2rem;
+}
+
+.modelCard {
+  min-width: 200px;
+  max-width: 400px;
+  background: #23272f;
+  border-radius: 1em;
+  padding: 3em 2.5em 2.5em 2.5em;
+  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: -8em;
+}
+
+.modelCard .text,
+.modelCard .container {
+  font-size: 1.35rem;
+}
+
+.modelCard .container {
+  min-width: 320px;
+  min-height: 3.5em;
+  font-size: 1.5em;
+  padding: 1.5em 2em;
+}
+
+.modelCard .text {
+  font-size: 1.35rem;
+  margin-bottom: 1.2em;
 }
 
 .text {
-  margin-left: 2em;
+  color: #e3e3e3;
+  font-size: 1.1rem;
+  margin-bottom: 0.5em;
+  text-align: center;
+}
+
+.container {
+  background: #23272f;
+  border-radius: 0.75em;
+  padding: 1em 1.5em;
+  min-height: 10em;
+  min-width: 200px;
+  margin-bottom: 1em;
+  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  word-break: break-word;
+  width: 90%;
 }
 
 .finished {
-  color: #43ea7f;
-  background-color: #1e2b1e;
+  opacity: 0.6;
 }
 
-.result {
-  margin-top: 1.5em;
+.rightCol {
+  flex: 1;
+  min-width: 0;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .buttons {
-  min-height: 100px;
-  margin-left: 2em;
+  display: flex;
+  gap: 1em;
+  justify-content: center;
+  margin-top: 1em;
 }
 
 .button1 {
-  margin-right: 0.5em;
-  float: left;
+  display: inline-block;
+}
+
+.katexTextareaWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.katexTextarea {
+  width: 100%;
+  max-width: 650px;
+  height: 80px;
+  font-size: 15px;
+  background: #181a20;
+  color: #e3e3e3;
+  border: 1.5px solid #333;
+  border-radius: 0.5em;
+  padding: 0.7em 1em;
+  font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+  resize: vertical;
+  transition: border 0.2s;
+}
+
+.katexTextarea:focus {
+  outline: none;
+  border-color: #00adb5;
 }

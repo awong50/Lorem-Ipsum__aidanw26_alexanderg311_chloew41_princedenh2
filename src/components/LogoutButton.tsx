@@ -24,9 +24,9 @@ const LogoutButton = () => {
   };
 
   return (
-    <button onClick={handleLogout} style={{ marginLeft: '1rem' }}>
-      Logout
-    </button>
+    <span onClick={handleLogout} style={{ marginLeft: '.1rem', cursor: 'pointer', color: 'rgb(192, 192, 192)'}}>
+      Sign Out
+    </span>
   );
 };
 

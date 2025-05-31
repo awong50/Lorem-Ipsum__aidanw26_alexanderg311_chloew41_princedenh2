@@ -6,7 +6,7 @@ import LogoutButton from './components/LogoutButton';
 import UserProfile from './pages/UserProfile';
 import Auth from './pages/Auth';
 
-import { FaRegKeyboard, FaRegUser, FaInfo, FaUser, FaSignOutAlt } from "react-icons/fa";
+import { FaRegKeyboard, FaRegUser, FaInfo, FaUser, FaSignOutAlt, FaChartLine  } from "react-icons/fa";
 import { SiLatex } from "react-icons/si";
 import LogoButton from './components/LogoButton'; 
 
@@ -82,8 +82,8 @@ function App() {
               onMouseEnter={(e) => (e.currentTarget.style.background = '#2a2b3d')}
               onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
               >
-              <FaUser size={16} />
-              Public profile
+              <FaChartLine size={16}/>
+              User Stats
               </Link>
 
                 <div

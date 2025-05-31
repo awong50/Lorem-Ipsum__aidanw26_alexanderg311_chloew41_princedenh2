@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 const API_URL = import.meta.env.VITE_API_URL;
 
 interface TypingTest {
-  wpm: number;
-  accuracy: number;
+  wpm?: number;
+  accuracy?: number;
   date: string;
+  latexStreak?: number; // Add this line
 }
 
 const UserProfile = () => {
@@ -45,6 +46,7 @@ const UserProfile = () => {
               <th>#</th>
               <th>WPM</th>
               <th>Accuracy (%)</th>
+              <th>LaTeX Score</th> {/* Add this column */}
               <th>Date</th>
             </tr>
           </thead>
@@ -52,8 +54,9 @@ const UserProfile = () => {
             {history.map((test, i) => (
               <tr key={i}>
                 <td>{i + 1}</td>
-                <td>{test.wpm}</td>
-                <td>{test.accuracy}</td>
+                <td>{test.wpm ?? '-'}</td>
+                <td>{test.accuracy ?? '-'}</td>
+                <td>{test.latexStreak ?? '-'}</td> {/* Show LaTeX score if present */}
                 <td>{new Date(test.date).toLocaleString()}</td>
               </tr>
             ))}

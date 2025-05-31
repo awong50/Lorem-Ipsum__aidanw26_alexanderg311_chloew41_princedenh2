@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
 import styles from '@css/KaTeX.module.css';
+import CustomTimeModal from '../components/CustomTimeModal';
+import { MdOutlineNavigateNext } from "react-icons/md";
 
-// Custom tab instead of \t because we think it looks nicer (four spaces)
+const API_URL = import.meta.env.VITE_API_URL;
 const TAB = '    '; 
 
 const formulas: string[] = [
@@ -12,114 +14,113 @@ const formulas: string[] = [
   '\\zeta(3) = \\frac{5}{2} \\sum_{n=1}^\\infty \\frac{(-1)^{n-1}}{n^3 \\binom{2n}{n}}'
 ];
 
-const LatexPage = () => {
+const DEFAULT_TIMES = [60, 120, 180, 300];
 
+const KaTeXPage = () => {
   const [finished, setFinished] = useState(false);
   const [shownSol, setShownSol] = useState(false);
   const [usedSol, setUsedSol] = useState(false);
   const [score, setScore] = useState<number>(0);
-
   const [equation, setEquation] = useState<string>('');
-
   const [startTime, setStartTime] = useState<number | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
-  const totalTime = 180;
-
+  const [totalTime, setTotalTime] = useState<number>(180);
   const [targetEquation, setTargetEquation] = useState<string>('');
+  const [showCustomModal, setShowCustomModal] = useState(false);
 
+  const [flashGreen, setFlashGreen] = useState(false);
+
+  const [skipped, setSkipped] = useState(0);
+  const [shownSolutions, setShownSolutions] = useState(0);
+  const [totalQuestions, setTotalQuestions] = useState(0);
+
+  // For time selection UI
   useEffect(() => {
     const index = Math.floor(Math.random() * formulas.length);
     setTargetEquation(formulas[index]);
   }, []);
 
+  // Timer effect
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
     if (startTime && !finished) {
       interval = setInterval(() => {
-        const elapsed = (Date.now() - startTime) / 1000; // seconds
+        const elapsed = (Date.now() - startTime) / 1000;
         setElapsedTime(elapsed);
+        if (elapsed >= totalTime) {
+          setFinished(true);
+        }
       }, 500);
     }
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [startTime, finished]);
+  }, [startTime, finished, totalTime]);
 
-  var html = "";
-
-  function cleanUp(str: string) {
-    try {
-        html = katex.renderToString(str);
-        const noLB = str.replace(/[{]/g, "");
-        const noRB = noLB.replace(/[}]/g, "");
-        return noRB.replace(/ /g, "");
+  // Saves result to server
+  useEffect(() => {
+    if (finished && localStorage.getItem('user')) {
+      const user = JSON.parse(localStorage.getItem('user')!);
+      fetch(`${API_URL}/api/latex-result`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: user.name,
+          latexStreak: score,
+          skipped,
+          shownSolutions,
+          totalQuestions,
+          duration: totalTime,
+        }),
+      }).catch((err) => console.error('Failed to save LaTeX result:', err));
     }
-    catch (e) {
-        if (e instanceof katex.ParseError) {
-            // KaTeX can't parse the expression
-            html = ("Error in LaTeX '" + str + "': " + e.message)
-                .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            return(html)
-        }
-    }
-  }
+  }, [finished]);
 
-  const showSolution = () => {
-    setShownSol(true)
-    setUsedSol(true)
-  }
-
-  const handleInputChange = 
-    // AreaElement allows the inputted string to be in the form of a text box
-    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-
-    if (!startTime) {
-        setStartTime(Date.now());
-    }
-
-    setEquation(e.target.value);
-
-    if (cleanUp(e.target.value) === cleanUp(targetEquation)) {
-        setFinished(true);
-        setShownSol(false);
-        if (!usedSol) {
-            setScore(score+1);
-        }
-        setUsedSol(false);
-    }
+  // Reset everything for a new test
+  const handleRestart = (customTime?: number) => {
+    const index = Math.floor(Math.random() * formulas.length);
+    setTargetEquation(formulas[index]);
+    setEquation('');
+    setStartTime(null);
+    setElapsedTime(0);
+    setFinished(false);
+    setShownSol(false);
+    setUsedSol(false);
+    setScore(0);
+    if (customTime) setTotalTime(customTime);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    // Makes pressing tab key indent code
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      const target = e.target as HTMLTextAreaElement;
-      const start = target.selectionStart;
-      const end = target.selectionEnd;
-      const newValue = equation.substring(0, start) + TAB + equation.substring(end);
-      setEquation(newValue);
-
-      setTimeout(() => {
-        target.selectionStart = target.selectionEnd = start + TAB.length;
-      }, 0);
-    }
+  // When user skips, increment skipped and totalQuestions
+  const handleSkip = () => {
+    setSkipped(prev => prev + 1);
+    setTotalQuestions(prev => prev + 1);
+    const index = Math.floor(Math.random() * formulas.length);
+    setTargetEquation(formulas[index]);
+    setEquation('');
+    setShownSol(false);
+    setUsedSol(false);
   };
 
+  // Handle time selection
+  const handleTimeSelect = (sec: number) => {
+    setTotalTime(sec);
+    handleRestart(sec);
+  };
+
+  // KaTeX rendering helpers
   const containerRef = useRef<HTMLDivElement>(null);
   const targetRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (containerRef.current && equation) {
       containerRef.current.innerHTML = '';
-
       const equationElement = document.createElement('div');
       katex.render(equation, equationElement, {
         throwOnError: false,
         displayMode: true,
       });
       containerRef.current?.appendChild(equationElement);
-    }
-    else {
+    } else {
       if (containerRef.current) {
         containerRef.current.innerHTML = '';
       }
@@ -138,60 +139,320 @@ const LatexPage = () => {
     }
   }, [targetEquation]);
 
-  const handleRestart = () => {
-    const index = Math.floor(Math.random() * formulas.length);
-    setTargetEquation(formulas[index]);
-    setEquation("");
-    //setStartTime(null);
-    //setElapsedTime(0);
-    setFinished(false);
-    setShownSol(false);
+  // Input logic
+  function cleanUp(str: string) {
+    try {
+      katex.renderToString(str);
+      const noLB = str.replace(/[{]/g, "");
+      const noRB = noLB.replace(/[}]/g, "");
+      return noRB.replace(/ /g, "");
+    }
+    catch (e) {
+      return "";
+    }
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (!startTime) setStartTime(Date.now());
+    setEquation(e.target.value);
+
+    if (cleanUp(e.target.value) === cleanUp(targetEquation)) {
+      setFlashGreen(true);
+      setScore(prev => prev + 1);
+      setTotalQuestions(prev => prev + 1);
+      setShownSol(false);
+      setUsedSol(false);
+      setTimeout(() => {
+        const index = Math.floor(Math.random() * formulas.length);
+        setTargetEquation(formulas[index]);
+        setEquation('');
+        setFlashGreen(false);
+      }, 1000);
+    }
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const target = e.target as HTMLTextAreaElement;
+      const start = target.selectionStart;
+      const end = target.selectionEnd;
+      const newValue = equation.substring(0, start) + TAB + equation.substring(end);
+      setEquation(newValue);
+
+      setTimeout(() => {
+        target.selectionStart = target.selectionEnd = start + TAB.length;
+      }, 0);
+    }
+  };
+
+  // Show solution logic
+  const showSolution = () => {
+    if (!shownSol) setShownSolutions(prev => prev + 1);
+    setShownSol(true);
+    setUsedSol(true);
+  };
+
+  // Time controls UI
+  const timeControls = (
+    <div style={{ marginBottom: '1em', textAlign: 'center' }}>
+      <label style={{ color: '#fff', marginRight: '0.5em' }}>Test Duration:</label>
+      {DEFAULT_TIMES.map((sec) => (
+        <button
+          key={sec}
+          onClick={() => handleTimeSelect(sec)}
+          style={{
+            margin: '0 0.5em',
+            padding: '0.3em 0.7em',
+            backgroundColor: totalTime === sec ? '#00adb5' : '#333',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            boxShadow: totalTime === sec ? '0 0 8px #00adb5' : undefined,
+            transition: 'box-shadow 0.2s',
+            marginTop: '12em',
+          }}
+        >
+          {sec}s
+        </button>
+      ))}
+      <button
+        onClick={() => setShowCustomModal(true)}
+        style={{
+          marginLeft: '0.5em',
+          padding: '0.3em 0.7em',
+          backgroundColor: !DEFAULT_TIMES.includes(totalTime) ? '#00adb5' : '#555',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '6px',
+          cursor: 'pointer',
+          boxShadow: !DEFAULT_TIMES.includes(totalTime) ? '0 0 8px #00adb5' : undefined,
+          transition: 'box-shadow 0.2s'
+        }}
+      >
+        Custom
+      </button>
+      {showCustomModal && (
+        <CustomTimeModal
+          onClose={() => setShowCustomModal(false)}
+          onSubmit={(val) => handleTimeSelect(val)}
+        />
+      )}
+    </div>
+  );
+
+  const showNavbarOverlay = startTime && !finished;
 
   return (
     <div>
-      <div className={styles.text}>
-        <h1>LaTeX Test</h1>
-      <p>
-        <b>Create the following formula in LaTeX:</b>
-      </p>
-      </div>
-      <div 
-        className={styles.container}
-        ref={targetRef} >
-      </div>
-      <div className={styles.text}>
-        <p><b>Your output:</b></p>
-      </div>
-      <div 
-        className={styles.container + (finished ? ' ' + styles.finished : '')}
-        ref={containerRef}>
-      </div>
-      <div className={styles.text}>
-        <p><b>Type here:</b></p>
-      </div>
-      <div>
-        <textarea
-          value={equation}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          style={{ width: '755px', height: '80px', fontSize: '15px', marginLeft: '30px' }}
-          disabled={finished}
-          placeholder="Start LaTeXing here..."
+      {showNavbarOverlay && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100px',
+            background: '#2e2f34',
+            zIndex: 1000,
+            pointerEvents: 'none',
+          }}
         />
-      </div>
-      <div className={styles.text}>
-        <p><b>Time Remaining:</b> {totalTime-Math.round(elapsedTime)}s</p>
-        <p><b>Score:</b> {score}</p>
-      </div>
-      <div className={styles.buttons}>
-        <div className={styles.button1}>{<button onClick={handleRestart}>Skip</button>}</div>
-        {!finished && !shownSol && <button onClick={showSolution}>Show Solution</button>}
-        {!finished && shownSol && <button onClick={() => setShownSol(false)}>Hide Solution</button>}
-        {shownSol && (<p><b>Solution:</b> {targetEquation}</p>)}
-      </div>
+      )}
+      {startTime ? (
+        <div
+          style={{
+            height: '240px',
+            width: '200px',
+            borderRadius: '8px',
+            marginBottom: '1em',
+          }}
+        />
+      ) : (
+        timeControls
+      )}
+
+      {/* Results screen */}
+      {finished ? (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+            marginTop: '3em',
+            gap: '2em',
+            width: '100%',
+          }}
+        >
+          {/* Left: Score and time */}
+          <div
+            style={{
+              minWidth: 200,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start',
+              color: '#fff',
+              background: 'rgba(30,30,30,0.8)',
+              borderRadius: 12,
+              padding: '2em 1.5em',
+              boxShadow: '0 2px 12px #0004',
+              fontSize: '1.4em',
+            }}
+          >
+            <div style={{ fontWeight: 700, fontSize: '2.2em', marginBottom: '0.5em' }}>
+              {score}
+              <span style={{ fontWeight: 400, fontSize: '0.5em', marginLeft: 8, color: '#aaa' }}>Score</span>
+            </div>
+            <div style={{ fontWeight: 500, fontSize: '1.2em', marginTop: '1.5em' }}>
+              Time
+            </div>
+            <div style={{ fontWeight: 700, fontSize: '1.7em', color: '#00adb5' }}>
+              {totalTime}s
+            </div>
+            <button
+              onClick={() => handleRestart()}
+              style={{
+                marginTop: '2em',
+                background: '#00adb5',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 8,
+                padding: '0.7em 1.2em',
+                fontSize: '1em',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+              }}
+            >
+              <MdOutlineNavigateNext size={24} />
+              New Test
+            </button>
+          </div>
+          {/* Right: Skipped and Show Solution */}
+          <div
+            style={{
+              minWidth: 200,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start',
+              color: '#fff',
+              background: 'rgba(30,30,30,0.8)',
+              borderRadius: 12,
+              padding: '2em 1.5em',
+              boxShadow: '0 2px 12px #0004',
+              fontSize: '1.2em',
+            }}
+          >
+            <div style={{ marginBottom: '1em', fontWeight: 600, fontSize: '1.2em' }}>
+              <b>Skipped:</b> {skipped}
+            </div>
+            <div style={{ marginBottom: '1em', fontWeight: 600, fontSize: '1.2em' }}>
+              <b>Show Solution:</b> {shownSolutions}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              fontSize: '1.5em',
+              fontWeight: 600,
+              color: '#fff',
+              width: '100%',
+              maxWidth: 1700,
+              marginTop: '2em',
+              marginBottom: '-6em',
+              marginLeft: '28em',
+            }}
+          >
+            <div>
+              {startTime && !finished && (
+                <strong>{Math.max(0, totalTime - Math.round(elapsedTime))}</strong>
+              )}
+            </div>
+            <div style={{ fontWeight: 400, fontSize: '0.9em', color: '#00adb5', marginRight: '23em' }}>
+              <b>Score:</b> {score}
+            </div>
+          </div>
+          <div className={styles.katexPageMain}>
+            {/* Left Side */}
+            <div
+              className={styles.modelCard}
+              style={{
+                border: '2px solid #00adb5',
+                borderRadius: '8px',
+                background: '#23272f',
+                boxShadow: '0 0 6px #222',
+                width: '90%',
+                minHeight: '8em',
+                marginBottom: '1em',
+              }}
+            >
+              <div className={styles.container} ref={targetRef}></div>
+            </div>
+
+            {/* Right Side*/}
+            <div className={styles.rightCol}>
+              <div
+                className={styles.container + (finished ? ' ' + styles.finished : '')}
+                ref={containerRef}
+                style={{
+                  width: '90%',
+                  minHeight: '9.7em',
+                  marginBottom: '1em',
+                  border: flashGreen ? '2px solid #2ecc40' : '2px solid #00adb5',
+                  borderRadius: '8px',
+                  background: finished ? '#222831' : '#23272f',
+                  boxShadow: finished ? '0 0 12px #00adb5' : flashGreen ? '0 0 6px #2ecc40' : '0 0 6px #222',
+                  transition: 'box-shadow 0.2s, border-color 0.2s',
+                  marginTop: '0em',
+                }}
+              ></div>
+              <div className={styles.katexTextareaWrapper}>
+                <textarea
+                  value={equation}
+                  onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
+                  className={styles.katexTextarea}
+                  disabled={finished}
+                  placeholder="Start LaTeXing here..."
+                  style={{
+                    resize: 'none',
+                    width: '100%',
+                    minHeight: '6em',
+                    maxHeight: '12em',
+                    overflowY: 'auto',
+                    border: flashGreen ? '2px solid #2ecc40' : '2px solid #00adb5',
+                    boxShadow: finished ? '0 0 12px #00adb5' : flashGreen ? '0 0 6px #2ecc40' : '0 0 6px #222',
+                  }}
+                />
+              </div>
+              <div className={styles.text}>
+                <p><b>Score:</b> {score}</p>
+              </div>
+              <div className={styles.buttons}>
+                <div className={styles.button1}>
+                  <button onClick={handleSkip}>Skip</button>
+                </div>
+                {!finished && !shownSol && <button onClick={showSolution}>Show Solution</button>}
+                {!finished && shownSol && <button onClick={() => setShownSol(false)}>Hide Solution</button>}
+                {shownSol && (<p><b>Solution:</b> {targetEquation}</p>)}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
 
-export default LatexPage;
+export default KaTeXPage;

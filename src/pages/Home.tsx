@@ -6,7 +6,7 @@ import ApexChart from "react-apexcharts";
 const API_URL = import.meta.env.VITE_API_URL;
 
 import CustomTimeModal from '../components/CustomTimeModal';
-import { FaTools } from "react-icons/fa";
+import { FaTools, FaRedoAlt } from "react-icons/fa";
 
 const Typing = () => {
   const [input, setInput] = useState("");
@@ -300,15 +300,6 @@ const Typing = () => {
       setWrongAfterSpaceIndex(null);
     }
 
-    // Append wrong letters to sampleText for display
-    let displaySampleText = sampleText;
-    if (wrongAfterSpaceIndex !== null && wrongAfterSpace.length > 0) {
-      displaySampleText =
-        sampleText.slice(0, wrongAfterSpaceIndex + 1) +
-        wrongAfterSpace.join("") +
-        sampleText.slice(wrongAfterSpaceIndex + 1);
-    }
-
     const newCharacter = value.length > input.length;
 
     if (newCharacter) {
@@ -443,53 +434,63 @@ const Typing = () => {
             top: 0,
             left: 0,
             width: '100vw',
-            height: '64px', 
+            height: '100px', 
             background: '#2e2f34', 
             zIndex: 1000,
             pointerEvents: 'none',
           }}
         />
       )}
-      {!finished && input.length === 0 && (
-      <div className={styles.controls} style={{ marginBottom: '1em', textAlign: 'center' }}>
+
+      {/* Always render controls, but hide when not needed */}
+      <div
+        className={styles.controls}
+        style={{
+          marginBottom: '1em',
+          textAlign: 'center',
+          minHeight: 48, // Reserve space (adjust as needed)
+          opacity: !finished && input.length === 0 ? 1 : 0,
+          pointerEvents: !finished && input.length === 0 ? 'auto' : 'none',
+          transition: 'opacity 0.3s',
+        }}
+      >
         <label style={{ color: '#fff', marginRight: '0.5em' }}>Test Duration:</label>
         {[15, 30, 60, 120].map((sec) => (
-        <button
-          key={sec}
-          onClick={() => handleRestart(sec)}
-          style={{
-          margin: '0 0.5em',
-          padding: '0.3em 0.7em',
-          backgroundColor: timeTotal === sec ? '#00adb5' : '#333',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '6px',
-          cursor: 'pointer',
-          boxShadow: timeTotal === sec ? '0 0 8px #00adb5' : undefined,
-          transition: 'box-shadow 0.2s'
-          }}
-        >
-          {sec}s
-        </button>
+          <button
+            key={sec}
+            onClick={() => handleRestart(sec)}
+            style={{
+              margin: '0 0.5em',
+              padding: '0.3em 0.7em',
+              backgroundColor: timeTotal === sec ? '#00adb5' : '#333',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              boxShadow: timeTotal === sec ? '0 0 8px #00adb5' : undefined,
+              transition: 'box-shadow 0.2s'
+            }}
+          >
+            {sec}s
+          </button>
         ))}
         <button
-        onClick={() => setShowCustomModal(true)}
-        style={{
-          marginLeft: '0.5em',
-          padding: '0.3em 0.7em',
-          backgroundColor: ![15, 30, 60, 120].includes(timeTotal) ? '#00adb5' : '#555',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '6px',
-          cursor: 'pointer',
-          boxShadow: ![15, 30, 60, 120].includes(timeTotal) ? '0 0 8px #00adb5' : undefined,
-          transition: 'box-shadow 0.2s'
-        }}
+          onClick={() => setShowCustomModal(true)}
+          style={{
+            marginLeft: '0.5em',
+            padding: '0.3em 0.7em',
+            backgroundColor: ![15, 30, 60, 120].includes(timeTotal) ? '#00adb5' : '#555',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            boxShadow: ![15, 30, 60, 120].includes(timeTotal) ? '0 0 8px #00adb5' : undefined,
+            transition: 'box-shadow 0.2s'
+          }}
         >
-        <FaTools />
+          <FaTools />
         </button>
       </div>
-      )}
       {showCustomModal && (
       <CustomTimeModal
         onClose={() => setShowCustomModal(false)}
@@ -618,35 +619,40 @@ const Typing = () => {
       ) : (
         <>
             <div
-            style={{
-              textAlign: 'left',      
-              fontSize: '1.5em',     
-              fontWeight: 600,       
-              color: '#fff',         
-              width: '100%',       
-              maxWidth: 1700,      
-              marginTop: '5em',
-              marginBottom: '-6em',    
-            }}
+              style={{
+                textAlign: 'left',
+                fontSize: '1.5em',
+                fontWeight: 600,
+                color: '#fff',
+                width: '100%',
+                maxWidth: 1700,
+                marginTop: '4.2em',
+                marginBottom: '-7em',
+                minHeight: '1.5em', 
+                display: 'flex',
+                alignItems: 'center',
+              }}
             >
-            {startTime && !finished && (
-              <strong>{timeLeft}</strong>
-            )}
+              {startTime && !finished ? (
+                <strong>{timeLeft}</strong>
+              ) : (
+                <span style={{ visibility: 'hidden' }}>00</span>
+              )}
             </div>
-          <div
-            className={styles.sample}
-            style={{
-              userSelect: 'none',
-              marginBottom: 8,
-              position: 'relative',
-              minHeight: '2.5em',
-              cursor: 'text',
-            }}
-            onClick={() => {
-              inputRef.current?.focus();
-              setInputFocused(true);
-            }}
-          >
+            <div
+              className={styles.sample}
+              style={{
+                userSelect: 'none',
+                marginBottom: 8,
+                position: 'relative',
+                minHeight: '2.5em',
+                cursor: 'text',
+              }}
+              onClick={() => {
+                inputRef.current?.focus();
+                setInputFocused(true);
+              }}
+            >
             <div
               id="sampleTextContainer"
               style={{
@@ -713,8 +719,8 @@ const Typing = () => {
 
               // Prevent Enter and Tab from inserting characters
               if (['Tab', 'Enter'].includes(e.key)) {
-                e.preventDefault(); // Prevent typing them
-                // Allow focus movement / activation
+                e.preventDefault(); 
+
                 if (e.key === 'Tab') {
                   const focusable = document.querySelectorAll(
                     'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
@@ -728,7 +734,7 @@ const Typing = () => {
                 } else if (e.key === 'Enter') {
                   const active = document.activeElement as HTMLElement;
                   if (active && typeof active.click === 'function') {
-                    active.click(); // Trigger button click
+                    active.click(); 
                   }
                 }
                 return;
@@ -795,9 +801,8 @@ const Typing = () => {
                 e.currentTarget.style.boxShadow = '0 2px 8px #0003';
               }}
             >
-              <MdOutlineNavigateNext size={22} />
-              Restart
-            </button>
+              <FaRedoAlt size={22}/>
+              </button>
           </div>
         </>
       )}
