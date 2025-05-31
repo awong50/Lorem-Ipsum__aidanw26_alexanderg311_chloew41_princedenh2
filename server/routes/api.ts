@@ -176,11 +176,6 @@ router.post('/latex-result', async (req, res) => {
       date: new Date(),
     });
 
-    // Optional: keep only the 10 most recent entries
-    if (user.latexResults.length > 10) {
-      user.latexResults = user.latexResults.slice(-10);
-    }
-
     await user.save();
     res.status(201).json({
       message: 'Result saved',

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../css/UserProfile.module.css';
 const API_URL = import.meta.env.VITE_API_URL;
+import { FaRegUserCircle } from "react-icons/fa";
 
 // Interfaces
 interface TypingTest {
@@ -57,7 +58,6 @@ const UserProfile = () => {
     fetch(`${API_URL}/api/typing-history/${localUser.name}`)
       .then(res => res.json())
       .then((data) => {
-        // If backend returns { typingTests: [...] }
         if (Array.isArray(data)) {
           setTypingTests(data);
         } else if (Array.isArray(data.typingTests)) {
@@ -72,7 +72,6 @@ const UserProfile = () => {
     fetch(`${API_URL}/api/latex-results/${localUser.name}`)
       .then(res => res.json())
       .then((data) => {
-        // If backend returns { latexResults: [...] }
         if (Array.isArray(data)) {
           setLatexTests(data);
         } else if (Array.isArray(data.latexResults)) {
@@ -85,7 +84,7 @@ const UserProfile = () => {
   }, []);
 
   const totalLatexTime = latexTests.reduce((acc, t) => acc + (t.time || 0), 0);
-  const totalTypingTime = typingTests.reduce((acc, t) => acc + (t.time || 0), 0); // <-- Add this line
+  const totalTypingTime = typingTests.reduce((acc, t) => acc + (t.time || 0), 0);
   const totalTests = typingTests.length + latexTests.length;
 
   const formatDuration = (seconds: number) => {
@@ -96,29 +95,36 @@ const UserProfile = () => {
 
   return (
     <div className={styles.container}>
-    <div className={styles.statsCard}>
-      <h2 className={styles.username}>{user.name}</h2>
-      <div className={styles.stats}>
-        <div>
-          <p className={styles.statLabel}>Tests Completed</p>
-          <p className={styles.statValue}>{totalTests}</p>
+      <div className={styles.topCards}>
+        <div className={styles.userCard}>
+          <div className={styles.userIconContainer}>
+            <FaRegUserCircle className={styles.userIcon}/>
+          </div>
+          <div>
+            <h2 className={styles.username}>{user.name}</h2>
+            <div>
+              <p className={styles.statLabel}>Date Joined</p>
+              <p className={styles.statValue}>
+                {dateJoined ? new Date(dateJoined).toLocaleDateString() : 'N/A'}
+              </p>
+            </div>
+          </div>
         </div>
-        <div>
-          <p className={styles.statLabel}>Total Time Spent</p>
-          <p className={styles.statValue}>
-            {formatDuration(totalTypingTime + totalLatexTime)}
-          </p>
-        </div>
-        <div>
-          <p className={styles.statLabel}>Date Joined</p>
-          <p className={styles.statValue}>
-            {dateJoined ? new Date(dateJoined).toLocaleDateString() : 'N/A'}
-          </p>
+        <div className={styles.statsCard}>
+          <div className={styles.stats}>
+            <div>
+              <p className={styles.statLabel}>Tests Completed</p>
+              <p className={styles.statValue}>{totalTests}</p>
+            </div>
+            <div>
+              <p className={styles.statLabel}>Total Time Spent</p>
+              <p className={styles.statValue}>
+                {formatDuration(totalTypingTime + totalLatexTime)}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-
-      <h1 className={styles.heading}>{user.name}'s Test History</h1>
 
       <div className={styles.tables}>
         <div className={styles.tableContainer}>

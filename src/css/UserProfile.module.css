@@ -6,6 +6,80 @@
   padding: 2rem;
 }
 
+.topCards {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 3rem;
+  margin-bottom: 2rem;
+}
+
+.userCard {
+  background-color: #1f1f23;
+  border-radius: 1rem;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  min-width: 220px;
+  color: #ffffff;
+}
+
+.userCard {
+  display: flex;
+  align-items: center;
+  gap: 1.5em;
+  font-size: 2rem;
+}
+
+.userIconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.userIcon {
+  font-size: 3em; 
+  color: gray;   
+}
+
+.statsCard {
+  background-color: #1f1f23;
+  border-radius: 1rem;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 220px;
+  color: #ffffff;
+  height: 165px;
+  width: 40%;
+}
+
+.username {
+  font-size: 1.75rem;
+  color: #00e6e6;
+  margin-bottom: 0.5rem;
+}
+
+.stats {
+  display: flex;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  color: #b0b0b0;
+}
+
+.statValue {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ffffff;
+}
+
 .heading {
   font-size: 2rem;
   margin-bottom: 2rem;
@@ -16,10 +90,11 @@
   gap: 2rem;
   flex-wrap: wrap;
   align-items: flex-start;
+  justify-content: center;
 }
 
 .tableContainer {
-  background-color: #23242a; /* Slightly lighter for contrast */
+  background-color: #23242a;
   border-radius: 1rem;
   padding: 1.5rem;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
@@ -82,18 +157,21 @@ th {
 }
 
 .stats {
+  margin-left: 5rem;
+  margin-top: 2rem;
   display: flex;
-  gap: 2rem;
+  gap: 10rem;
   flex-wrap: wrap;
 }
 
 .statLabel {
-  font-size: 0.9rem;
+  font-size: 1.3rem;
   color: #b0b0b0;
 }
 
 .statValue {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: bold;
   color: #ffffff;
 }
+
