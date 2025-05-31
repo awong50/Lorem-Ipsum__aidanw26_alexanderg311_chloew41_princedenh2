@@ -27,6 +27,7 @@ export interface IUser extends Document {
 const TypingTestSchema = new Schema<ITypingTest>({
   wpm: { type: Number, required: true },
   accuracy: { type: Number, required: true },
+  time: { type: Number, required: true }, 
   date: { type: Date, default: Date.now },
 });
 

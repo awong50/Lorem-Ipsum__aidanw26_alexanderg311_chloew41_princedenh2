@@ -132,6 +132,7 @@ const UserProfile = () => {
                   <th>#</th>
                   <th>WPM</th>
                   <th>Accuracy (%)</th>
+                  <th>Time (s)</th>
                   <th>Date</th>
                 </tr>
               </thead>
@@ -139,8 +140,15 @@ const UserProfile = () => {
                 {typingTests.map((test, i) => (
                   <tr key={i}>
                     <td>{i + 1}</td>
-                    <td>{test.wpm ?? '-'}</td>
+                    <td>
+                      {typeof test.wpm === 'number'
+                        ? test.wpm
+                        : (typeof test.wpm === 'number' && typeof test.time === 'number'
+                            ? Math.round((test.wpm * 60) / test.time)
+                            : '-')}
+                    </td>
                     <td>{test.accuracy ?? '-'}</td>
+                    <td>{test.time ?? '-'}</td>
                     <td>{new Date(test.date).toLocaleString()}</td>
                   </tr>
                 ))}

@@ -96,7 +96,7 @@ router.post('/logout', (req, res) => {
 
 router.post('/typing-result', async (req, res) => {
   try {
-    const { username, wpm, accuracy, time } = req.body; 
+    const { username, wpm, accuracy, time } = req.body;
     const user = await User.findOne({ name: username });
 
     if (!user) {
@@ -105,9 +105,8 @@ router.post('/typing-result', async (req, res) => {
     }
     
     user.typingTests = user.typingTests || [];
-    user.typingTests.push({ wpm, accuracy, time, date: new Date() }); 
+    user.typingTests.push({ wpm, accuracy, time, date: new Date() }); // <-- Save time
 
-    // Keep only last 10 results
     if (user.typingTests.length > 10) {
       user.typingTests = user.typingTests.slice(-10);
     }
