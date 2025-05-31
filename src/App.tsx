@@ -28,22 +28,22 @@ function App() {
           alignItems: 'center',
           gap: '10px',
           background: '#2e2f34', 
-          paddingBottom: '0.5rem', 
+          paddingBottom: '0.5vh', 
         }}
       >
         <LogoButton />
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginRight: 'auto', marginTop: '2rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '2vh', marginRight: 'auto', marginTop: '2vh' }}>
           <Link to="/"><FaRegKeyboard size={NAVBARSIZE} /></Link>
           <Link to="/latex"><SiLatex size={NAVBARSIZE} /></Link>
           <Link to="/about"><FaInfo size={NAVBARSIZE} /></Link>
         </div>
         {isLoggedIn && (
-          <div
+            <div
             style={{
               display: 'flex',
               alignItems: 'center',
-              marginRight: '32rem',
-              marginTop: '2rem',
+              marginRight: '32vh',
+              marginTop: '2vh', // Use viewport height for relative margin
               position: 'relative',
             }}
             onMouseEnter={(e) => {
@@ -54,8 +54,8 @@ function App() {
               const menu = e.currentTarget.querySelector('.profile-hover-menu') as HTMLElement;
               if (menu) menu.style.display = 'none';
             }}
-          >
-            <span style={{ marginRight: '0.5rem', fontWeight: 'bold' }}>
+            >
+            <span style={{ marginRight: '0.5vh', fontWeight: 'bold' }}>
               {JSON.parse(localStorage.getItem('user') || '{}').name || 'User'}
             </span>
             <Link to="/user-profile">
@@ -68,17 +68,17 @@ function App() {
               display: 'none',
               flexDirection: 'column',
               position: 'absolute',
-              top: '2.5rem',
+              top: '2.5vh', // Use viewport height for relative positioning
               left: 0,
               backgroundColor: '#1a1b26',
-              borderRadius: '0.75rem',
-              minWidth: '12rem',
-              padding: '0.5rem 0',
+              borderRadius: '0.75vh',
+              minWidth: '12vh',
+              padding: '0.5vh 0',
               zIndex: 100,
-              fontSize: '0.95rem',
+              fontSize: '0.95vh',
               color: '#c0c0c0',
-              border: '6px solid #2e2f34', // <-- Set border thickness and color here
-              marginTop: '-18px',
+              border: '6px solid #2e2f34',
+              marginTop: '-1.8vh', // Use viewport height for relative margin
               }}
             >
               <Link
@@ -86,8 +86,8 @@ function App() {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.75rem',
-                padding: '0.6rem 1rem',
+                gap: '0.75vh',
+                padding: '0.6vh 1vh',
                 textDecoration: 'none',
                 color: 'inherit',
                 transition: 'background 0.2s',
@@ -99,30 +99,30 @@ function App() {
               User Stats
               </Link>
 
-                <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.75rem',
-                  padding: '0.6rem 1rem',
-                  textDecoration: 'none',
-                  color: 'inherit',
-                  cursor: 'pointer',
-                  transition: 'background 0.2s',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = '#2a2b3d')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                >
-                <FaSignOutAlt size={16} />
-                <span>
-                  <LogoutButton />
-                </span>
-                </div>
+              <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75vh',
+                padding: '0.6vh 1vh',
+                textDecoration: 'none',
+                color: 'inherit',
+                cursor: 'pointer',
+                transition: 'background 0.2s',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = '#2a2b3d')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+              >
+              <FaSignOutAlt size={16} />
+              <span>
+                <LogoutButton />
+              </span>
+              </div>
             </div>
-          </div>
+            </div>
         )}
         {!isLoggedIn && (
-          <Link to="/user-profile" style={{ marginRight: '32rem', marginTop: '2rem' }}>
+          <Link to="/user-profile" style={{ marginRight: '32vh', marginTop: '2vh' }}>
             <FaRegUser size={NAVBARSIZE} />
           </Link>
         )}
