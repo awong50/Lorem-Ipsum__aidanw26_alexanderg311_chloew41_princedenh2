@@ -203,6 +203,9 @@ aidanW -- 2025-05-29 23:35
 * Implemented smooth scrolling for words
 * Added restrictions to typing (space between each word, no keyboard commands, etc)
 
+chloeW, saschaGZ -- 2025-05-30 11:01 
+* Finished implementing LaTeX point system
+
 aidanW 2025-05-30 13:32
 * Tab Enter goes to next test
 * Made site theme blue to differentiate
