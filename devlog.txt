@@ -222,4 +222,8 @@ aidanW 2025-05-31 15:24
 * Added date joined, total time spent, and tests completed calculations
 * Created about page
 
+saschaGZ, chloeW -- 2025-06-02 11:01
+* Adding equations to the LaTeX page
+* Experimenting with differently sized boxes to fit equations
+
 
