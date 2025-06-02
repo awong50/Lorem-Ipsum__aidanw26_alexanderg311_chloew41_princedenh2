@@ -31,7 +31,7 @@ function App() {
               display: 'flex',
               alignItems: 'center',
               marginRight: '32rem',
-              marginTop: '2rem', // Use viewport height for relative margin
+              marginTop: '2rem', 
               position: 'relative',
             }}
             onMouseEnter={(e) => {
@@ -56,7 +56,7 @@ function App() {
               display: 'none',
               flexDirection: 'column',
               position: 'absolute',
-              top: '2.5rem', // Use viewport height for relative positioning
+              top: '2.5rem', 
               left: 0,
               backgroundColor: '#1a1b26',
               borderRadius: '0.75rem',
@@ -66,7 +66,7 @@ function App() {
               fontSize: '0.95rem',
               color: '#c0c0c0',
               border: '6px solid #2e2f34',
-              marginTop: '-18px', // Use viewport height for relative margin
+              marginTop: '-18px', 
               }}
             >
               <Link
