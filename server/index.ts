@@ -14,6 +14,7 @@ connectDB();
 const allowedOrigins = [
   'https://prototype.awong50.tech',
   'http://localhost:5173',
+  'http://localhost:3000'
 ];
 
 app.use(cors({
@@ -26,8 +27,9 @@ app.use(cors({
   },
   credentials: true,
 }));
-
+app.use(cors());
 app.use(express.json());
+
 
 app.use(
   session({
@@ -37,6 +39,8 @@ app.use(
     cookie: { secure: true, sameSite: 'none' }
   })
 );
+
+
 // API Routes
 app.use('/api', apiRouter);
 

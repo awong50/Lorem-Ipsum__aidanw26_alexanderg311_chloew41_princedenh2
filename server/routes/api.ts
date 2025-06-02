@@ -3,9 +3,43 @@ import User from '../models/User';
 import userQuery from '../db/userQuery';
 import RandomWords from '../data/RandomWords';
 import { random } from 'lodash';
+import  {WebSocket, WebSocketServer } from 'ws';
+import http from 'http';
 const router = Router();
+const lobbies: Record<string, Set<WebSocket>> = {};
 
-// Create a new user
+
+let socketPortCounter = 8081;
+// interface for User
+type User = {
+  id: string;
+  name: string;
+  socket: WebSocket;
+};
+router.get('/create-ws-server', (req, res) => {
+  let currentLobbyId: string | null = null;
+  let currentUser: User | null = null;
+  try {
+    const newPort = socketPortCounter++;
+    const server = http.createServer();
+    const wss = new WebSocketServer({ server });
+    const lobbyId = `${newPort}`; // Use the port as the lobby I
+    wss.on('connection', (ws) => {
+      console.log('New client connected on port', newPort);
+      ws.send('Hello from WebSocket server!');
+
+    });
+
+    server.listen(newPort, () => {
+      console.log(`WebSocket server running at ws://localhost:${newPort}`);
+    });
+    res.json({ wsUrl: `ws://localhost:${newPort}`, lobbyId: `${newPort}` });
+  } catch (error) {
+    console.error('Error creating WebSocket server:', error);
+    res.status(500).json({ error: 'Failed to create WebSocket server' });
+  }
+});
+
 router.post('/users', async (req, res) => {
   try {
     const { name,  password } = req.body;

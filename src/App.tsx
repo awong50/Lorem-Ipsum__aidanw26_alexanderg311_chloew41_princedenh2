@@ -5,11 +5,11 @@ import LatexPage from './pages/KaTeXPage';
 import LogoutButton from './components/LogoutButton';
 import UserProfile from './pages/UserProfile';
 import Auth from './pages/Auth';
-
+import Lobby from './pages/Lobby';
 import { FaRegKeyboard, FaRegUser, FaInfo, FaSignOutAlt, FaChartLine  } from "react-icons/fa";
 import { SiLatex } from "react-icons/si";
 import LogoButton from './components/LogoButton'; 
-
+import GameLobby from './pages/GameLobby';
 function App() {
   const isLoggedIn = !!localStorage.getItem('user'); // Check if user is logged in
 
@@ -36,6 +36,7 @@ function App() {
           <Link to="/"><FaRegKeyboard size={NAVBARSIZE} /></Link>
           <Link to="/latex"><SiLatex size={NAVBARSIZE} /></Link>
           <Link to="/about"><FaInfo size={NAVBARSIZE} /></Link>
+          <Link to="/lobby"><FaInfo size={NAVBARSIZE} /></Link>
         </div>
         {isLoggedIn && (
             <div
@@ -134,6 +135,8 @@ function App() {
         <Route path="/latex" element={<LatexPage />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/user-profile" element={<UserProfile />} />
+        <Route path="/lobby" element={<Lobby />} />
+         <Route path="/lobby/:lobbyId" element={<GameLobby />} />
       </Routes>
     </div>
   );
