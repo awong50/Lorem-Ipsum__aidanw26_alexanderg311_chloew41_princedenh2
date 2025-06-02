@@ -17,22 +17,9 @@ function App() {
 
   return (
     <div>
-      <nav
-        style={{
-          position: 'fixed',
-          top: 0,         
-          left: 0,          
-          width: '100%',     
-          zIndex: 1000,      
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          background: '#2e2f34', 
-          paddingBottom: '0.5vh', 
-        }}
-      >
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <LogoButton />
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2vh', marginRight: 'auto', marginTop: '2vh' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginRight: 'auto', marginTop: '2rem' }}>
           <Link to="/"><FaRegKeyboard size={NAVBARSIZE} /></Link>
           <Link to="/latex"><SiLatex size={NAVBARSIZE} /></Link>
           <Link to="/about"><FaInfo size={NAVBARSIZE} /></Link>
@@ -43,8 +30,8 @@ function App() {
             style={{
               display: 'flex',
               alignItems: 'center',
-              marginRight: '32vh',
-              marginTop: '2vh', // Use viewport height for relative margin
+              marginRight: '32rem',
+              marginTop: '2rem', // Use viewport height for relative margin
               position: 'relative',
             }}
             onMouseEnter={(e) => {
@@ -56,7 +43,7 @@ function App() {
               if (menu) menu.style.display = 'none';
             }}
             >
-            <span style={{ marginRight: '0.5vh', fontWeight: 'bold' }}>
+            <span style={{ marginRight: '0.5rem', fontWeight: 'bold' }}>
               {JSON.parse(localStorage.getItem('user') || '{}').name || 'User'}
             </span>
             <Link to="/user-profile">
@@ -69,17 +56,17 @@ function App() {
               display: 'none',
               flexDirection: 'column',
               position: 'absolute',
-              top: '2.5vh', // Use viewport height for relative positioning
+              top: '2.5rem', // Use viewport height for relative positioning
               left: 0,
               backgroundColor: '#1a1b26',
-              borderRadius: '0.75vh',
-              minWidth: '12vh',
-              padding: '0.5vh 0',
+              borderRadius: '0.75rem',
+              minWidth: '12rem',
+              padding: '0.5rem 0',
               zIndex: 100,
-              fontSize: '0.95vh',
+              fontSize: '0.95rem',
               color: '#c0c0c0',
               border: '6px solid #2e2f34',
-              marginTop: '-1.8vh', // Use viewport height for relative margin
+              marginTop: '-18px', // Use viewport height for relative margin
               }}
             >
               <Link
@@ -87,8 +74,8 @@ function App() {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.75vh',
-                padding: '0.6vh 1vh',
+                gap: '0.75rem',
+                padding: '0.6rem 1rem',
                 textDecoration: 'none',
                 color: 'inherit',
                 transition: 'background 0.2s',
@@ -104,8 +91,8 @@ function App() {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.75vh',
-                padding: '0.6vh 1vh',
+                gap: '0.75rem',
+                padding: '0.6rem 1rem',
                 textDecoration: 'none',
                 color: 'inherit',
                 cursor: 'pointer',
@@ -123,7 +110,7 @@ function App() {
             </div>
         )}
         {!isLoggedIn && (
-          <Link to="/user-profile" style={{ marginRight: '32vh', marginTop: '2vh' }}>
+          <Link to="/user-profile" style={{ marginRight: '32rem', marginTop: '2rem' }}>
             <FaRegUser size={NAVBARSIZE} />
           </Link>
         )}
