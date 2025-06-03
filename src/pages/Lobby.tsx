@@ -49,72 +49,82 @@ function HoverCard({ children }: { children: React.ReactNode }) {
   );
 }
 
-
-
 const Lobby = () => {
-    // Redirect if not logged in
-   const navigate = useNavigate();
-   useEffect(() => {
-      const user = localStorage.getItem('user');
-      if (!user) {
-        navigate('/auth');
-      }
-    }, [navigate]);
-  
+  const navigate = useNavigate();
   const [wsUrl, setWsUrl] = useState<string | null>(null);
+  const [lobbies, setLobbies] = useState<{ lobbyId: string, participants: string[] }[]>([]);
+  const [participants, setParticipants] = useState<string[]>([]);
+  const [username, setUsername] = useState<string>(() => {
+    const user = localStorage.getItem('user');
+    try { return user ? JSON.parse(user).name : ''; } catch { return ''; }
+  });
 
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (!user) navigate('/auth');
+
+    const fetchLobbies = () => {
+      fetch('http://localhost:3000/api/lobbies')
+        .then(res => res.json())
+        .then(setLobbies)
+        .catch(() => setLobbies([]));
+    };
+
+    fetchLobbies(); // Initial fetch
+
+    const interval = setInterval(fetchLobbies, 2000); // Poll every 2 seconds
+
+    return () => clearInterval(interval);
+  }, [navigate]);
+
+  // Create server and auto-join
   const createServer = async () => {
-// replace with the server URL once updated
-   const response = await fetch('http://localhost:3000/api/create-ws-server');
+    const response = await fetch('http://localhost:3000/api/create-ws-server');
     const data = await response.json();
     setWsUrl(data.wsUrl);
-    console.log(data.wsUrl);
-    if (data.wsUrl !== null) {
-            // Connect to the new WebSocket server
-    const socket = new WebSocket(data.wsUrl);
-    const lobbyId = data.lobbyId;
-    socket.onopen = () => console.log('Connected to WebSocket server');
-    socket.onmessage = (msg) => alert(`Received: ${msg.data}`);
-        navigate(`/lobby/${lobbyId}?ws=${encodeURIComponent(data.wsUrl)}`);
-    }
-    else {
-        alert("WebSocket URL is not available. Please try again.");
-    }
-   
+    joinLobby(data.wsUrl, data.lobbyId);
   };
-  return (
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      minHeight: "100vh",
-    }}
-  >
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "2fr 1fr",
-        gap: "2.5rem 10rem",
-        maxWidth: "1100px",
-        width: "100%",
-      }}
-    >
-      <HoverCard>
-    <form>
-      <label htmlFor="serverName">Server Name:</label>
-      <input type="text" id="serverName" name="serverName" required />
-      <button type="submit">Join Server</button>
-    </form>
-      </HoverCard>
-      <HoverCard>
-       <button onClick={createServer}>
-      Create Server {wsUrl && <p>Connected to WebSocket server at: {wsUrl}</p>}</button>
-      </HoverCard>
 
+  // Join an existing lobby
+  const joinLobby = (wsUrl: string, lobbyId: string) => {
+    const socket = new WebSocket(wsUrl);
+    socket.onopen = () => {
+      socket.send(JSON.stringify({ type: 'join', username }));
+    };
+    socket.onmessage = (msg) => {
+      const data = JSON.parse(msg.data);
+      if (data.type === 'participants') setParticipants(data.participants);
+    };
+    navigate(`/lobby/${lobbyId}?ws=${encodeURIComponent(wsUrl)}`);
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100vh" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "2.5rem 10rem", maxWidth: "1100px", width: "100%" }}>
+        <HoverCard>
+          <h2>Available Servers</h2>
+          <ul>
+            {lobbies.map(lobby => (
+              <li key={lobby.lobbyId}>
+                Lobby {lobby.lobbyId} ({lobby.participants.length} participants)
+                <button onClick={() => joinLobby(`ws://localhost:${lobby.lobbyId}`, lobby.lobbyId)}>Join</button>
+              </li>
+            ))}
+          </ul>
+        </HoverCard>
+        <HoverCard>
+          <button onClick={createServer}>Create Server</button>
+        </HoverCard>
+      </div>
+      {participants.length > 0 && (
+        <div>
+          <h3>Participants:</h3>
+          <ul>
+            {participants.map(p => <li key={p}>{p}</li>)}
+          </ul>
+        </div>
+      )}
     </div>
-  </div>
   );
 };
 

@@ -7,6 +7,7 @@ import UserProfile from './pages/UserProfile';
 import Auth from './pages/Auth';
 import Lobby from './pages/Lobby';
 import { FaRegKeyboard, FaRegUser, FaInfo, FaSignOutAlt, FaChartLine  } from "react-icons/fa";
+import { LuSwords } from "react-icons/lu";
 import { SiLatex } from "react-icons/si";
 import LogoButton from './components/LogoButton'; 
 import GameLobby from './pages/GameLobby';
@@ -22,8 +23,8 @@ function App() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginRight: 'auto', marginTop: '2rem' }}>
           <Link to="/"><FaRegKeyboard size={NAVBARSIZE} /></Link>
           <Link to="/latex"><SiLatex size={NAVBARSIZE} /></Link>
+          <Link to="/lobby"><LuSwords size={NAVBARSIZE} /></Link>
           <Link to="/about"><FaInfo size={NAVBARSIZE} /></Link>
-          <Link to="/lobby"><FaInfo size={NAVBARSIZE} /></Link>
         </div>
         {isLoggedIn && (
             <div
