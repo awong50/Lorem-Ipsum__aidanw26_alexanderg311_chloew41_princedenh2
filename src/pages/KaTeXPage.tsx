@@ -12,11 +12,13 @@ const formulas: string[] = [
   '\\zeta(s) = \\sum_{n \\geq 1} \\frac{1}{n^s} \\quad \\quad \\forall{s > 1}',
   '\\left(\\frac{\\int_0^\\infty e^{-x^2} \\mathrm{d}x}{\\frac{\\sqrt\\pi}{2}}\\right) = 1',
   '\\zeta(3) = \\frac{5}{2} \\sum_{n=1}^\\infty \\frac{(-1)^{n-1}}{n^3 \\binom{2n}{n}}',
-  'PV = nRT',
   'P=\\frac{RT}{V-b}-\\frac{a}{V^2}',
   'f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} e ^{-\\frac{1}{2}\\left({\\frac{x - \\mu}{\\sigma}}\\right)^2}',
   '\\oiint_{\\mathrm{d}\\Omega} \\mathbf{F} \\cdot \\mathrm{d}\\mathbf{S} = \\iiint_{\\Omega} \\mathrm{div}(\\mathbf{F}) \\mathrm{d}\\Omega',
-  '\\oint_\\gamma \\mathbf{F} \\cdot \\mathrm{d}\\mathbf{r} = \\iint_\\Omega (\\nabla \\times \\mathbf{F}) \\cdot \\mathrm{d}\\mathbf{\\Omega}' ]
+  '\\oint_\\gamma \\mathbf{F} \\cdot \\mathrm{d}\\mathbf{r} = \\iint_\\Omega (\\nabla \\times \\mathbf{F}) \\cdot \\mathrm{d}\\mathbf{\\Omega}',
+  '\\phi = \\oint \\mathbf{E} \\cdot \\mathrm{d} \\mathbf{s} = \\frac{Q_{enc}}{\\varepsilon_0}',
+  'Q(t) = CV_0\\left(1-e^{-\\frac{t}{RC}}\\right)'
+]
 
 const DEFAULT_TIMES = [60, 120, 180, 300];
 
