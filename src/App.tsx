@@ -30,7 +30,7 @@ function App() {
             style={{
               display: 'flex',
               alignItems: 'center',
-              marginRight: '32rem',
+              marginRight: 'auto',
               marginTop: '2rem', 
               position: 'relative',
             }}
