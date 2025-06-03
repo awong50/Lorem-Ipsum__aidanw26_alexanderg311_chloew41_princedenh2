@@ -221,3 +221,6 @@ aidanW 2025-05-31 15:24
 
 aidanW 2025-06-02 21:50
 * Got servers working with web sockets
+
+aidanW 2025-06-03 10:38
+* Swapped from multi web socket architecture to one web socket controller

@@ -2,67 +2,10 @@ import { Router } from 'express';
 import User from '../models/User';
 import userQuery from '../db/userQuery';
 import RandomWords from '../data/RandomWords';
-import { random } from 'lodash';
-import  {WebSocket, WebSocketServer } from 'ws';
-import http from 'http';
+import { getLobbies } from '../websocket';
+
 const router = Router();
-const lobbies: Record<string, { wss: WebSocketServer, participants: Set<string> }> = {};
 
-
-let socketPortCounter = 8081;
-// interface for User
-type User = {
-  id: string;
-  name: string;
-  socket: WebSocket;
-};
-
-router.get('/create-ws-server', (req, res) => {
-  try {
-    const newPort = socketPortCounter++;
-    const server = http.createServer();
-    const wss = new WebSocketServer({ server });
-    const lobbyId = `${newPort}`;
-    lobbies[lobbyId] = { wss, participants: new Set() };
-
-    wss.on('connection', (ws, req) => {
-      let username = '';
-      ws.on('message', (msg) => {
-        try {
-          const data = JSON.parse(msg.toString());
-          if (data.type === 'join' && data.username) {
-            username = data.username;
-            lobbies[lobbyId].participants.add(username);
-            // Broadcast updated participant list
-            const payload = JSON.stringify({
-              type: 'participants',
-              participants: Array.from(lobbies[lobbyId].participants),
-            });
-            wss.clients.forEach(client => client.send(payload));
-          }
-        } catch {}
-      });
-      ws.on('close', () => {
-        if (username) {
-          lobbies[lobbyId].participants.delete(username);
-          const payload = JSON.stringify({
-            type: 'participants',
-            participants: Array.from(lobbies[lobbyId].participants),
-          });
-          wss.clients.forEach(client => client.send(payload));
-        }
-      });
-    });
-
-    server.listen(newPort, () => {
-      console.log(`WebSocket server running at ws://localhost:${newPort}`);
-    });
-    res.json({ wsUrl: `ws://localhost:${newPort}`, lobbyId });
-  } catch (error) {
-    console.error('Error creating WebSocket server:', error);
-    res.status(500).json({ error: 'Failed to create WebSocket server' });
-  }
-});
 router.post('/users', async (req, res) => {
   try {
     const { name,  password } = req.body;
@@ -280,11 +223,7 @@ router.get('/user/:username', async (req, res) => {
 });
 
 router.get('/lobbies', (_req, res) => {
-  // Return a list of lobby IDs and participant counts
-  res.json(Object.keys(lobbies).map(lobbyId => ({
-    lobbyId,
-    participants: Array.from(lobbies[lobbyId].participants),
-  })));
+  res.json(getLobbies());
 });
 
 
