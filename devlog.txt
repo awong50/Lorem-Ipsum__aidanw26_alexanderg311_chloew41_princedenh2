@@ -224,3 +224,6 @@ aidanW 2025-06-02 21:50
 
 aidanW 2025-06-03 10:38
 * Swapped from multi web socket architecture to one web socket controller
+
+saschaGZ, chloeW -- 2025-06-03 11:01
+* Working on shipping over some more equations!
