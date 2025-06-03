@@ -2,13 +2,20 @@ import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
 import path from 'path';
+import http from 'http';
+import { WebSocketServer } from 'ws';
 import connectDB from './db/mongoose';
 import apiRouter from './routes/api';
+import { setupWebSocketServer } from './websocket';
 
 const app = express();
+const server = http.createServer(app);
+const wss = new WebSocketServer({ server });
+
+setupWebSocketServer(wss);
+
 const PORT = process.env.PORT || 3000;
 
-// Connect to MongoDB
 connectDB();
 
 const allowedOrigins = [
@@ -27,23 +34,17 @@ app.use(cors({
   },
   credentials: true,
 }));
-app.use(cors());
 app.use(express.json());
 
+app.use(session({
+  secret: 'supasecretkeyhehe',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: true, sameSite: 'none' }
+}));
 
-app.use(
-  session({
-    secret: 'supasecretkeyhehe',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: true, sameSite: 'none' }
-  })
-);
-
-
-// API Routes
 app.use('/api', apiRouter);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
