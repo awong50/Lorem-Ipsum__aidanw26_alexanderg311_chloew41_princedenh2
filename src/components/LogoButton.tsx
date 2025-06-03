@@ -12,9 +12,9 @@ const LogoButton = () => {
         background: 'transparent',
         cursor: 'pointer',
         padding: '0',
-        marginRight: 'auto',
+        marginRight: '1rem',
         marginTop: '2rem',
-        marginLeft: 'auto',
+        marginLeft: '30rem',
       }}
     >
       <img src={logo} alt="Prototype Logo" style={{ height: '45px' }} />
