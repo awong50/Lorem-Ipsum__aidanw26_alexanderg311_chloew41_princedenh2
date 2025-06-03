@@ -203,9 +203,6 @@ aidanW -- 2025-05-29 23:35
 * Implemented smooth scrolling for words
 * Added restrictions to typing (space between each word, no keyboard commands, etc)
 
-chloeW, saschaGZ -- 2025-05-30 11:01 
-* Finished implementing LaTeX point system
-
 aidanW 2025-05-30 13:32
 * Tab Enter goes to next test
 * Made site theme blue to differentiate
@@ -220,10 +217,7 @@ aidanW 2025-05-31 15:24
 * Styled LaTeX test page
 * Implemented personal best screens and better charts for history
 * Added date joined, total time spent, and tests completed calculations
-* Created about page
+* Created about
 
-saschaGZ, chloeW -- 2025-06-02 11:01
-* Adding equations to the LaTeX page
-* Experimenting with differently sized boxes to fit equations
-
-
+aidanW 2025-06-02 21:50
+* Got servers working with web sockets
