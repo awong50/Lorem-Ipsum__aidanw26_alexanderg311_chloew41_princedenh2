@@ -9,13 +9,18 @@ function GameLobby() {
 
   const wsUrl = params.get('ws');
   console.log('Attempting to connect to', wsUrl);
-  const fetchUsers = () => {
-  fetch('http://localhost:3000/api/lobbies/' + lobbyId + '/users')
-    .then(res => res.json())
-    .then(setUsers)
-    .catch(() => setUsers([]))
-  }
-fetchUsers();
+
+  useEffect(() => {
+    const fetchUsers = () => {
+      fetch('http://localhost:3000/api/lobbies/' + lobbyId + '/users')
+        .then(res => res.json())
+        .then(data => setUsers(data.users || []))
+        .catch(() => setUsers([]));
+    };
+  
+    fetchUsers();
+  }, [lobbyId]);
+  
   useEffect(() => {
     if (!wsUrl) return;
 
@@ -24,7 +29,6 @@ fetchUsers();
     socket.onopen = () => {
       console.log(`Connected to lobby ${lobbyId}`);
       socket.send(`User joined lobby ${lobbyId}`);
-      fetchUsers();
     };
 
     socket.onmessage = (msg) => {
@@ -47,11 +51,11 @@ fetchUsers();
   >
       <h1>Lobby {lobbyId}</h1>
       <h2>Users in this lobby:</h2>
-      {/* <ul>
+      <ul>
         {users.map((user, index) => (
           <li key={index}>{user}</li>
         ))}
-      </ul> */}
+      </ul>
     </div>
   );
 }
