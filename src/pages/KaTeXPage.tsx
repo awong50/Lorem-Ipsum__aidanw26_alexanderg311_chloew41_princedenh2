@@ -154,7 +154,18 @@ const KaTeXPage = () => {
       katex.renderToString(str);
       const noLB = str.replace(/[{]/g, "");
       const noRB = noLB.replace(/[}]/g, "");
-      return noRB.replace(/ /g, "");
+      const nospace = noRB.replace(/ /g, "");
+      const gt = nospace.replaceAll("\\gt", ">");
+      const geq = gt.replaceAll("\\geq", "≥");
+      const ge = geq.replaceAll("\\ge", "≥");
+      const lt = ge.replaceAll("\\lt", "<");
+      const leq = lt.replaceAll("\\leq", "≤");
+      const le = leq.replaceAll("\\le", "≤");
+      const semicolon = le.replaceAll("\\;", "");
+      const comma = semicolon.replaceAll("\\,", "");
+      const text = comma.replaceAll("text", "mathrm");
+      return text.replace(/ /g, "");
+
     }
     catch (e) {
       return "";
