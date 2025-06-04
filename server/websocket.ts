@@ -1,5 +1,6 @@
 import { WebSocketServer, WebSocket } from 'ws';
 
+
 interface Lobby {
   participants: Set<string>;
 }
@@ -52,6 +53,9 @@ function broadcastParticipants(wss: WebSocketServer, lobbyId: string) {
       client.send(message);
     }
   });
+}
+export function getLobby(lobbyId: string) {
+  return lobbies[lobbyId] || null;
 }
 
 export function getLobbies() {

@@ -1,0 +1,117 @@
+.container {
+  background: 2e2f34;
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+  color: white;
+}
+
+.createSection {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+}
+
+.createButton {
+  padding: 0.75rem 1.5rem;
+  background: #7f5af0;
+  border: none;
+  border-radius: 999px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.lobbyList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.card {
+  background: #2a2b3d;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+.banner {
+  height: 80px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.tags {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  gap: 6px;
+}
+
+.tagTyping {
+  background: #d800d8;
+  color: black;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.tagLatex {
+  background: #ffc600;
+  color: black;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.cardContent {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  align-items: center;
+}
+
+.lobbyTitle {
+  margin: 0;
+}
+
+.subtitle {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.playerCount {
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+.joinButton {
+  background: #00e6e6;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+}

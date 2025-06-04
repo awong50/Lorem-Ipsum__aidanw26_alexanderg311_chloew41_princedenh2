@@ -3,7 +3,7 @@ import User from '../models/User';
 import userQuery from '../db/userQuery';
 import RandomWords from '../data/RandomWords';
 import { getLobbies } from '../websocket';
-
+import { getLobby } from '../websocket';
 const router = Router();
 
 router.post('/users', async (req, res) => {
@@ -226,6 +226,17 @@ router.get('/lobbies', (_req, res) => {
   res.json(getLobbies());
 });
 
+router.get('/lobbies/:lobbyId/users', (req, res) => {
+  const lobbyId = req.params.lobbyId; 
+  const lobby = getLobby(lobbyId);
+  console.log('Fetching users for lobby:', lobbyId, 'Lobby:', lobby);
+  if (!lobby) {
+    res.status(404).json({ error: 'Lobby not found' });
+  }
+  else {
+    res.status(200).json({ users: Array.from(lobby.participants)});
 
-
+  }
+  
+});
 export default router;

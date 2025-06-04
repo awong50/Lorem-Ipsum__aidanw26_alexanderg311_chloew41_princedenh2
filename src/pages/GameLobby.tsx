@@ -1,12 +1,21 @@
-import { useParams, useSearchParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { Navigate, useParams, useSearchParams } from 'react-router-dom';
+import { use, useEffect, useState} from 'react';
+import { set } from 'lodash';
 
 function GameLobby() {
   const { lobbyId } = useParams();
   const [params] = useSearchParams();
+  const [users, setUsers] = useState<string[]>([]);
+
   const wsUrl = params.get('ws');
   console.log('Attempting to connect to', wsUrl);
-
+  const fetchUsers = () => {
+  fetch('http://localhost:3000/api/lobbies/' + lobbyId + '/users')
+    .then(res => res.json())
+    .then(setUsers)
+    .catch(() => setUsers([]))
+  }
+fetchUsers();
   useEffect(() => {
     if (!wsUrl) return;
 
@@ -15,6 +24,7 @@ function GameLobby() {
     socket.onopen = () => {
       console.log(`Connected to lobby ${lobbyId}`);
       socket.send(`User joined lobby ${lobbyId}`);
+      fetchUsers();
     };
 
     socket.onmessage = (msg) => {
@@ -36,7 +46,12 @@ function GameLobby() {
     }}
   >
       <h1>Lobby {lobbyId}</h1>
-      
+      <h2>Users in this lobby:</h2>
+      {/* <ul>
+        {users.map((user, index) => (
+          <li key={index}>{user}</li>
+        ))}
+      </ul> */}
     </div>
   );
 }
