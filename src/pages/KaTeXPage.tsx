@@ -17,7 +17,21 @@ const formulas: string[] = [
   '\\oiint_{\\mathrm{d}\\Omega} \\mathbf{F} \\cdot \\mathrm{d}\\mathbf{S} = \\iiint_{\\Omega} \\mathrm{div}(\\mathbf{F}) \\mathrm{d}\\Omega',
   '\\oint_\\gamma \\mathbf{F} \\cdot \\mathrm{d}\\mathbf{r} = \\iint_\\Omega (\\nabla \\times \\mathbf{F}) \\cdot \\mathrm{d}\\mathbf{\\Omega}',
   '\\phi = \\oint \\mathbf{E} \\cdot \\mathrm{d} \\mathbf{s} = \\frac{Q_{enc}}{\\varepsilon_0}',
-  'Q(t) = CV_0\\left(1-e^{-\\frac{t}{RC}}\\right)'
+  'Q(t) = CV_0\\left(1-e^{-\\frac{t}{RC}}\\right)',
+  '\\Gamma(z) = \\int_0^\\infty t^{z - 1} e^{-t} \\,\\mathrm{d}t',
+ '\\beta(z_1, z_2) = \\int_0^1 t^{z_1 - 1} (1- t)^{z_2 - 1} \\,\\mathrm{d}t',
+ '\\beta(z_1, z_2) = \\frac{\\Gamma(z_1)\\Gamma(z_2)}{\\Gamma(z_1 + z_2)}',
+ '\\Gamma(z)\\Gamma(1 - z) = \\frac{\\pi}{\\sin(\\pi z)}',
+ '\\int_0^\\infty e^{-x} \\ln x \\, \\mathrm{d}x = -\\gamma',
+ '\\gamma = \\lim_{n \\to \\infty} \\left(\\sum_{k = 1}^n \\frac{1}{k} - \\ln n\\right)',
+ '\\psi(z) = -\\gamma + \\sum_{n \\geq 1} \\left(\\frac{1}{n} - \\frac{1}{n + z}\\right)',
+ '\\psi^{(2)}(z) = \\sum_{n \\geq 1} \\frac{1}{(n + z)^2}',
+ '\\mathrm{Li}_2(z) = \\sum_{n \\geq 1} \\frac{z^n}{n^2} ',
+ '\\mathrm{Li}_2(z) = -\\int_0^z \\frac{\\ln (1 - u)}{u} \\; \\mathrm{d}u ',
+ 'e^{i\\theta} = \\cos\\theta + i \\sin\\theta',
+ '\\frac{\\mathrm{d}}{\\mathrm{d}z}\\left[e^z\\right] = e^z',
+ '\\int_0^\\infty f(x)g(x) \\; \\mathrm{d}x = \\int_0^\\infty \\mathcal{L}[f]\\{s\\}\\mathcal{L}^{-1}[g]\\{s\\} \\; \\mathrm{d}s',
+ '\\oint_\\gamma f(z) \\; \\mathrm{d}z = 2\\pi i \\sum \\mathrm{Res}(f, \\, a_k)'
 ]
 
 const DEFAULT_TIMES = [60, 120, 180, 300];
