@@ -231,3 +231,10 @@ saschaGZ, chloeW -- 2025-06-03 11:01
 princedenH -- 2025-06-03 17:00
 * Started working on lobbies 
 * Updated the UI 
+
+chloeW -- 2025-06-04 11:01 
+* More equivalences between different representations of identical outputs 
+
+saschaGZ -- 2025-06-04 11:01
+* More equations!
+
