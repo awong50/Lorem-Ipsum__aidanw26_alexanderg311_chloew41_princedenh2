@@ -22,7 +22,7 @@ const Lobby = () => {
 
     const fetchLobbies = () => {
       fetch('http://localhost:3000/api/lobbies')
-        .then(res => res.json())
+        .then(res => res.json()) 
         .then(setLobbies)
         .catch(() => setLobbies([]));
     };
@@ -38,7 +38,7 @@ const Lobby = () => {
 
     socket.onopen = () => {
       socket.send(JSON.stringify({ type: 'join', lobbyId, username }));
-      navigate(`/lobby/${lobbyId}`);
+      navigate(`/lobby/${lobbyId}?ws=${encodeURIComponent('ws://localhost:3000')}`);
     };
   };
 

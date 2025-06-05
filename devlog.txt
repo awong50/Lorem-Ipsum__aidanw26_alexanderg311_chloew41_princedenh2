@@ -227,3 +227,7 @@ aidanW 2025-06-03 10:38
 
 saschaGZ, chloeW -- 2025-06-03 11:01
 * Working on shipping over some more equations!
+
+princedenH -- 2025-06-03 17:00
+* Started working on lobbies 
+* Updated the UI 
