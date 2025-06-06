@@ -42,8 +42,12 @@ app.use(session({
   secret: 'supasecretkeyhehe',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: true, sameSite: 'none' }
+  cookie: {
+    secure: process.env.NODE_ENV === 'production', 
+    sameSite: 'none'
+  }
 }));
+
 
 app.use('/api', apiRouter);
 
