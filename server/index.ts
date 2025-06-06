@@ -20,6 +20,13 @@ const PORT = process.env.PORT || 3000;
 
 connectDB();
 
+const corsOptions ={
+   origin:'*', 
+   credentials:true,            
+   optionSuccessStatus:200,
+}
+
+
 const allowedOrigins = [
   'https://prototype.awong50.tech',
   'http://localhost:5173',
