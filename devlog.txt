@@ -238,3 +238,7 @@ chloeW -- 2025-06-04 11:01
 saschaGZ -- 2025-06-04 11:01
 * More equations!
 
+aidanW -- 2025-06-05 21:28
+* Completed implementation of multiplayer with web sockets
+* Added CSS to multiplayer
+* Served site on droplet
