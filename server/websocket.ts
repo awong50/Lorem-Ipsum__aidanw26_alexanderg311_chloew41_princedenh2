@@ -9,7 +9,7 @@ interface Client {
 interface LobbyMeta {
   host: string;
   time: number;
-  scores: Record<string, { wpm: number; accuracy: number }>;
+  scores: Record<string, { wpm: number; accuracy: number }>; // username -> stats
 }
 
 const lobbies: Record<string, Client[]> = {};
@@ -23,7 +23,7 @@ export function setupWebSocketServer(wss: WebSocketServer) {
     ws.on('message', (data) => {
       try {
         const message = JSON.parse(data.toString());
-        const { type, lobbyId, username, time, to, wpm, accuracy, sampleText } = message;
+        const { type, lobbyId, username, time, to, wpm, accuracy } = message;
 
         if (type === 'join') {
           currentLobbyId = lobbyId;
@@ -33,7 +33,6 @@ export function setupWebSocketServer(wss: WebSocketServer) {
             lobbyMeta[lobbyId] = { host: currentUsername, time: time || 60, scores: {} };
           }
 
-          // Remove any existing client with the same username
           lobbies[lobbyId] = lobbies[lobbyId].filter(c => c.username !== currentUsername);
           lobbies[lobbyId].push({ ws, lobbyId, username: currentUsername });
           broadcastParticipants(lobbyId);
@@ -49,7 +48,7 @@ export function setupWebSocketServer(wss: WebSocketServer) {
         }
 
         if (type === 'sample_text') {
-          broadcast(lobbyId, { type: 'sample_text', sampleText });
+          broadcast(lobbyId, { type: 'sample_text', sampleText: message.sampleText });
         }
 
         if (type === 'set_time' && lobbyMeta[lobbyId]?.host === username) {
@@ -68,9 +67,11 @@ export function setupWebSocketServer(wss: WebSocketServer) {
         }
 
         if (type === 'score_update') {
+          // Store the user's full stats (wpm and accuracy)
           if (!lobbyMeta[lobbyId].scores) lobbyMeta[lobbyId].scores = {};
           lobbyMeta[lobbyId].scores[username] = { wpm, accuracy };
 
+          // Broadcast the updated leaderboard
           broadcast(lobbyId, {
             type: 'leaderboard_update',
             leaderboard: Object.entries(lobbyMeta[lobbyId].scores)
@@ -118,13 +119,9 @@ function removeClient(ws: WebSocket, lobbyId: string) {
   if (lobbies[lobbyId].length === 0) {
     delete lobbies[lobbyId];
     delete lobbyMeta[lobbyId];
-  } else {
-    // If host left, assign new host
-    if (lobbyMeta[lobbyId] && !lobbies[lobbyId].some(c => c.username === lobbyMeta[lobbyId].host)) {
-      lobbyMeta[lobbyId].host = lobbies[lobbyId][0].username;
-    }
   }
 }
+
 
 export function getLobbies() {
   return Object.keys(lobbies).map((lobbyId) => ({
