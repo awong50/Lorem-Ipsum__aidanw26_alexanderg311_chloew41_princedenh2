@@ -169,15 +169,15 @@ const KaTeXPage = () => {
       const noLB = str.replace(/[{]/g, "");
       const noRB = noLB.replace(/[}]/g, "");
       const nospace = noRB.replace(/ /g, "");
-      const gt = nospace.replaceAll("\\gt", ">");
-      const geq = gt.replaceAll("\\geq", "≥");
-      const ge = geq.replaceAll("\\ge", "≥");
-      const lt = ge.replaceAll("\\lt", "<");
-      const leq = lt.replaceAll("\\leq", "≤");
-      const le = leq.replaceAll("\\le", "≤");
-      const semicolon = le.replaceAll("\\;", "");
-      const comma = semicolon.replaceAll("\\,", "");
-      const text = comma.replaceAll("text", "mathrm");
+      const gt = nospace.replace(/\\gt/g, ">");
+      const geq = gt.replace(/\\geq/g, "≥");
+      const ge = geq.replace(/\\ge/g, "≥");
+      const lt = ge.replace(/\\lt/g, "<");
+      const leq = lt.replace(/\\leq/g, "≤");
+      const le = leq.replace(/\\le/g, "≤");
+      const semicolon = le.replace(/\\;/g, "");
+      const comma = semicolon.replace(/\\,/g, "");
+      const text = comma.replace(/text/g, "mathrm");
       return text.replace(/ /g, "");
 
     }

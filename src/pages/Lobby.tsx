@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import styles from '@css/Lobby.module.css';
+import RoomSettingsModal from '../components/RoomSettingsModal';
 
 const Lobby = () => {
   const navigate = useNavigate();
-  const socketRef = useRef<WebSocket | null>(null);
-
   const [lobbies, setLobbies] = useState<{ lobbyId: string, participants: string[] }[]>([]);
-  const [lobbyName, setLobbyName] = useState('');
+  const [showModal, setShowModal] = useState(false);
+
   const username = (() => {
     try {
       const user = localStorage.getItem('user');
@@ -22,7 +22,7 @@ const Lobby = () => {
 
     const fetchLobbies = () => {
       fetch('http://localhost:3000/api/lobbies')
-        .then(res => res.json()) 
+        .then(res => res.json())
         .then(setLobbies)
         .catch(() => setLobbies([]));
     };
@@ -32,54 +32,56 @@ const Lobby = () => {
     return () => clearInterval(interval);
   }, [navigate, username]);
 
-  const joinLobby = (lobbyId: string) => {
-    const socket = new WebSocket(`ws://localhost:3000`);
-    socketRef.current = socket;
-
-    socket.onopen = () => {
-      socket.send(JSON.stringify({ type: 'join', lobbyId, username }));
-      navigate(`/lobby/${lobbyId}?ws=${encodeURIComponent('ws://localhost:3000')}`);
-    };
+  const joinLobby = (lobbyId: string, time?: number) => {
+    const query = new URLSearchParams();
+    query.set('ws', 'ws://localhost:3000');
+    if (time) query.set('time', time.toString());
+    navigate(`/lobby/${lobbyId}?${query.toString()}`);
   };
 
-  const handleCreate = () => {
-    if (!lobbyName) return alert('Enter a name for the server');
-    joinLobby(lobbyName);
+  const handleCreate = (name: string, time: number) => {
+    if (!name) return alert('Enter a name for the room');
+    joinLobby(name, time);
+    setShowModal(false);
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.createSection}>
-        <input
-          className={styles.input}
-          placeholder="Lobby name"
-          value={lobbyName}
-          onChange={e => setLobbyName(e.target.value)}
-        />
-        <button className={styles.createButton} onClick={handleCreate}>Create Room</button>
+        <button
+          className={styles.createButton}
+          style={{ backgroundColor: '#00adb5', color: '#222', marginLeft: '500px', marginTop: '50px' }}
+          onClick={() => setShowModal(true)}
+        >
+          Create Room
+        </button>
       </div>
 
-      <div className={styles.lobbyList}>
-        {lobbies.map((lobby, index) => (
-          <div key={lobby.lobbyId} className={styles.card}>
-            {/* <div
-              className={styles.banner}
-              style={{ backgroundImage: `url(https://source.unsplash.com/random/800x200?sig=${index})` }}
-            > */}
-              {/* <div className={styles.tags}>
-                <span className={styles.tagOpen}>Open</span>
-                <span className={styles.tagFreestyle}>Freestyle</span>
-              </div> */}
-            {/* </div> */}
+      {showModal && (
+        <RoomSettingsModal
+          onCreate={handleCreate}
+          onClose={() => setShowModal(false)}
+        />
+      )}
 
-            <div className={styles.cardContent}>
-              <div>
-                <h3 className={styles.lobbyTitle}>{lobby.lobbyId}'s room</h3>
-
-                <p className={styles.playerCount}>🎮 {lobby.participants.length} players</p>
-              </div>
-              <button className={styles.joinButton} onClick={() => joinLobby(lobby.lobbyId)}>Join</button>
-            </div>
+      <div className={styles.lobbyList} style={{ overflow: "visible" }}>
+        {lobbies.map((lobby) => (
+          <div
+        key={lobby.lobbyId}
+        className={styles.card}
+        onClick={() => joinLobby(lobby.lobbyId)}
+        style={{ cursor: "pointer" }}
+        tabIndex={0}
+        onKeyPress={e => {
+          if (e.key === "Enter" || e.key === " ") joinLobby(lobby.lobbyId);
+        }}
+          >
+        <div className={styles.cardContent}>
+          <div>
+            <h3 className={styles.lobbyTitle}>{lobby.lobbyId}</h3>
+            <p className={styles.playerCount}>🎮 {lobby.participants.length} players</p>
+          </div>
+        </div>
           </div>
         ))}
       </div>
