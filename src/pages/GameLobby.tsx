@@ -16,7 +16,7 @@ function GameLobby() {
   const timeParam = parseInt(params.get("time") || "60", 10);
 
   const [participants, setParticipants] = useState<{ name: string; isHost: boolean }[]>([]);
-  const [host, setHost] = useState<string | null>(null);
+  const [, setHost] = useState<string | null>(null);
   const [isHost, setIsHost] = useState(false);
   const [sampleText, setSampleText] = useState('');
   const [gotSampleText, setGotSampleText] = useState(false);
@@ -25,8 +25,8 @@ function GameLobby() {
   const [leaderboard, setLeaderboard] = useState<{ user: string; wpm: number; accuracy: number }[]>([]);
   const [input, setInput] = useState('');
   const [startTime, setStartTime] = useState<number | null>(null);
-  const [wpm, setWpm] = useState(0);
-  const [accuracy, setAccuracy] = useState(100);
+  const [, setWpm] = useState(0);
+  const [, setAccuracy] = useState(100);
   const [timeLeft, setTimeLeft] = useState(timeParam);
   const [finished, setFinished] = useState(false);
   const [showResults, setShowResults] = useState(false);
