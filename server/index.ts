@@ -12,6 +12,8 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
+app.set('trust proxy', 1);
+
 setupWebSocketServer(wss);
 
 const PORT = process.env.PORT || 3000;
