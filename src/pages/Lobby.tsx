@@ -34,7 +34,7 @@ const Lobby = () => {
 
   const joinLobby = (lobbyId: string, time?: number) => {
     const query = new URLSearchParams();
-    query.set('ws', 'ws://prototype.awong50.tech:3000');
+    query.set('ws', 'wss://prototype.awong50.tech:3000');
     if (time) query.set('time', time.toString());
     navigate(`/lobby/${lobbyId}?${query.toString()}`);
   };
