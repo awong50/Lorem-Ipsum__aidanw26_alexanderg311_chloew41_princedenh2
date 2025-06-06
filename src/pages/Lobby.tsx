@@ -21,7 +21,7 @@ const Lobby = () => {
     if (!username) navigate('/auth');
 
     const fetchLobbies = () => {
-      fetch('http://localhost:3000/api/lobbies')
+      fetch('https://prototype.awong50.tech/api/lobbies')
         .then(res => res.json())
         .then(setLobbies)
         .catch(() => setLobbies([]));
@@ -34,7 +34,7 @@ const Lobby = () => {
 
   const joinLobby = (lobbyId: string, time?: number) => {
     const query = new URLSearchParams();
-    query.set('ws', 'ws://localhost:3000');
+    query.set('ws', 'ws://prototype.awong50.tech:3000');
     if (time) query.set('time', time.toString());
     navigate(`/lobby/${lobbyId}?${query.toString()}`);
   };
