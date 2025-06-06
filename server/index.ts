@@ -12,20 +12,11 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
-app.set('trust proxy', 1);
-
 setupWebSocketServer(wss);
 
-const PORT = process.env.PORT || 3000;  
+const PORT = process.env.PORT || 3000;
 
 connectDB();
-
-const corsOptions ={
-   origin:'*', 
-   credentials:true,            
-   optionSuccessStatus:200,
-}
-
 
 const allowedOrigins = [
   'https://prototype.awong50.tech',
@@ -49,12 +40,8 @@ app.use(session({
   secret: 'supasecretkeyhehe',
   resave: false,
   saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production', 
-    sameSite: 'none'
-  }
+  cookie: { secure: true, sameSite: 'none' }
 }));
-
 
 app.use('/api', apiRouter);
 
