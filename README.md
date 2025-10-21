@@ -16,6 +16,9 @@ Typing is an extremely useful skill, one that is used daily in all of our lives.
 
 ProtoType also has a second life, one that lives in LaTeX. While some of us can type quickly (even fast enough to almost keep up with one’s thoughts!), there is no doubt that typing in LaTeX is slow and hard. Typing math can be really painful, despite how beautiful the result is. In ProtoType, one will be able to switch to a “LaTeX” mode. Here, an equation will be rendered and displayed. Users will be asked to type the equation in LaTeX, under the same settings as can found in the standard game. Multiple different ways to write identical terms will be accepted, and any other tips/question answers will be displayed in the home LaTeX page. 
 
+## Demo Video
+
+https://www.youtube.com/watch?v=EWOrQJsqDjE
 
 
 # Install Guide
